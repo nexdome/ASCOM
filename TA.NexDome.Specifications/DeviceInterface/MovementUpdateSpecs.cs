@@ -25,7 +25,7 @@ namespace TA.NexDome.Specifications.DeviceInterface
         Because of = () =>
             {
             Controller.Open(performOnConnectActions: false);
-            Channel.Send(string.Empty);
+            Channel.Send(string.Empty); // stimulates the fake channel to send the fake reply
             };
         It should_update_the_position_property = () => Controller.AzimuthEncoderPosition.ShouldEqual(99);
         Behaves_like<a_directionless_rotating_dome> _;

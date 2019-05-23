@@ -50,10 +50,14 @@
     <Compile Include="HardwareStatus.cs" />
     <Compile Include="IClock.cs" />
     <Compile Include="IHardwareStatus.cs" />
+    <Compile Include="IRotatorStatus.cs" />
+    <Compile Include="IShutterStatus.cs" />
+    <Compile Include="Maybe.cs" />
     <Compile Include="NotifyPropertyChangeReactiveExtensions.cs" />
     <Compile Include="Octet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RotationDirection.cs" />
+    <Compile Include="SemanticVersion.cs" />
     <Compile Include="SensorState.cs" />
     <Compile Include="ShutterDirection.cs" />
   </ItemGroup>
