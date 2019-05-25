@@ -77,4 +77,89 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         /// </summary>
         void RequestHardwareStatus();
         }
+
+    public interface IState
+        {
+        string Name { get; }
+
+        /// <summary>
+        ///     Called once when the state it first entered, but after the previous state's
+        ///     <see cref="OnExit" /> method has been called.
+        /// </summary>
+        void OnEnter();
+
+        /// <summary>
+        ///     Called once when the state exits but before the next state's
+        ///     <see cref="OnEnter" /> method is called.
+        /// </summary>
+        void OnExit();
     }
+
+    public interface IRotatorState : IState
+        {
+
+        /// <summary>
+        ///     Trigger: called to signal that dome rotation is detected.
+        ///     This can be triggered by a dome rotation direction notification,
+        ///     or by an azimuth encoder tick. States are not interested in the actual
+        ///     encoder position, only that movement is detected.
+        /// </summary>
+        void RotationDetected();
+
+        /// <summary>
+        ///     Trigger: called when a status report is received from the controller.
+        /// </summary>
+        /// <param name="status">An object containing the current hardware state.</param>
+        void StatusUpdateReceived(IRotatorStatus status);
+
+        /// <summary>
+        ///     Requests that the dome rotate to the specified azimuth in degrees,
+        ///     measured from North clockwise.
+        /// </summary>
+        void RotateToAzimuthDegrees(double azimuth);
+
+        /// <summary>
+        ///     Action: requests that the dome is rotated to the home position.
+        /// </summary>
+        void RotateToHomePosition();
+
+        /// <summary>
+        ///     Request a hardware status update.
+        /// </summary>
+        void RequestHardwareStatus();
+
+        }
+
+    public interface IShutterState : IState
+        {
+
+        /// <summary>
+        ///     Trigger: called to signal that a shutter motor current measurement
+        ///     has been received.
+        /// </summary>
+        void ShutterMovementDetected();
+
+        /// <summary>
+        ///     Trigger: called when a status report is received from the controller.
+        /// </summary>
+        /// <param name="status">An object containing the current hardware state.</param>
+        void StatusUpdateReceived(IShutterStatus status);
+        void RotateToAzimuthDegrees(double azimuth);
+
+        /// <summary>
+        ///     Action: Open Shutter
+        /// </summary>
+        void OpenShutter();
+
+        /// <summary>
+        ///     Action: Close Shutter
+        /// </summary>
+        void CloseShutter();
+
+        /// <summary>
+        ///     Request a hardware status update.
+        /// </summary>
+        void RequestHardwareStatus();
+
+    }
+}

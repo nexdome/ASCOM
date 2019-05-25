@@ -70,6 +70,10 @@ namespace TA.NexDome.DeviceInterface.StateMachine
 
         public bool ShutterMotorActive { get; internal set; }
 
+        public IRotatorState RotatorState { get; internal set; }
+        public IShutterState ShutterState { get; internal set; }
+
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>

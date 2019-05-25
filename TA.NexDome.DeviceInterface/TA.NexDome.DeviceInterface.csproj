@@ -85,6 +85,10 @@
       <Name>TA.NexDome.SharedTypes</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="StateMachine\Rotator\" />
+    <Folder Include="StateMachine\Shutter\" />
+  </ItemGroup>
   <Import Project="..\TA.NexDome.SharedCode\TA.NexDome.SharedCode.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
