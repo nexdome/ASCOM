@@ -37,6 +37,12 @@ namespace TA.NexDome.DeviceInterface.StateMachine
 
         public virtual void StatusUpdateReceived(IHardwareStatus status) { }
 
+        /// <inheritdoc />
+        public void StatusUpdateReceived(IRotatorStatus status) { }
+
+        /// <inheritdoc />
+        public void StatusUpdateReceived(IShutterStatus status) { }
+
         public virtual string Name => GetType().Name;
 
         public virtual void RotateToAzimuthDegrees(double azimuth) { }

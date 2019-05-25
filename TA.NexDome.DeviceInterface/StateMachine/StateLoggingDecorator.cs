@@ -27,10 +27,24 @@ namespace TA.NexDome.DeviceInterface.StateMachine
 
         public string Name => decoratedState.Name;
 
+        /// <inheritdoc />
+        public void StatusUpdateReceived(IRotatorStatus status)
+            {
+            Log.Info().Message("Status update {status}", status).Write();
+            decoratedState.StatusUpdateReceived(status);
+            }
+
+        /// <inheritdoc />
+        public void StatusUpdateReceived(IShutterStatus status)
+            {
+            Log.Info().Message("Status update {status}", status).Write();
+            decoratedState.StatusUpdateReceived(status);
+            }
+
         public void RotateToAzimuthDegrees(double azimuth)
             {
             Log.Info()
-                .Message($"Rotate to azimuth {azimuth}° requested")
+                .Message("Rotate to azimuth {azimuth}° requested", azimuth)
                 .Write();
             decoratedState.RotateToAzimuthDegrees(azimuth);
             }

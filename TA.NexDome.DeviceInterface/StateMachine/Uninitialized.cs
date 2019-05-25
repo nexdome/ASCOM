@@ -36,7 +36,19 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             throw uninitialized;
             }
 
+        /// <inheritdoc />
+        public void StatusUpdateReceived(IRotatorStatus status)
+            {
+            throw uninitialized;
+            }
+
         public string Name => nameof(Uninitialized);
+
+        /// <inheritdoc />
+        public void StatusUpdateReceived(IShutterStatus status)
+            {
+            throw uninitialized;
+            }
 
         public void RotateToAzimuthDegrees(double azimuth)
             {

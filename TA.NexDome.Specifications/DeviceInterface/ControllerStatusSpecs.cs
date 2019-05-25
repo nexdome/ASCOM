@@ -87,4 +87,16 @@ internal class when_creating_a_rotator_status_from_received_event_data
     static ControllerStatusFactory factory;
     const string RealWorldStatusPacket = "SER,450,1,55080,34567,0#";
     }
+
+[Subject(typeof(IShutterStatus), "Instance creation")]
+internal class when_creating_a_shutter_status_from_received_event_data
+    {
+    Because of = () => status = ControllerStatusFactory.FromShutterStatusPacket(RealWorldStatusPacket) ;
+    It should_set_the_position = () => status.Position.ShouldEqual(46000);
+    It should_be_open = () => status.OpenSensorActive.ShouldBeTrue();
+    It should_not_be_closed = () => status.ClosedSensorActive.ShouldBeFalse();
+    static IShutterStatus status;
+    static ControllerStatusFactory factory;
+    const string RealWorldStatusPacket = "SES,46000,1,0#";
+    }
 }

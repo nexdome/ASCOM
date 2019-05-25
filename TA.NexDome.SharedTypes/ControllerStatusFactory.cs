@@ -10,12 +10,18 @@ using NLog;
 
 namespace TA.NexDome.SharedTypes
     {
+    /// <summary>
+    /// A factory class that creates immutable instances of various types of status object.
+    /// </summary>
     public sealed class ControllerStatusFactory
         {
         private const string rotatorStatusPattern = @"^(?<Status>SER(,(?<Values>\d{1,6}))+)#$";
+        private const string shutterStatusPattern = @"^(?<Status>SES(,(?<Values>\d{1,6}))+)#$";
         private static readonly Logger log = LogManager.GetCurrentClassLogger();
         private static readonly char[] fieldDelimiters = {','};
-        private static readonly Regex rotatorStatusRegex = new Regex(rotatorStatusPattern,
+        private static readonly Regex RotatorStatusRegex = new Regex(rotatorStatusPattern,
+            RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.CultureInvariant);
+        private static readonly Regex ShutterStatusRegex = new Regex(shutterStatusPattern,
             RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.CultureInvariant);
         private readonly IClock timeSource;
 
@@ -88,10 +94,29 @@ namespace TA.NexDome.SharedTypes
         /// </returns>
         public static IRotatorStatus FromRotatorStatusPacket(string status)
             {
-            var match = rotatorStatusRegex.Match(status);
+            var match = RotatorStatusRegex.Match(status);
             var captures = match.Groups["Values"].Captures;
             var valueCollection = captures.Cast<Capture>().Select(p => p.Value);
             return RotatorStatus.FromValueCollection(valueCollection);
+            }
+
+        /// <summary>
+        ///     Creates an instance of a shutter status from the notification string received from
+        ///     the NexDome hardware.
+        /// </summary>
+        /// <param name="status">
+        ///     The status string received from the controller hardware.
+        /// </param>
+        /// <returns>
+        ///     An object implementing <see cref="IShutterStatus" /> populated with the status
+        ///     values.
+        /// </returns>
+        public static IShutterStatus FromShutterStatusPacket(string status)
+            {
+            var match = ShutterStatusRegex.Match(status);
+            var captures = match.Groups["Values"].Captures;
+            var valueCollection = captures.Cast<Capture>().Select(p => p.Value);
+            return ShutterStatus.FromValueCollection(valueCollection);
             }
 
         /// <summary>
@@ -133,6 +158,36 @@ namespace TA.NexDome.SharedTypes
                     };
                 return status;
                 }
+            }
+
+        class ShutterStatus : IShutterStatus
+            {
+            /// <inheritdoc />
+            public int Position { get; private set; }
+
+            /// <inheritdoc />
+            public bool OpenSensorActive { get; private set; }
+
+            /// <inheritdoc />
+            public bool ClosedSensorActive { get; private set; }
+
+            /// <summary>
+            ///     Creates and populates a ShutterStatus instance from a collection of string values.
+            /// </summary>
+            /// <param name="valueCollection">A collection of strings containing the status values that will need to be parsed.</param>
+            /// <returns><see cref="IShutterStatus"/></returns>
+            public static IShutterStatus FromValueCollection(IEnumerable<string> valueCollection)
+                {
+                var values = valueCollection.ToArray();
+                var status = new ShutterStatus()
+                    {
+                    Position = int.Parse(values[0]),
+                    OpenSensorActive = values[1] == "1",
+                    ClosedSensorActive = values[2] == "1"
+                    };
+                return status;
+                }
+
             }
         }
     }

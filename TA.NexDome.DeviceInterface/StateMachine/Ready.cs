@@ -46,7 +46,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             base.OpenShutter();
             machine.ShutterMovementDirection = ShutterDirection.Opening;
             machine.ControllerActions.OpenShutter();
-            machine.TransitionToState(new Rotating(machine));
+            machine.TransitionToState(new ShutterMoving(machine));
             }
 
         public override void CloseShutter()
@@ -54,7 +54,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             base.CloseShutter();
             machine.ShutterMovementDirection = ShutterDirection.Closing;
             machine.ControllerActions.CloseShutter();
-            machine.TransitionToState(new Rotating(machine));
+            machine.TransitionToState(new ShutterMoving(machine));
             }
 
         public override void RotateToHomePosition()

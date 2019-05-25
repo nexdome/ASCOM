@@ -11,6 +11,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.NexDome.Specifications",
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "TA.NexDome.SharedCode", "TA.NexDome.SharedCode\TA.NexDome.SharedCode.shproj", "{B52F3362-EBB7-4BAA-9FEA-EBFDB5396BC2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Design", "Design", "{CEAB814B-9A3F-41D1-B160-1DD101C9F5FB}"
+	ProjectSection(SolutionItems) = preProject
+		Markdown\ControllerStateMachine.md = Markdown\ControllerStateMachine.md
+		Markdown\RotatorStateMachine.md = Markdown\RotatorStateMachine.md
+		Markdown\ShutterStateMachine.md = Markdown\ShutterStateMachine.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		TA.NexDome.SharedCode\TA.NexDome.SharedCode.projitems*{1224a06b-5a84-452f-af63-cf8ef7d6713e}*SharedItemsImports = 4

@@ -43,6 +43,8 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         /// </summary>
         /// <param name="status">An object containing the current hardware state.</param>
         void StatusUpdateReceived(IHardwareStatus status);
+        void StatusUpdateReceived(IRotatorStatus status);
+        void StatusUpdateReceived(IShutterStatus status);
 
         /// <summary>
         ///     Requests that the dome rotate to the specified azimuth in degrees,

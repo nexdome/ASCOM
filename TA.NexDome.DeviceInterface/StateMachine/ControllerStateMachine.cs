@@ -41,6 +41,8 @@ namespace TA.NexDome.DeviceInterface.StateMachine
 
         [CanBeNull]
         public IHardwareStatus HardwareStatus { get; private set; }
+        [CanBeNull] public IRotatorStatus RotatorStatus { get; private set; }
+        [CanBeNull] public IShutterStatus ShutterStatus { get; private set; }
 
         public bool AtHome { get; set; }
 
@@ -130,6 +132,25 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             ShutterPosition = SetInferredShutterPosition(status.ShutterSensor);
             AtHome = status.AtHome;
             UserPins = status.UserPins;
+            }
+
+        internal void UpdateStatus(IRotatorStatus status)
+            {
+            AzimuthEncoderPosition = status.Azimuth;
+            AzimuthMotorActive = false;
+            AzimuthDirection = RotationDirection.None;
+            AtHome = status.AtHome;
+            }
+
+        internal void UpdateStatus(IShutterStatus status)
+            {
+            ShutterMotorActive = false;
+            ShutterMovementDirection = ShutterDirection.None;
+            if (status.OpenSensorActive)
+                ShutterPosition = SensorState.Open;
+            else if (status.ClosedSensorActive)
+                ShutterPosition = SensorState.Closed;
+            else ShutterPosition = SensorState.Indeterminate;
             }
 
         private SensorState SetInferredShutterPosition(SensorState statusShutterSensor)
@@ -260,6 +281,22 @@ namespace TA.NexDome.DeviceInterface.StateMachine
              * Otherwise there could be a race condition where a new state sees the old status data.
              */
             HardwareStatus = status;
+            UpdateStatus(status);
+            CurrentState.StatusUpdateReceived(status);
+            }
+
+        public void HardwareStatusReceived(IRotatorStatus status)
+            {
+            Log.Info().Message("Rotator status {status}", status).Write();
+            RotatorStatus = status;
+            UpdateStatus(status);
+            CurrentState.StatusUpdateReceived(status);
+            }
+
+        public void HardwareStatusReceived(IShutterStatus status)
+            {
+            Log.Info().Message("Shutter status {status}", status).Write();
+            ShutterStatus = status;
             UpdateStatus(status);
             CurrentState.StatusUpdateReceived(status);
             }
