@@ -52,11 +52,18 @@
     <Compile Include="StateMachine\ControllerStateMachine.cs" />
     <Compile Include="StateMachine\IControllerActions.cs" />
     <Compile Include="StateMachine\IControllerState.cs" />
+    <Compile Include="StateMachine\IRotatorState.cs" />
+    <Compile Include="StateMachine\IShutterState.cs" />
+    <Compile Include="StateMachine\IState.cs" />
     <Compile Include="StateMachine\Ready.cs" />
     <Compile Include="StateMachine\RequestStatus.cs" />
     <Compile Include="StateMachine\Rotating.cs" />
+    <Compile Include="StateMachine\Rotator\ReadyState.cs" />
+    <Compile Include="StateMachine\Rotator\RotatorStateBase.cs" />
     <Compile Include="StateMachine\RxControllerActions.cs" />
     <Compile Include="StateMachine\ShutterMoving.cs" />
+    <Compile Include="StateMachine\Shutter\OfflineState.cs" />
+    <Compile Include="StateMachine\Shutter\ShutterStateBase.cs" />
     <Compile Include="StateMachine\StateLoggingDecorator.cs" />
     <Compile Include="StateMachine\Uninitialized.cs" />
     <Compile Include="StatusTransaction.cs" />
@@ -85,10 +92,7 @@
       <Name>TA.NexDome.SharedTypes</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="StateMachine\Rotator\" />
-    <Folder Include="StateMachine\Shutter\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="..\TA.NexDome.SharedCode\TA.NexDome.SharedCode.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

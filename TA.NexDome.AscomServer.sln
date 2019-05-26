@@ -16,6 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Design", "Design", "{CEAB81
 		Markdown\ControllerStateMachine.md = Markdown\ControllerStateMachine.md
 		Markdown\RotatorStateMachine.md = Markdown\RotatorStateMachine.md
 		Markdown\ShutterStateMachine.md = Markdown\ShutterStateMachine.md
+		Markdown\StateMachineClasses.md = Markdown\StateMachineClasses.md
 	EndProjectSection
 EndProject
 Global

@@ -6,6 +6,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -73,7 +74,6 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         public IRotatorState RotatorState { get; internal set; }
         public IShutterState ShutterState { get; internal set; }
 
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
@@ -85,12 +85,49 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             TransitionToState(startState);
             }
 
-        public void TransitionToState([NotNull] IControllerState targetState)
+        public void Initialize(IRotatorState rotatorInitialState, IShutterState shutterInitialState)
+            {
+            TransitionToState(rotatorInitialState);
+            TransitionToState(shutterInitialState);
+            }
+
+        private void SetCurrentState<TState>(TState newState) where TState : IState
+            {
+            switch (newState)
+                {
+                case IRotatorState rotator:
+                    RotatorState = rotator;
+                    break;
+                case IShutterState shutter:
+                    ShutterState = shutter;
+                    break;
+                case IControllerState state:
+                    CurrentState = state;
+                    break;
+                }
+            }
+
+        private IState GetCurrentState<TState>() where TState : IState
+            {
+            var result = default(TState);
+            switch (result)
+                {
+                case IRotatorState rotator:
+                    return RotatorState;
+                case IShutterState shutter:
+                    return ShutterState;
+                case IControllerState state:
+                default:
+                    return CurrentState;
+                }
+            }
+
+        public void TransitionToState<TState>([NotNull] TState targetState) where TState : class, IState
             {
             if (targetState == null) throw new ArgumentNullException(nameof(targetState));
             try
                 {
-                CurrentState.OnExit();
+                GetCurrentState<TState>()?.OnExit();
                 }
             catch (Exception ex)
                 {
@@ -100,10 +137,11 @@ namespace TA.NexDome.DeviceInterface.StateMachine
                     .Write();
                 }
 
-            CurrentState = new StateLoggingDecorator(targetState);
+            SetCurrentState(targetState);
+
             try
                 {
-                CurrentState.OnEnter();
+                targetState.OnEnter();
                 }
             catch (Exception ex)
                 {
