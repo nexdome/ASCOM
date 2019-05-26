@@ -70,7 +70,7 @@ namespace TA.NexDome.Specifications.DeviceInterface
         };
 
         static IHardwareStatus receivedStatus;
-        Behaves_like<a_stopped_dome> stopped_dome;
+        Behaves_like<a_stopped_rotator> stopped_dome;
         const string RealWorldStatusPacket = "V4,704,293,1,289,0,0,1,0,287,299,0,0,0,0,112,50,0,0,0,180,5,5\n";
     }
 

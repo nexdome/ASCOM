@@ -1,0 +1,30 @@
+﻿<ProjectConfiguration>
+  <Settings>
+    <IgnoredTests>
+      <FixtureTestSelector>
+        <FixtureName>TA.NexDome.Specifications.DeviceInterface.when_a_status_packet_is_received</FixtureName>
+      </FixtureTestSelector>
+      <FixtureTestSelector>
+        <FixtureName>TA.NexDome.Specifications.DeviceInterface.when_an_encoder_tick_is_received</FixtureName>
+      </FixtureTestSelector>
+      <FixtureTestSelector>
+        <FixtureName>TA.NexDome.Specifications.DeviceInterface.when_idle_and_an_azimuth_encoder_tick_is_received</FixtureName>
+      </FixtureTestSelector>
+      <FixtureTestSelector>
+        <FixtureName>TA.NexDome.Specifications.DeviceInterface.when_the_shutter_move_is_insufficient</FixtureName>
+      </FixtureTestSelector>
+      <FixtureTestSelector>
+        <FixtureName>TA.NexDome.Specifications.DeviceInterface.when_the_shutter_moves_for_a_sufficiently_long_time</FixtureName>
+      </FixtureTestSelector>
+      <FixtureTestSelector>
+        <FixtureName>TA.NexDome.Specifications.DeviceInterface.when_the_shutter_moves_for_a_sufficiently_long_time_but_current_draw_is_too_low</FixtureName>
+      </FixtureTestSelector>
+      <FixtureTestSelector>
+        <FixtureName>TA.NexDome.Specifications.DeviceInterface.when_the_state_machine_starts</FixtureName>
+      </FixtureTestSelector>
+      <FixtureTestSelector>
+        <FixtureName>TA.NexDome.Specifications.DeviceInterface.when_the_user_fails_to_initialize_the_state_machine</FixtureName>
+      </FixtureTestSelector>
+    </IgnoredTests>
+  </Settings>
+</ProjectConfiguration>

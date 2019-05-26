@@ -14,8 +14,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Design", "Design", "{CEAB814B-9A3F-41D1-B160-1DD101C9F5FB}"
 	ProjectSection(SolutionItems) = preProject
 		Markdown\ControllerStateMachine.md = Markdown\ControllerStateMachine.md
+		Markdown\ReadMe.md = Markdown\ReadMe.md
 		Markdown\RotatorStateMachine.md = Markdown\RotatorStateMachine.md
 		Markdown\ShutterStateMachine.md = Markdown\ShutterStateMachine.md
+		Markdown\skin.puml = Markdown\skin.puml
 		Markdown\StateMachineClasses.md = Markdown\StateMachineClasses.md
 	EndProjectSection
 EndProject

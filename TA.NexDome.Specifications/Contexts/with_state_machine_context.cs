@@ -13,11 +13,11 @@ namespace TA.NexDome.Specifications.Contexts
 /// A test context for testing Device Controller state machine operation. Includes a context
 /// class to hold all the test data and unit under test, plus a builder to create the context.
 /// </summary>
-class with_state_machine_context
+internal class with_state_machine_context
     {
-    public static StateMachineContext Context { get; set; }
+    protected static StateMachineContext Context;
 
-    public static StateMachineBuilder ContextBuilder { get; set; }
+    protected static StateMachineBuilder ContextBuilder { get; set; }
 
     Cleanup after = () =>
         {
@@ -27,9 +27,9 @@ class with_state_machine_context
     Establish context = () => ContextBuilder = new StateMachineBuilder();
 
     #region Convenience Properties
-    public static IControllerActions Actions => Context.Actions;
+    protected static IControllerActions Actions => Context.Actions;
 
-    public static ControllerStateMachine Machine => Context.Machine;
+    protected static ControllerStateMachine Machine => Context.Machine;
 
     #endregion
     }

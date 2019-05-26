@@ -59,10 +59,17 @@
     <Compile Include="StateMachine\RequestStatus.cs" />
     <Compile Include="StateMachine\Rotating.cs" />
     <Compile Include="StateMachine\Rotator\ReadyState.cs" />
+    <Compile Include="StateMachine\Rotator\RequestStatusState.cs" />
+    <Compile Include="StateMachine\Rotator\RotatingState.cs" />
     <Compile Include="StateMachine\Rotator\RotatorStateBase.cs" />
     <Compile Include="StateMachine\RxControllerActions.cs" />
     <Compile Include="StateMachine\ShutterMoving.cs" />
+    <Compile Include="StateMachine\Shutter\ClosedState.cs" />
+    <Compile Include="StateMachine\Shutter\ClosingState.cs" />
     <Compile Include="StateMachine\Shutter\OfflineState.cs" />
+    <Compile Include="StateMachine\Shutter\OpeningState.cs" />
+    <Compile Include="StateMachine\Shutter\OpenState.cs" />
+    <Compile Include="StateMachine\Shutter\RequestStatusState.cs" />
     <Compile Include="StateMachine\Shutter\ShutterStateBase.cs" />
     <Compile Include="StateMachine\StateLoggingDecorator.cs" />
     <Compile Include="StateMachine\Uninitialized.cs" />

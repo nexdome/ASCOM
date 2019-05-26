@@ -1,10 +1,6 @@
 ```puml
 @startuml
-skinparam linetype polyline
-skinparam state {
-    BackgroundColor<<Warning>> IndianRed
-    BackgroundColor<<Safe>> DarkSeaGreen
-}
+!include skin.puml
 Hide empty
 Title Controller State Machine
 

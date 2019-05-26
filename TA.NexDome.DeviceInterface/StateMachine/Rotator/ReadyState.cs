@@ -9,14 +9,29 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Rotator {
             {
             base.OnEnter();
             Machine.AzimuthMotorActive = false;
-
+            Machine.RotatorInReadyState.Set();
             }
 
         /// <inheritdoc />
         public override void OnExit()
             {
+            Machine.RotatorInReadyState.Reset();
             base.OnExit();
-
             }
-        }
+
+        /// <inheritdoc />
+        public override void RotationDetected()
+            {
+            base.RotationDetected();
+            Machine.TransitionToState(new RotatingState(Machine));
+            }
+
+        /// <inheritdoc />
+        public override void RotateToAzimuthDegrees(double azimuth)
+            {
+            base.RotateToAzimuthDegrees(azimuth);
+            Machine.ControllerActions.RotateToAzimuth((int) azimuth);
+            Machine.TransitionToState(new RotatingState(Machine));
+            }
+    }
     }

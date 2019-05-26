@@ -203,16 +203,4 @@ namespace TA.NexDome.Specifications.DeviceInterface
         It should_finish_with_shutter_indeterminate =
             () => Machine.ShutterPosition.ShouldEqual(SensorState.Indeterminate);
         }
-
-    [Subject(typeof(ControllerStateMachine), "Movement Race Condition")]
-    internal class when_the_dome_is_moved : with_state_machine_that_infers_shutter_position
-        {
-        Establish context = () =>
-            {
-            Machine.Initialize(new Ready(Machine));
-            Machine.WaitForReady(TimeSpan.FromSeconds(2));
-            };
-        Because of = () => { Machine.RotateToAzimuthDegrees(180); };
-        It should_indicate_movement_when_the_command_returns = () => Machine.IsMoving.ShouldBeTrue();
-        }
     }

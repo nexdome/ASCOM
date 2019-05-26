@@ -1,12 +1,8 @@
 ```puml
 @startuml
 title Shutter State Machine
+!include skin.puml
 skinparam linetype arc
-skinparam state {
-    BackgroundColor<<Warning>> IndianRed
-    BackgroundColor<<Safe>> DarkSeaGreen
-}
-
 
 [*] --> Offline
 

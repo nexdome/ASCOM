@@ -21,6 +21,8 @@ namespace TA.NexDome.DeviceInterface.StateMachine
     public class ControllerStateMachine : INotifyHardwareStateChanged
         {
         internal readonly ManualResetEvent InReadyState = new ManualResetEvent(false);
+        internal readonly ManualResetEvent ShutterInReadyState = new ManualResetEvent(false);
+        internal readonly ManualResetEvent RotatorInReadyState = new ManualResetEvent(false);
         [CanBeNull] internal CancellationTokenSource KeepAliveCancellationSource;
 
         public ControllerStateMachine(IControllerActions controllerActions, DeviceControllerOptions options,
@@ -42,8 +44,12 @@ namespace TA.NexDome.DeviceInterface.StateMachine
 
         [CanBeNull]
         public IHardwareStatus HardwareStatus { get; private set; }
-        [CanBeNull] public IRotatorStatus RotatorStatus { get; private set; }
-        [CanBeNull] public IShutterStatus ShutterStatus { get; private set; }
+
+        [CanBeNull]
+        public IRotatorStatus RotatorStatus { get; private set; }
+
+        [CanBeNull]
+        public IShutterStatus ShutterStatus { get; private set; }
 
         public bool AtHome { get; set; }
 
@@ -72,6 +78,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         public bool ShutterMotorActive { get; internal set; }
 
         public IRotatorState RotatorState { get; internal set; }
+
         public IShutterState ShutterState { get; internal set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -95,30 +102,30 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             {
             switch (newState)
                 {
-                case IRotatorState rotator:
-                    RotatorState = rotator;
-                    break;
-                case IShutterState shutter:
-                    ShutterState = shutter;
-                    break;
-                case IControllerState state:
-                    CurrentState = state;
-                    break;
+                    case IRotatorState rotator:
+                        RotatorState = rotator;
+                        break;
+                    case IShutterState shutter:
+                        ShutterState = shutter;
+                        break;
+                    case IControllerState state:
+                        CurrentState = state;
+                        break;
                 }
             }
 
-        private IState GetCurrentState<TState>() where TState : IState
+        private IState GetCurrentState<TState>(TState targetState) where TState : IState
             {
-            var result = default(TState);
-            switch (result)
+            switch (targetState)
                 {
-                case IRotatorState rotator:
-                    return RotatorState;
-                case IShutterState shutter:
-                    return ShutterState;
-                case IControllerState state:
-                default:
-                    return CurrentState;
+                    case IRotatorState state:
+                        return RotatorState;
+                    case IShutterState state:
+                        return ShutterState;
+                    case IControllerState state:
+                        return CurrentState;
+                    default:
+                        throw new InvalidOperationException("Funky state type");
                 }
             }
 
@@ -127,7 +134,8 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             if (targetState == null) throw new ArgumentNullException(nameof(targetState));
             try
                 {
-                GetCurrentState<TState>()?.OnExit();
+                var state = GetCurrentState(targetState);
+                state?.OnExit();
                 }
             catch (Exception ex)
                 {
@@ -258,7 +266,8 @@ namespace TA.NexDome.DeviceInterface.StateMachine
 
         public void RotateToAzimuthDegrees(double azimuth)
             {
-            CurrentState.RotateToAzimuthDegrees(azimuth);
+            //CurrentState.RotateToAzimuthDegrees(azimuth);
+            RotatorState.RotateToAzimuthDegrees(azimuth);
             }
 
         public void OpenShutter()
@@ -310,7 +319,8 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         public void AzimuthEncoderTickReceived(int encoderPosition)
             {
             AzimuthEncoderPosition = encoderPosition;
-            CurrentState.RotationDetected();
+            //CurrentState.RotationDetected();
+            RotatorState.RotationDetected();
             }
 
         public void HardwareStatusReceived(IHardwareStatus status)

@@ -1,7 +1,7 @@
 ```puml
 @startuml
 title Rotator State Machine
-
+!include skin.puml
 [*] --> Ready
 
 state Ready <<Safe>>

@@ -1,7 +1,7 @@
 ```puml
 @startuml
 Title State Machine Classes
-Hide empty members
+!include skin.puml
 skinparam linetype ortho
 
 interface IState
@@ -18,6 +18,7 @@ class ControllerStateMachine {
 
 namespace Rotator {
 abstract class RotatorStateBase
+class ReadyState<<Ready>>
 .IRotatorState <|-- RotatorStateBase
 RotatorStateBase <|-- ReadyState
 RotatorStateBase <|-- RotatingState
@@ -26,6 +27,9 @@ RotatorStateBase <|-- RequestStatusState
 
 namespace Shutter {
 abstract class ShutterStateBase
+class OpenState<<Ready>>
+class ClosedState<<Ready>>
+class OfflineState<<Warning>>
 .IShutterState <|-- ShutterStateBase
 ShutterStateBase <|-- OfflineState
 ShutterStateBase <|-- OpenState
