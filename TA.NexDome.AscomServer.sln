@@ -21,6 +21,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Design", "Design", "{CEAB81
 		Markdown\StateMachineClasses.md = Markdown\StateMachineClasses.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration", "Configuration", "{6A882801-923B-4451-89CB-712E20A531AF}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		TA.NexDome.SharedCode\TA.NexDome.SharedCode.projitems*{1224a06b-5a84-452f-af63-cf8ef7d6713e}*SharedItemsImports = 4

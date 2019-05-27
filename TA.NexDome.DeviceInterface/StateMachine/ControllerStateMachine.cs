@@ -92,9 +92,25 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             TransitionToState(startState);
             }
 
-        public void Initialize(IRotatorState rotatorInitialState, IShutterState shutterInitialState)
+        /// <summary>
+        ///     Initializes the specified rotator initial state.
+        /// </summary>
+        /// <param name="rotatorInitialState">
+        /// Sets the Initial state of the rotator state machine.
+        /// </param>
+        public void Initialize(IRotatorState rotatorInitialState)
             {
             TransitionToState(rotatorInitialState);
+            }
+
+        /// <summary>
+        /// Initializes the specified shutter initial state.
+        /// </summary>
+        /// <param name="shutterInitialState">
+        /// Sets the Initial state of the shutter state machine.
+        /// </param>
+        public void Initialize(IShutterState shutterInitialState)
+            {
             TransitionToState(shutterInitialState);
             }
 
@@ -342,7 +358,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             Log.Info().Message("Rotator status {status}", status).Write();
             RotatorStatus = status;
             UpdateStatus(status);
-            CurrentState.StatusUpdateReceived(status);
+            RotatorState.StatusUpdateReceived(status);
             }
 
         public void HardwareStatusReceived(IShutterStatus status)

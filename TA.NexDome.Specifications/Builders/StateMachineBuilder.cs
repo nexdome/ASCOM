@@ -25,13 +25,31 @@ namespace TA.NexDome.Specifications.Builders
         };
         Type rotatorStartType= typeof(TA.NexDome.DeviceInterface.StateMachine.Rotator.ReadyState);
         Type shutterStartType = typeof(TA.NexDome.DeviceInterface.StateMachine.Shutter.OfflineState);
-        bool initializeStateMachine = false;
+        bool initializeRotatorStateMachine = false;
+        bool initializeShuttterStateMachine = false;
+        bool rotatorIsRotating = false;
 
         internal StateMachineBuilder WithReadyRotatorAndOfflineShutter()
             {
             rotatorStartType = typeof(TA.NexDome.DeviceInterface.StateMachine.Rotator.ReadyState);
             shutterStartType = typeof(TA.NexDome.DeviceInterface.StateMachine.Shutter.OfflineState);
-            initializeStateMachine = true;
+            initializeRotatorStateMachine = true;
+            initializeShuttterStateMachine = true;
+            return this;
+            }
+
+        internal StateMachineBuilder WithReadyRotator()
+            {
+            rotatorStartType = typeof(TA.NexDome.DeviceInterface.StateMachine.Rotator.ReadyState);
+            initializeRotatorStateMachine = true;
+            return this;
+            }
+
+        internal StateMachineBuilder WithRotatingRotator()
+            {
+            rotatorStartType = typeof(TA.NexDome.DeviceInterface.StateMachine.Rotator.RotatingState);
+            initializeRotatorStateMachine = true;
+            rotatorIsRotating = true;
             return this;
             }
 
@@ -43,13 +61,24 @@ namespace TA.NexDome.Specifications.Builders
             Actions = actions,
             Machine = machine
             };
-        if (initializeStateMachine)
+        if (initializeRotatorStateMachine)
             {
             IRotatorState rotatorState = Activator.CreateInstance(rotatorStartType, machine) as IRotatorState;
-            IShutterState shutterState = Activator.CreateInstance(shutterStartType, machine) as IShutterState;
-            machine.Initialize(rotatorState, shutterState);
+            machine.Initialize(rotatorState);
             }
-        return context;
+        if (initializeShuttterStateMachine)
+            {
+            IShutterState shutterState = Activator.CreateInstance(shutterStartType, machine) as IShutterState;
+            machine.Initialize(shutterState);
+            }
+        if (rotatorIsRotating)
+            {
+            machine.AzimuthMotorActive = true;
+            machine.AtHome = false;
+            machine.AzimuthDirection = RotationDirection.Clockwise; // Arbitrary choice
+            machine.AzimuthEncoderPosition = 100; // Arbitrary choice
+            }
+            return context;
         }
     }
 }

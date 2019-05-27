@@ -1,4 +1,5 @@
-﻿using FakeItEasy;
+﻿
+using FakeItEasy;
 using Machine.Specifications;
 using TA.NexDome.DeviceInterface.StateMachine;
 using TA.NexDome.DeviceInterface.StateMachine.Rotator;
@@ -6,6 +7,7 @@ using TA.NexDome.DeviceInterface.StateMachine.Shutter;
 using TA.NexDome.SharedTypes;
 using TA.NexDome.Specifications.Contexts;
 using TA.NexDome.Specifications.DeviceInterface.Behaviours;
+using RequestStatusState = TA.NexDome.DeviceInterface.StateMachine.Rotator.RequestStatusState;
 
 namespace TA.NexDome.Specifications.DeviceInterface
     {
@@ -31,7 +33,7 @@ namespace TA.NexDome.Specifications.DeviceInterface
     [Subject(typeof(ReadyState), "triggers")]
     internal class when_in_ready_state_and_rotation_is_detected : with_state_machine_context
         {
-        Establish context = () => Context=ContextBuilder
+        Establish context = () => Context = ContextBuilder
             .WithReadyRotatorAndOfflineShutter()
             .Build();
         Because of = () => Machine.AzimuthEncoderTickReceived(100);
@@ -46,14 +48,54 @@ namespace TA.NexDome.Specifications.DeviceInterface
     internal class when_in_ready_state_and_rotation_is_requested : with_state_machine_context
         {
         const double targetAzimuth = 299.9;
-        Establish context = () => Context=ContextBuilder
+        Establish context = () => Context = ContextBuilder
             .WithReadyRotatorAndOfflineShutter()
             .Build();
         Because of = () => Machine.RotateToAzimuthDegrees(targetAzimuth);
         It should_invoke_the_rotate_action =
-            () => A.CallTo(() => Actions.RotateToAzimuth((int) targetAzimuth)).MustHaveHappened(1, Times.Exactly);
+            () => A.CallTo(() => Actions.RotateToAzimuth((int)targetAzimuth)).MustHaveHappened(1, Times.Exactly);
         It should_transition_to_rotating_state = () => Machine.RotatorState.ShouldBeOfExactType<RotatingState>();
         It should_be_rotating = () => Machine.AzimuthMotorActive.ShouldBeTrue();
         It should_should_not_be_at_home = () => Machine.AtHome.ShouldBeFalse();
+        }
+
+    [Subject(typeof(RotatingState), "triggers")]
+    internal class when_in_rotating_state_and_status_is_received : with_state_machine_context
+        {
+        Establish context = () => Context = ContextBuilder
+            .WithRotatingRotator()
+            .Build();
+        Because of = () => Machine.HardwareStatusReceived(A.Fake<IRotatorStatus>());
+        Behaves_like<a_stopped_rotator> _;
+        }
+
+    [Subject(typeof(RotatingState), "triggers")]
+    internal class when_in_rotating_state_and_watchdog_timeout_occurs : with_state_machine_context
+        {
+        Establish context = () =>
+            {
+                Context = ContextBuilder
+                    .Build();
+                testableRotatingState = new TestableRotatingState(Machine);
+                Machine.Initialize(testableRotatingState);
+            };
+        Because of = () => testableRotatingState.TriggerWatchdogTimeout();
+
+        It should_transition_to_request_status_state =
+            () => Machine.RotatorState.ShouldBeOfExactType<RequestStatusState>();
+        It should_send_a_status_request = () => A.CallTo(() => Actions.RequestRotatorStatus());
+        static TestableRotatingState testableRotatingState;
+
+        private class TestableRotatingState : RotatingState
+            {
+            /// <inheritdoc />
+            public TestableRotatingState(ControllerStateMachine machine) : base(machine) { }
+
+            internal void TriggerWatchdogTimeout()
+                {
+                CancelTimeout();    // Cancels any pending timeout which would interfere with the test in progress.
+                HandleTimeout();    // Manually trigger the timeout.
+                }
+            }
         }
     }

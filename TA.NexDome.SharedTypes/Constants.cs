@@ -1,8 +1,8 @@
 ﻿namespace TA.NexDome.SharedTypes
 {
     /// <summary>
-    ///     Constants that apply to Digital DomeWorks hardware, software, firmware and settings. This struct includes
-    ///     all of the commands used by the DD protocol plus other data and magic numbers.
+    ///     Constants that apply to hardware, software, firmware and settings. This struct includes
+    ///     all of the commands used by the communications protocol plus other data and magic numbers.
     /// </summary>
     public struct Constants
     {
@@ -122,6 +122,11 @@
         public const string CmdUnpark = "GSRK";
 
         #endregion
+        #region NexDome command verbs
+
+        public const string RequestRotatorStatus = "SRR";
+        public const string RequestShutterStatus = "SRS";
+        #endregion
 
         #region DDW responses
 
@@ -158,5 +163,6 @@
         public const string ActionNameControllerStatus = "ControllerStatus";
 
         #endregion Custom Actions
+
     }
 }

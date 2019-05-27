@@ -45,5 +45,10 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         /// </summary>
         /// <param name="newState">An octet with the state of the user pins in bits 0..3.</param>
         void SetUserOutputPins(Octet newState);
+
+        /// <summary>
+        ///     Requests that the rotator controller send a status report on the current state of the rotator hardware.
+        /// </summary>
+        void RequestRotatorStatus();
         }
     }

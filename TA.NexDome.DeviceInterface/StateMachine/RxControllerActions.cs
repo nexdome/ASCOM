@@ -53,5 +53,11 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             {
             channel.Send(string.Format(Constants.CmdSetUserPins, (byte)newState));
             }
+
+        /// <inheritdoc />
+        public void RequestRotatorStatus()
+            {
+            channel.Send(Constants.RequestRotatorStatus);
+            }
         }
     }

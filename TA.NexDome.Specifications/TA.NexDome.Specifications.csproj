@@ -93,6 +93,7 @@
     <EmbeddedResource Include="TestData\StatusWithIndeterminateShutter.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".editorconfig" />
     <None Include="app.config" />
     <None Include="nlog.dll.nlog" />
     <None Include="TA.NexDome.Specifications.csproj.DotSettings" />

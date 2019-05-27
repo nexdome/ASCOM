@@ -100,7 +100,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Rotator
         ///     Called when the state's timeout expires. Derived classes that wish to handle a
         ///     timeout should override this method.
         /// </summary>
-        protected virtual void HandleTimeout()
+        protected internal virtual void HandleTimeout()
             {
             Log.Warn().Message("state timed out").Write();
             }
