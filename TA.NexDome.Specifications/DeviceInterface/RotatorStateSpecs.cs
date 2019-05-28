@@ -83,7 +83,7 @@ namespace TA.NexDome.Specifications.DeviceInterface
 
         It should_transition_to_request_status_state =
             () => Machine.RotatorState.ShouldBeOfExactType<RequestStatusState>();
-        It should_send_a_status_request = () => A.CallTo(() => Actions.RequestRotatorStatus());
+        It should_send_a_status_request = () => A.CallTo(() => Actions.RequestRotatorStatus()).MustHaveHappenedOnceExactly();
         static TestableRotatingState testableRotatingState;
 
         private class TestableRotatingState : RotatingState

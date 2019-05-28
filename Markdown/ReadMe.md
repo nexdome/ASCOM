@@ -1,6 +1,19 @@
 # ASCOM Server for NexDome
 
-## Software Design UML Diagrams
+## General descriptions
+
+The ASCOM server uses the COM LocalServer pattern originally provided by The ASCOM Initiative, with enhancements developed by Tigra Astronomy.
+
+A standard LocalServer-based driver runs as an executable in its own process and communicates with its host application via Inter-Process Communications (IPC) protocol supplied by the COM runtime. To the host application, the ASCOM driver appears to be a local object which it can call directly, but in fact it is talking to a proxy object that marshals calls into the LocalServer process. The mechanics of this are handled by COM and are unimportant, except that a major benefit of this approach is that LocalServer-based drivers are compatible with 32-bit and 64-bit applications and can use a different version of the .NET Framework to the host application. This makes it a very attractive pattern if maximum compatibility is desired. Another benefit is that the  LocalServer pattern makes it relatively easy to support multiple client connections, as long as the driver developer takes account of that in the driver design (which we have done).
+
+
+## Software Design
+
+### Overview
+
+The driver is composed from several projects, which are outlined in the following component diagram. Solid lines show object dependencies while dotted lines show data flow of commands and responses.
+
+@import "BlockDiagram.md"
 
 ### Controller State Machines
 

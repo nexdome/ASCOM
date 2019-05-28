@@ -15,13 +15,13 @@ Rotating: OnEnter {azimuth motor = active; atHome = false;}
 Rotating: OnExit {cancel rotation watchdog}
 Rotating: OnExit {azimuth motor = stopped; direction = stopped}
 Rotating --> Rotating : __RotationDetected__\nReset rotation watchdog
-Rotating --> Ready : RotatorStatusReceived
+Rotating --> Ready : __RotatorStatusReceived__\nmachine.UpdateStatus
 Rotating --> RequestStatus : WatchdogTimeout
 
-state RequestStatus
+state RequestStatus <<warning>>
 RequestStatus: OnEnter {actions.RequestRotatorStatus}
 RequestStatus --> RequestStatus : __RotationDetected__\nactions.EmergencyStop\nactions.RequestRotatorStatus
-RequestStatus --> Ready : RotatorStatusReceived
+RequestStatus --> Ready : __RotatorStatusReceived__\nmachine.UpdateStatus
 
 @enduml
 ```

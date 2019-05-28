@@ -1,4 +1,5 @@
 ﻿using System;
+using TA.NexDome.SharedTypes;
 
 namespace TA.NexDome.DeviceInterface.StateMachine.Rotator {
     class RotatingState : RotatorStateBase {
@@ -19,6 +20,19 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Rotator {
             base.OnEnter();
             Machine.AzimuthMotorActive = true;
             ResetTimeout(EncoderTickTimeout);
+            }
+
+        public override void StatusUpdateReceived(IRotatorStatus status)
+            {
+            base.StatusUpdateReceived(status);
+            Machine.UpdateStatus(status);
+            Machine.TransitionToState(new ReadyState(Machine));
+            }
+
+        protected internal override void HandleTimeout()
+            {
+            base.HandleTimeout();
+            Machine.TransitionToState(new RequestStatusState(Machine));
             }
         }
     }
