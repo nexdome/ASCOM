@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// Copyright © Tigra Astronomy, all rights reserved.
+using System;
 using TA.NexDome.DeviceInterface.StateMachine;
+using TA.NexDome.SharedTypes;
+using TA.NexDome.Specifications.Builders;
 
 namespace TA.NexDome.Specifications.Contexts
     {

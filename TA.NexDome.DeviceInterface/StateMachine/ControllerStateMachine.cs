@@ -1,7 +1,8 @@
-﻿// This file is part of the TA.DigitalDomeworks project
-// 
+﻿// Copyright © Tigra Astronomy, all rights reserved.
+// This file is part of the TA.DigitalDomeworks project
+//
 // Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
-// 
+//
 // File: ControllerStateMachine.cs  Last modified: 2018-09-14@18:13 by Tim Long
 
 using System;
@@ -80,6 +81,8 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         public IRotatorState RotatorState { get; internal set; }
 
         public IShutterState ShutterState { get; internal set; }
+        public int DomeCircumference { get; internal set; }
+        public int HomePosition { get; internal set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -118,15 +121,15 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             {
             switch (newState)
                 {
-                    case IRotatorState rotator:
-                        RotatorState = rotator;
-                        break;
-                    case IShutterState shutter:
-                        ShutterState = shutter;
-                        break;
-                    case IControllerState state:
-                        CurrentState = state;
-                        break;
+                case IRotatorState rotator:
+                    RotatorState = rotator;
+                    break;
+                case IShutterState shutter:
+                    ShutterState = shutter;
+                    break;
+                case IControllerState state:
+                    CurrentState = state;
+                    break;
                 }
             }
 
@@ -134,14 +137,14 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             {
             switch (targetState)
                 {
-                    case IRotatorState state:
-                        return RotatorState;
-                    case IShutterState state:
-                        return ShutterState;
-                    case IControllerState state:
-                        return CurrentState;
-                    default:
-                        throw new InvalidOperationException("Funky state type");
+                case IRotatorState state:
+                    return RotatorState;
+                case IShutterState state:
+                    return ShutterState;
+                case IControllerState state:
+                    return CurrentState;
+                default:
+                    throw new InvalidOperationException("Funky state type");
                 }
             }
 
@@ -206,6 +209,8 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             AzimuthMotorActive = false;
             AzimuthDirection = RotationDirection.None;
             AtHome = status.AtHome;
+            DomeCircumference = status.DomeCircumference;
+            HomePosition = status.HomePosition;
             }
 
         internal void UpdateStatus(IShutterStatus status)
@@ -331,7 +336,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             CurrentState.RequestHardwareStatus();
             }
 
-        #region State triggers 
+        #region State triggers
         public void AzimuthEncoderTickReceived(int encoderPosition)
             {
             AzimuthEncoderPosition = encoderPosition;

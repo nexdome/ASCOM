@@ -1,9 +1,11 @@
-﻿using System;
+﻿// Copyright © Tigra Astronomy, all rights reserved.
+using System;
 using TA.NexDome.SharedTypes;
 
-namespace TA.NexDome.DeviceInterface.StateMachine.Rotator {
-    class RotatingState : RotatorStateBase {
-
+namespace TA.NexDome.DeviceInterface.StateMachine.Rotator
+    {
+    internal class RotatingState : RotatorStateBase
+        {
         /// <summary>
         ///     While rotating, azimuth position updates are expected to arrive at least this often.
         ///     If they do not, then it will be assumed that rotation may have stopped and we must
@@ -19,6 +21,12 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Rotator {
             {
             base.OnEnter();
             Machine.AzimuthMotorActive = true;
+            ResetTimeout(EncoderTickTimeout);
+            }
+
+        public override void RotationDetected()
+            {
+            base.RotationDetected();
             ResetTimeout(EncoderTickTimeout);
             }
 

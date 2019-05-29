@@ -1,18 +1,13 @@
-﻿// This file is part of the TA.DigitalDomeworks project
-// 
-// Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
-// 
-// File: DeviceController.cs  Last modified: 2018-09-16@15:44 by Tim Long
-
+﻿// Copyright © Tigra Astronomy, all rights reserved.
+using JetBrains.Annotations;
+using NLog.Fluent;
+using PostSharp.Patterns.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
-using NLog.Fluent;
-using PostSharp.Patterns.Model;
 using TA.Ascom.ReactiveCommunications;
 using TA.Ascom.ReactiveCommunications.Diagnostics;
 using TA.NexDome.DeviceInterface.StateMachine;
@@ -215,7 +210,9 @@ namespace TA.NexDome.DeviceInterface
             disposableSubscriptions.Add(azimuthEncoderSubscription);
             }
 
-        private void RotationDirectionOnNext(RotationDirection direction) { }
+        private void RotationDirectionOnNext(RotationDirection direction)
+            {
+            }
 
         public void Close()
             {
@@ -230,10 +227,7 @@ namespace TA.NexDome.DeviceInterface
             }
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-            {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         public void SetUserOutputPin(int pinNumber, bool state)
             {

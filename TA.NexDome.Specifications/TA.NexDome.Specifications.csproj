@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builders\DeviceControllerContextBuilder.cs" />
+    <Compile Include="Builders\RotatorStatusBuilder.cs" />
     <Compile Include="Builders\StateMachineBuilder.cs" />
     <Compile Include="Contexts\DeviceControllerContext.cs" />
     <Compile Include="Contexts\LogSetup.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="DeviceInterface\Behaviours\a_stopped_shutter.cs" />
     <Compile Include="DeviceInterface\Behaviours\device_controller_behaviour.cs" />
     <Compile Include="DeviceInterface\Behaviours\state_machine_behaviour.cs" />
+    <Compile Include="DeviceInterface\Behaviours\view_model_is_updated_from_rotator_status.cs" />
     <Compile Include="DeviceInterface\ConnectionSpecs.cs" />
     <Compile Include="DeviceInterface\ControllerStateMachineBehaviours.cs" />
     <Compile Include="DeviceInterface\ControllerStateMachineSpecs.cs" />

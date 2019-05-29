@@ -52,5 +52,7 @@ namespace TA.NexDome.DeviceInterface
         ///     Indicates whether the shutter motor is energized.
         /// </summary>
         bool ShutterMotorActive { get; }
+        int DomeCircumference { get; }
+        int HomePosition { get; }
         }
     }

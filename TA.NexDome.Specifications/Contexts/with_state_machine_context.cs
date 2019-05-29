@@ -1,36 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// Copyright © Tigra Astronomy, all rights reserved.
 using Machine.Specifications;
 using TA.NexDome.DeviceInterface.StateMachine;
 using TA.NexDome.Specifications.Builders;
 
 namespace TA.NexDome.Specifications.Contexts
-{
-/// <summary>
-/// A test context for testing Device Controller state machine operation. Includes a context
-/// class to hold all the test data and unit under test, plus a builder to create the context.
-/// </summary>
-internal class with_state_machine_context
     {
-    protected static StateMachineContext Context;
-
-    protected static StateMachineBuilder ContextBuilder { get; set; }
-
-    Cleanup after = () =>
+    /// <summary>
+    /// A test context for testing Device Controller state machine operation. Includes a context
+    /// class to hold all the test data and unit under test, plus a builder to create the context.
+    /// </summary>
+    internal class with_state_machine_context
         {
-        Context = null;
-        ContextBuilder = null;
+        protected static StateMachineContext Context;
+
+        protected static StateMachineBuilder ContextBuilder { get; set; }
+        protected static RotatorStatusBuilder RotatorStatus;
+
+        Cleanup after = () =>
+            {
+                Context = null;
+                ContextBuilder = null;
+            };
+
+        Establish context = () =>
+        {
+            ContextBuilder = new StateMachineBuilder();
+            RotatorStatus = new RotatorStatusBuilder();
         };
-    Establish context = () => ContextBuilder = new StateMachineBuilder();
 
-    #region Convenience Properties
-    protected static IControllerActions Actions => Context.Actions;
+        #region Convenience Properties
+        protected static IControllerActions Actions => Context.Actions;
 
-    protected static ControllerStateMachine Machine => Context.Machine;
+        protected static ControllerStateMachine Machine => Context.Machine;
 
-    #endregion
+        #endregion Convenience Properties
+        }
     }
-}
