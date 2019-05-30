@@ -36,5 +36,6 @@ namespace TA.NexDome.DeviceInterface.StateMachine {
 
         void LinkStateReceived(ShutterLinkState state);
 
+        void ShutterDirectionReceived(ShutterDirection direction);
         }
     }

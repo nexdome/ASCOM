@@ -235,7 +235,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             {
             if (direction == ShutterDirection.Closing || direction == ShutterDirection.Opening)
                 ShutterMovementDirection = direction;
-            CurrentState.ShutterMovementDetected();
+            ShutterState.ShutterDirectionReceived(direction);
             }
 
         public void AllStop()

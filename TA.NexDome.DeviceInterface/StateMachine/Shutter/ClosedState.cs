@@ -1,4 +1,6 @@
-﻿namespace TA.NexDome.DeviceInterface.StateMachine.Shutter {
+﻿using TA.NexDome.SharedTypes;
+
+namespace TA.NexDome.DeviceInterface.StateMachine.Shutter {
     class ClosedState : ShutterStateBase {
         /// <inheritdoc />
         public ClosedState(ControllerStateMachine machine) : base(machine) { }
@@ -16,5 +18,12 @@
             Machine.ShutterInReadyState.Reset();
             }
 
+        /// <inheritdoc />
+        public override void ShutterDirectionReceived(ShutterDirection direction)
+            {
+            base.ShutterDirectionReceived(direction);
+            if (direction== ShutterDirection.Opening)
+                Machine.TransitionToState(new OpeningState(Machine));
+            }
         }
     }

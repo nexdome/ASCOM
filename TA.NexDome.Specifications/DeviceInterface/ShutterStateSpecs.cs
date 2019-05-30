@@ -50,4 +50,16 @@ namespace TA.NexDome.Specifications.DeviceInterface
         Behaves_like<a_closed_shutter> _;
         Because of = () => Machine.HardwareStatusReceived(ShutterStatus.FullyClosed().Build());
         }
+
+    [Subject(typeof(RequestStatusState), "triggers")]
+    internal class when_closed_and_shutter_opening_received : with_state_machine_context
+        {
+        Establish context = () => Context = ContextBuilder
+            .WithShutterFullyClosed()
+            .Build();
+        Because of = () => Machine.ShutterDirectionReceived(ShutterDirection.Opening);
+        Behaves_like<a_moving_shutter> _;
+        It should_be_in_opening_state = () => Machine.ShutterState.ShouldBeOfExactType<OpeningState>();
+        It should_be_opening = () => Machine.ShutterMovementDirection.ShouldEqual(ShutterDirection.Opening);
+        }
     }

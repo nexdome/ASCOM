@@ -44,8 +44,6 @@ namespace TA.NexDome.Specifications.Builders
             if (initializeShuttterStateMachine)
                 {
                 IShutterState shutterState = Activator.CreateInstance(shutterStartType, machine) as IShutterState;
-                machine.ShutterMovementDirection = ShutterDirection.None;
-                machine.ShutterPosition = 0;
                 machine.Initialize(shutterState);
                 }
             if (rotatorIsRotating)
@@ -108,6 +106,16 @@ namespace TA.NexDome.Specifications.Builders
 
         public StateMachineBuilder WithShutterFullyOpen()
             {
+            shutterStartType = typeof(OpenState);
+            initializeShuttterStateMachine = true;
+            shutterSensorState = SensorState.Open;
+            return this;
+            }
+
+        public StateMachineBuilder WithShutterFullyClosed()
+            {
+            shutterStartType = typeof(ClosedState);
+            initializeShuttterStateMachine = true;
             shutterSensorState = SensorState.Open;
             return this;
             }

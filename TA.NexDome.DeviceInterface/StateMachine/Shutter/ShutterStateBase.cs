@@ -31,7 +31,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
             }
 
         /// <inheritdoc />
-        public void ShutterMovementDetected() { }
+        public virtual void ShutterMovementDetected() { }
 
         /// <inheritdoc />
         public virtual void StatusUpdateReceived(IShutterStatus status) =>
@@ -113,5 +113,6 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
             timeoutCancellation?.Cancel();
             }
 
+        public virtual void ShutterDirectionReceived(ShutterDirection direction) => Log.Debug().Message("Shutter direction {direction}", direction).Write();
         }
     }
