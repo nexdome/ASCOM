@@ -15,6 +15,7 @@ namespace TA.NexDome.Specifications.Contexts
 
         protected static StateMachineBuilder ContextBuilder { get; set; }
         protected static RotatorStatusBuilder RotatorStatus;
+        protected static ShutterStatusBuilder ShutterStatus;
 
         Cleanup after = () =>
             {
@@ -26,6 +27,7 @@ namespace TA.NexDome.Specifications.Contexts
         {
             ContextBuilder = new StateMachineBuilder();
             RotatorStatus = new RotatorStatusBuilder();
+            ShutterStatus = new ShutterStatusBuilder();
         };
 
         #region Convenience Properties

@@ -46,6 +46,9 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
         /// <inheritdoc />
         public virtual void RequestHardwareStatus() => Log.Debug().Message("Request status").Write();
 
+        /// <inheritdoc />
+        public virtual void LinkStateReceived(ShutterLinkState state) => Log.Debug().Message("Link state {state}/{displayState}", state, state.DisplayEquivalent()).Write();
+
         /// <summary>
         ///     Cancels any existing timeout and starts a new one with the specified time interval.
         /// </summary>

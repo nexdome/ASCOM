@@ -32,4 +32,40 @@ namespace TA.NexDome.Specifications.Builders
             return this.Azimuth(expectedAzimuth);
             }
         }
+    class ShutterStatusBuilder
+        {
+        const int PresumedFullShutterTravel = 500;
+        IShutterStatus status = A.Fake<IShutterStatus>();
+        public IShutterStatus Build() => status;
+        public ShutterStatusBuilder Position(int steps)
+            {
+            A.CallTo(() => status.Position).Returns(steps);
+            return this;
+            }
+
+        public ShutterStatusBuilder FullyOpen()
+            {
+            A.CallTo(() => status.OpenSensorActive).Returns(true);
+            A.CallTo(() => status.ClosedSensorActive).Returns(false);
+            A.CallTo(() => status.Position).Returns(PresumedFullShutterTravel);
+            return this;
+            }
+
+        public ShutterStatusBuilder FullyClosed()
+            {
+            A.CallTo(() => status.OpenSensorActive).Returns(false);
+            A.CallTo(() => status.ClosedSensorActive).Returns(true);
+            A.CallTo(() => status.Position).Returns(0);
+            return this;
+            }
+
+        public ShutterStatusBuilder PartiallyOpen()
+            {
+            A.CallTo(() => status.OpenSensorActive).Returns(false);
+            A.CallTo(() => status.ClosedSensorActive).Returns(false);
+            A.CallTo(() => status.Position).Returns(PresumedFullShutterTravel / 2);
+            return this;
+            }
+
+        }
     }

@@ -1,6 +1,7 @@
 ﻿using FakeItEasy;
 using System;
 using TA.NexDome.DeviceInterface.StateMachine;
+using TA.NexDome.DeviceInterface.StateMachine.Shutter;
 using TA.NexDome.SharedTypes;
 using TA.NexDome.Specifications.Contexts;
 
@@ -25,6 +26,7 @@ namespace TA.NexDome.Specifications.Builders
         private bool rotatorIsRotating = false;
         private Type rotatorStartType = typeof(TA.NexDome.DeviceInterface.StateMachine.Rotator.ReadyState);
         private Type shutterStartType = typeof(TA.NexDome.DeviceInterface.StateMachine.Shutter.OfflineState);
+        SensorState shutterSensorState = SensorState.Indeterminate;
 
         internal StateMachineContext Build()
             {
@@ -42,6 +44,8 @@ namespace TA.NexDome.Specifications.Builders
             if (initializeShuttterStateMachine)
                 {
                 IShutterState shutterState = Activator.CreateInstance(shutterStartType, machine) as IShutterState;
+                machine.ShutterMovementDirection = ShutterDirection.None;
+                machine.ShutterPosition = 0;
                 machine.Initialize(shutterState);
                 }
             if (rotatorIsRotating)
@@ -83,6 +87,28 @@ namespace TA.NexDome.Specifications.Builders
             rotatorStartType = typeof(TA.NexDome.DeviceInterface.StateMachine.Rotator.RequestStatusState);
             initializeRotatorStateMachine = true;
             rotatorIsRotating = true;
+            return this;
+            }
+
+        internal StateMachineBuilder WithOfflineShutter()
+            {
+            shutterStartType = typeof(OfflineState);
+            initializeShuttterStateMachine = true;
+            shutterSensorState = SensorState.Indeterminate;
+            return this;
+            }
+
+        public StateMachineBuilder WithShutterInRequestStatusState()
+            {
+            shutterStartType = typeof(RequestStatusState);
+            initializeShuttterStateMachine = true;
+            shutterSensorState = SensorState.Indeterminate;
+            return this;
+            }
+
+        public StateMachineBuilder WithShutterFullyOpen()
+            {
+            shutterSensorState = SensorState.Open;
             return this;
             }
         }

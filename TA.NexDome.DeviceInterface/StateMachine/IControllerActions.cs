@@ -50,5 +50,10 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         ///     Requests that the rotator controller send a status report on the current state of the rotator hardware.
         /// </summary>
         void RequestRotatorStatus();
+
+        /// <summary>
+        ///     Requests that the shutter controller send a status report on the current state of the shutter hardware.
+        /// </summary>
+        void RequestShutterStatus();
         }
     }

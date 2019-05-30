@@ -34,5 +34,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine {
         /// </summary>
         void RequestHardwareStatus();
 
+        void LinkStateReceived(ShutterLinkState state);
+
         }
     }

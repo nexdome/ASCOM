@@ -59,5 +59,11 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             {
             channel.Send(Constants.RequestRotatorStatus);
             }
+
+        /// <inheritdoc />
+        public void RequestShutterStatus()
+            {
+            channel.Send(Constants.RequestShutterStatus);
+            }
         }
     }

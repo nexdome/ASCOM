@@ -52,7 +52,22 @@ namespace TA.NexDome.DeviceInterface
         ///     Indicates whether the shutter motor is energized.
         /// </summary>
         bool ShutterMotorActive { get; }
+        /// <summary>
+        ///     Gets the dome circumference in whole steps.
+        /// </summary>
+        /// <value>The dome circumference.</value>
         int DomeCircumference { get; }
+
+        /// <summary>
+        /// Gets the position of the home sensor measured in whole steps clockwise from true north.
+        /// </summary>
+        /// <value>The home position.</value>
         int HomePosition { get; }
+
+        /// <summary>
+        ///     Gets the state of the shutter communications link.
+        /// </summary>
+        /// <value>The state of the shutter link.</value>
+        ShutterLinkState ShutterLinkState { get; }
         }
     }

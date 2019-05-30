@@ -7,8 +7,8 @@ skinparam linetype arc
 [*] --> Offline
 
 state Offline <<Warning>>
-Offline --> Closed : __XBee->Online && ClosedSensorActive__
-Offline --> Open : __XBee->Online && NOT ClosedSensorActive__
+Offline --> RequestStatus : XBee->Online
+
 
 state Closed <<Safe>>
 Closed: OnEnter {Shutter motor = stopped}
@@ -35,6 +35,11 @@ Closing: OnEnter {Shutter motor = active; direction = Closing}
 Closing --> Closed : __ShutterStatusReceived && ClosedSensorActive__
 Closing --> Closing : __ShutterPositionReceived__
 Closing --> Offline : __XBee offline__
+
+state RequestStatus <<Warning>>
+RequestStatus: OnEnter {actions.RequestShutterStatus}
+RequestStatus --> Closed : ShutterStatusReceived && Closed
+RequestStatus --> Open : ShutterStatusReceived && !Closed
 
 
 @enduml

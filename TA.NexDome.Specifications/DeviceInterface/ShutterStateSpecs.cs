@@ -1,21 +1,53 @@
-﻿using Machine.Specifications;
-using TA.NexDome.DeviceInterface.StateMachine;
-using TA.NexDome.DeviceInterface.StateMachine.Rotator;
+﻿using FakeItEasy;
+using Machine.Specifications;
 using TA.NexDome.DeviceInterface.StateMachine.Shutter;
+using TA.NexDome.SharedTypes;
 using TA.NexDome.Specifications.Contexts;
+using TA.NexDome.Specifications.DeviceInterface.Behaviours;
 
 namespace TA.NexDome.Specifications.DeviceInterface
     {
-    [Subject(typeof(ControllerStateMachine), "startup")]
-    internal class when_doing_something_to_the_shutter : with_state_machine_context
+    [Subject(typeof(OfflineState), "startup")]
+    internal class when_shutter_is_offline : with_state_machine_context
         {
         Establish context = () => Context = ContextBuilder
-            .WithReadyRotatorAndOfflineShutter()
+            .WithOfflineShutter()
             .Build();
-        It should_have_rotator_in_ready_state = () => Machine.RotatorState.ShouldBeOfExactType<ReadyState>();
+        Behaves_like<an_offline_shutter> _;
         It should_have_shutter_in_offline_state = () => Machine.ShutterState.ShouldBeOfExactType<OfflineState>();
-        It should_not_be_at_home = () => Machine.AtHome.ShouldBeFalse();
-        It should_be_at_azimuth_zero = () => Machine.AzimuthEncoderPosition.ShouldEqual(0);
-        It should_signal_ready = () => Machine.RotatorInReadyState.WaitOne(0).ShouldBeTrue();
+        It should_not_signal_ready = () => Machine.ShutterInReadyState.WaitOne(0).ShouldBeFalse();
+        }
+
+    [Subject(typeof(OfflineState), "startup")]
+    internal class when_shutter_is_offline_and_xbee_connection_established : with_state_machine_context
+        {
+        Establish context = () => Context = ContextBuilder
+            .WithOfflineShutter()
+            .Build();
+        Because of = () => Machine.ShutterLinkStateChanged(ShutterLinkState.Online);
+        It should_transition_to_request_status_state = () => Machine.ShutterState.ShouldBeOfExactType<RequestStatusState>();
+        It should_request_status = () => A.CallTo(() => Actions.RequestShutterStatus()).MustHaveHappenedOnceExactly();
+        It should_update_the_view_model = () => Machine.ShutterLinkState.ShouldEqual(ShutterLinkState.Online);
+        It should_not_signal_ready = () => Machine.ShutterInReadyState.WaitOne(0).ShouldBeFalse();
+        }
+
+    [Subject(typeof(RequestStatusState), "triggers")]
+    internal class when_requesting_status_and_status_received_and_shutter_open : with_state_machine_context
+        {
+        Establish context = () => Context = ContextBuilder
+            .WithShutterInRequestStatusState()
+            .Build();
+        Because of = () => Machine.HardwareStatusReceived(ShutterStatus.FullyOpen().Build());
+        Behaves_like<an_open_shutter> _;
+        }
+
+    [Subject(typeof(RequestStatusState), "triggers")]
+    internal class when_requesting_status_and_status_received_and_shutter_closed : with_state_machine_context
+        {
+        Establish context = () => Context = ContextBuilder
+            .WithShutterInRequestStatusState()
+            .Build();
+        Behaves_like<a_closed_shutter> _;
+        Because of = () => Machine.HardwareStatusReceived(ShutterStatus.FullyClosed().Build());
         }
     }

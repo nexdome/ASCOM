@@ -5,15 +5,14 @@
 //
 // File: ControllerStateMachine.cs  Last modified: 2018-09-14@18:13 by Tim Long
 
-using System;
-using System.ComponentModel;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using NLog.Fluent;
 using PostSharp.Patterns.Model;
+using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using TA.NexDome.SharedTypes;
 
 namespace TA.NexDome.DeviceInterface.StateMachine
@@ -51,6 +50,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
 
         [CanBeNull]
         public IShutterStatus ShutterStatus { get; private set; }
+        public ShutterLinkState ShutterLinkState { get; internal set; }
 
         public bool AtHome { get; set; }
 
@@ -90,10 +90,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         ///     Initializes the state machine and optionally sets the starting state.
         /// </summary>
         /// <param name="startState"></param>
-        public void Initialize(IControllerState startState)
-            {
-            TransitionToState(startState);
-            }
+        public void Initialize(IControllerState startState) => TransitionToState(startState);
 
         /// <summary>
         ///     Initializes the specified rotator initial state.
@@ -101,10 +98,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         /// <param name="rotatorInitialState">
         /// Sets the Initial state of the rotator state machine.
         /// </param>
-        public void Initialize(IRotatorState rotatorInitialState)
-            {
-            TransitionToState(rotatorInitialState);
-            }
+        public void Initialize(IRotatorState rotatorInitialState) => TransitionToState(rotatorInitialState);
 
         /// <summary>
         /// Initializes the specified shutter initial state.
@@ -112,10 +106,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         /// <param name="shutterInitialState">
         /// Sets the Initial state of the shutter state machine.
         /// </param>
-        public void Initialize(IShutterState shutterInitialState)
-            {
-            TransitionToState(shutterInitialState);
-            }
+        public void Initialize(IShutterState shutterInitialState) => TransitionToState(shutterInitialState);
 
         private void SetCurrentState<TState>(TState newState) where TState : IState
             {
@@ -180,10 +171,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             }
 
         [NotifyPropertyChangedInvocator]
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-            {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         /// <summary>
         ///     Update state machine properties from a <see cref="IHardwareStatus" /> record.
@@ -235,10 +223,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             return InferredShutterPosition;
             }
 
-        internal void RequestHardwareStatus()
-            {
-            ControllerActions.RequestHardwareStatus();
-            }
+        internal void RequestHardwareStatus() => ControllerActions.RequestHardwareStatus();
 
         public void ShutterMotorCurrentReceived(int current)
             {
@@ -276,10 +261,10 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         /// </exception>
         public void WaitForReady(TimeSpan timeout)
             {
-            var signalled = InReadyState.WaitOne(timeout);
+            bool signalled = InReadyState.WaitOne(timeout);
             if (!signalled)
                 {
-                var message = $"State machine did not enter the ready state within the allotted time of {timeout}";
+                string message = $"State machine did not enter the ready state within the allotted time of {timeout}";
                 Log.Error().Message(message).Write();
                 throw new TimeoutException(message);
                 }
@@ -291,20 +276,11 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             RotatorState.RotateToAzimuthDegrees(azimuth);
             }
 
-        public void OpenShutter()
-            {
-            CurrentState.OpenShutter();
-            }
+        public void OpenShutter() => CurrentState.OpenShutter();
 
-        public void CloseShutter()
-            {
-            CurrentState.CloseShutter();
-            }
+        public void CloseShutter() => CurrentState.CloseShutter();
 
-        public void RotateToHomePosition()
-            {
-            CurrentState.RotateToHomePosition();
-            }
+        public void RotateToHomePosition() => CurrentState.RotateToHomePosition();
 
         public void SetUserOutputPins(Octet newState)
             {
@@ -371,8 +347,15 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             Log.Info().Message("Shutter status {status}", status).Write();
             ShutterStatus = status;
             UpdateStatus(status);
-            CurrentState.StatusUpdateReceived(status);
+            ShutterState.StatusUpdateReceived(status);
             }
         #endregion State triggers
+
+        public void ShutterLinkStateChanged(ShutterLinkState state)
+            {
+            Log.Info().Message("Shutter link state {state}", state).Write();
+            ShutterLinkState = state;
+            ShutterState.LinkStateReceived(state);
+            }
         }
     }

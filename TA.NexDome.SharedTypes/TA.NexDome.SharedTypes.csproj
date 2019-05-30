@@ -47,6 +47,8 @@
     <Compile Include="Constants.cs" />
     <Compile Include="ControllerStatusFactory.cs" />
     <Compile Include="DeviceControllerOptions.cs" />
+    <Compile Include="DisplayEquivalentAttribute.cs" />
+    <Compile Include="EnumExtensions.cs" />
     <Compile Include="HardwareStatus.cs" />
     <Compile Include="IClock.cs" />
     <Compile Include="IHardwareStatus.cs" />
@@ -60,6 +62,7 @@
     <Compile Include="SemanticVersion.cs" />
     <Compile Include="SensorState.cs" />
     <Compile Include="ShutterDirection.cs" />
+    <Compile Include="ShutterLinkState.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="GitVersionTask">
