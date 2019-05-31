@@ -38,10 +38,10 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
             Log.Debug().Message("Status received: {status}", status).Write();
 
         /// <inheritdoc />
-        public void OpenShutter() { }
+        public virtual void OpenShutter() { }
 
         /// <inheritdoc />
-        public void CloseShutter() { }
+        public virtual void CloseShutter() { }
 
         /// <inheritdoc />
         public virtual void RequestHardwareStatus() => Log.Debug().Message("Request status").Write();
@@ -114,5 +114,8 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
             }
 
         public virtual void ShutterDirectionReceived(ShutterDirection direction) => Log.Debug().Message("Shutter direction {direction}", direction).Write();
+
+        /// <inheritdoc />
+        public virtual void EncoderTickReceived(int encoderPosition) => Log.Debug().Message("Shutter position {position}", encoderPosition).Write();
         }
     }

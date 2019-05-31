@@ -276,9 +276,9 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             RotatorState.RotateToAzimuthDegrees(azimuth);
             }
 
-        public void OpenShutter() => CurrentState.OpenShutter();
+        public void OpenShutter() => ShutterState.OpenShutter();
 
-        public void CloseShutter() => CurrentState.CloseShutter();
+        public void CloseShutter() => ShutterState.CloseShutter();
 
         public void RotateToHomePosition() => CurrentState.RotateToHomePosition();
 
@@ -319,6 +319,15 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             //CurrentState.RotationDetected();
             RotatorState.RotationDetected();
             }
+
+        public void ShutterEncoderTickReceived(int encoderPosition)
+            {
+            ShutterStepPosition = encoderPosition;
+            //CurrentState.RotationDetected();
+            ShutterState.EncoderTickReceived(encoderPosition);
+            }
+
+        public int ShutterStepPosition { get; set; }
 
         public void HardwareStatusReceived(IHardwareStatus status)
             {

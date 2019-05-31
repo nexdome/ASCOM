@@ -25,5 +25,28 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter {
             if (direction== ShutterDirection.Opening)
                 Machine.TransitionToState(new OpeningState(Machine));
             }
+
+        /// <inheritdoc />
+        public override void EncoderTickReceived(int encoderPosition)
+            {
+            base.EncoderTickReceived(encoderPosition);
+            Machine.TransitionToState(new OpeningState(Machine));
+            }
+
+        /// <inheritdoc />
+        public override void OpenShutter()
+            {
+            base.OpenShutter();
+            Machine.ControllerActions.OpenShutter();
+            Machine.TransitionToState(new OpeningState(Machine));
+            }
+
+        /// <inheritdoc />
+        public override void LinkStateReceived(ShutterLinkState state)
+            {
+            base.LinkStateReceived(state);
+            if (state!= ShutterLinkState.Online)
+                Machine.TransitionToState(new OfflineState(Machine));
+            }
         }
     }

@@ -37,6 +37,12 @@
       <FixtureTestSelector>
         <FixtureName>TA.NexDome.Specifications.DeviceInterface.when_the_shutter_begins_to_open</FixtureName>
       </FixtureTestSelector>
+      <FixtureTestSelector>
+        <FixtureName>TA.NexDome.Specifications.DeviceInterface.when_shutter_close_received_and_shutter_not_closed</FixtureName>
+      </FixtureTestSelector>
+      <FixtureTestSelector>
+        <FixtureName>TA.NexDome.Specifications.DeviceInterface.when_shutter_open_received_and_shutter_not_open</FixtureName>
+      </FixtureTestSelector>
     </IgnoredTests>
   </Settings>
 </ProjectConfiguration>

@@ -51,7 +51,7 @@ namespace TA.NexDome.Specifications.DeviceInterface
         Because of = () => Machine.HardwareStatusReceived(ShutterStatus.FullyClosed().Build());
         }
 
-    [Subject(typeof(RequestStatusState), "triggers")]
+    [Subject(typeof(ClosedState), "triggers")]
     internal class when_closed_and_shutter_opening_received : with_state_machine_context
         {
         Establish context = () => Context = ContextBuilder
@@ -61,5 +61,42 @@ namespace TA.NexDome.Specifications.DeviceInterface
         Behaves_like<a_moving_shutter> _;
         It should_be_in_opening_state = () => Machine.ShutterState.ShouldBeOfExactType<OpeningState>();
         It should_be_opening = () => Machine.ShutterMovementDirection.ShouldEqual(ShutterDirection.Opening);
+        }
+
+    [Subject(typeof(ClosedState), "triggers")]
+    internal class when_closed_and_shutter_position_received : with_state_machine_context
+        {
+        const int ExpectedStepPosition = 213;
+        Establish context = () => Context = ContextBuilder
+            .WithShutterFullyClosed()
+            .Build();
+        Because of = () => Machine.ShutterEncoderTickReceived(ExpectedStepPosition);
+        Behaves_like<a_moving_shutter> _;
+        It should_be_in_opening_state = () => Machine.ShutterState.ShouldBeOfExactType<OpeningState>();
+        It should_be_opening = () => Machine.ShutterMovementDirection.ShouldEqual(ShutterDirection.Opening);
+        It should_update_the_view_model = () => Machine.ShutterStepPosition.ShouldEqual(ExpectedStepPosition);
+        }
+
+    [Subject(typeof(ClosedState), "triggers")]
+    internal class when_closed_and_shutter_open_requested : with_state_machine_context
+        {
+        Establish context = () => Context = ContextBuilder
+            .WithShutterFullyClosed()
+            .Build();
+        Because of = () => Machine.OpenShutter();
+        Behaves_like<a_moving_shutter> _;
+        It should_be_in_opening_state = () => Machine.ShutterState.ShouldBeOfExactType<OpeningState>();
+        It should_be_opening = () => Machine.ShutterMovementDirection.ShouldEqual(ShutterDirection.Opening);
+        It should_invoke_open_shutter_action = () => A.CallTo(()=>Actions.OpenShutter()).MustHaveHappenedOnceExactly();
+        }
+
+    [Subject(typeof(ClosedState), "triggers")]
+    internal class when_closed_and_link_goes_down : with_state_machine_context
+        {
+        Establish context = () => Context = ContextBuilder
+            .WithShutterFullyClosed()
+            .Build();
+        Because of = () => Machine.ShutterLinkStateChanged(ShutterLinkState.Detect);
+        Behaves_like<an_offline_shutter> _;
         }
     }

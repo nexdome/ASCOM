@@ -69,5 +69,7 @@ namespace TA.NexDome.DeviceInterface
         /// </summary>
         /// <value>The state of the shutter link.</value>
         ShutterLinkState ShutterLinkState { get; }
+
+        int ShutterStepPosition { get; set; }
         }
     }
