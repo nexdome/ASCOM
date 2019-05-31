@@ -99,4 +99,16 @@ namespace TA.NexDome.Specifications.DeviceInterface
         Because of = () => Machine.ShutterLinkStateChanged(ShutterLinkState.Detect);
         Behaves_like<an_offline_shutter> _;
         }
+
+    [Subject(typeof(OpeningState), "triggers")]
+    internal class when_opening_and_encoder_tick_received : with_state_machine_context
+        {
+        Establish context = () => Context = ContextBuilder
+            .WithOpeningShutter()
+            .Build();
+        Because of = () => Machine.ShutterEncoderTickReceived(50);
+        Behaves_like<a_moving_shutter> _;
+        It should_be_opening = () => Machine.ShutterState.ShouldBeOfExactType<OpeningState>();
+        It should_update_the_view_model_position = () => Machine.ShutterStepPosition.ShouldEqual(50);
+        }
     }

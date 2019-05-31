@@ -27,10 +27,12 @@ namespace TA.NexDome.Specifications.Builders
         private Type rotatorStartType = typeof(TA.NexDome.DeviceInterface.StateMachine.Rotator.ReadyState);
         private Type shutterStartType = typeof(TA.NexDome.DeviceInterface.StateMachine.Shutter.OfflineState);
         SensorState shutterSensorState = SensorState.Indeterminate;
+        int shutterStepPosition = 0;
 
         internal StateMachineContext Build()
             {
             var machine = new ControllerStateMachine(actions, deviceControllerOptions, new SystemDateTimeUtcClock());
+            machine.ShutterStepPosition = shutterStepPosition;
             var context = new StateMachineContext
                 {
                 Actions = actions,
@@ -117,6 +119,15 @@ namespace TA.NexDome.Specifications.Builders
             shutterStartType = typeof(ClosedState);
             initializeShuttterStateMachine = true;
             shutterSensorState = SensorState.Open;
+            return this;
+            }
+
+        public StateMachineBuilder WithOpeningShutter()
+            {
+            shutterStartType = typeof(OpeningState);
+            initializeShuttterStateMachine = true;
+            shutterSensorState = SensorState.Indeterminate;
+            shutterStepPosition = 50;
             return this;
             }
         }
