@@ -9,6 +9,7 @@ namespace TA.NexDome.Specifications.Builders
     {
     internal class StateMachineBuilder
         {
+        const int shutterLimitOfTravel = 500;
         private IControllerActions actions = A.Fake<IControllerActions>();
 
         private DeviceControllerOptions deviceControllerOptions = new DeviceControllerOptions
@@ -111,6 +112,16 @@ namespace TA.NexDome.Specifications.Builders
             shutterStartType = typeof(OpenState);
             initializeShuttterStateMachine = true;
             shutterSensorState = SensorState.Open;
+            shutterStepPosition = shutterLimitOfTravel;
+            return this;
+            }
+
+        public StateMachineBuilder WithShutterPartiallyOpen()
+            {
+            shutterStartType = typeof(OpenState);
+            initializeShuttterStateMachine = true;
+            shutterSensorState = SensorState.Indeterminate;
+            shutterStepPosition = shutterLimitOfTravel/2;
             return this;
             }
 
@@ -119,6 +130,7 @@ namespace TA.NexDome.Specifications.Builders
             shutterStartType = typeof(ClosedState);
             initializeShuttterStateMachine = true;
             shutterSensorState = SensorState.Open;
+            shutterStepPosition = 0;
             return this;
             }
 
@@ -128,6 +140,15 @@ namespace TA.NexDome.Specifications.Builders
             initializeShuttterStateMachine = true;
             shutterSensorState = SensorState.Indeterminate;
             shutterStepPosition = 50;
+            return this;
+            }
+
+        public StateMachineBuilder WithClosingShutter()
+            {
+            shutterStartType = typeof(ClosingState);
+            initializeShuttterStateMachine = true;
+            shutterSensorState = SensorState.Indeterminate;
+            shutterStepPosition = shutterLimitOfTravel/2;
             return this;
             }
         }

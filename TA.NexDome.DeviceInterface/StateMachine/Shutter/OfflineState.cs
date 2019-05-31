@@ -8,10 +8,20 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
         public OfflineState(ControllerStateMachine machine) : base(machine) { }
 
         /// <inheritdoc />
+        public override void OnEnter()
+            {
+            base.OnEnter();
+            Machine.ShutterStepPosition = 0;
+            Machine.ShutterMotorActive = false;
+            Machine.ShutterMovementDirection = ShutterDirection.None;
+            Machine.ShutterPosition = SensorState.Indeterminate;
+            }
+
+        /// <inheritdoc />
         public override void LinkStateReceived(ShutterLinkState state)
             {
             base.LinkStateReceived(state);
-            if (state == ShutterLinkState.Online)
+            if (state== ShutterLinkState.Online)
                 Machine.TransitionToState(new RequestStatusState(Machine));
             }
         }

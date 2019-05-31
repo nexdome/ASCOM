@@ -31,6 +31,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter {
             {
             base.EncoderTickReceived(encoderPosition);
             ResetTimeout(EncoderTickTimeout);
+            Machine.ShutterStepPosition = encoderPosition;
             }
 
         /// <inheritdoc />

@@ -30,6 +30,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter {
         public override void EncoderTickReceived(int encoderPosition)
             {
             base.EncoderTickReceived(encoderPosition);
+            Machine.ShutterStepPosition = encoderPosition;
             Machine.TransitionToState(new OpeningState(Machine));
             }
 
@@ -39,14 +40,6 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter {
             base.OpenShutter();
             Machine.ControllerActions.OpenShutter();
             Machine.TransitionToState(new OpeningState(Machine));
-            }
-
-        /// <inheritdoc />
-        public override void LinkStateReceived(ShutterLinkState state)
-            {
-            base.LinkStateReceived(state);
-            if (state!= ShutterLinkState.Online)
-                Machine.TransitionToState(new OfflineState(Machine));
             }
         }
     }

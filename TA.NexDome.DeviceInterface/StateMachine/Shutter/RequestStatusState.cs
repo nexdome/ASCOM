@@ -28,12 +28,5 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
             else
                 Machine.TransitionToState(new OpenState(Machine));
             }
-
-        /// <inheritdoc />
-        public override void LinkStateReceived(ShutterLinkState state)
-            {
-            base.LinkStateReceived(state);
-            Machine.TransitionToState(new OfflineState(Machine));
-            }
         }
     }

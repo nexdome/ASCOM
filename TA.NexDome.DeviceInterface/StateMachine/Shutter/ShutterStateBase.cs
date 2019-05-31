@@ -47,7 +47,12 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
         public virtual void RequestHardwareStatus() => Log.Debug().Message("Request status").Write();
 
         /// <inheritdoc />
-        public virtual void LinkStateReceived(ShutterLinkState state) => Log.Debug().Message("Link state {state}/{displayState}", state, state.DisplayEquivalent()).Write();
+        public virtual void LinkStateReceived(ShutterLinkState state)
+            {
+            Log.Debug().Message("Link state {state}/{displayState}", state, state.DisplayEquivalent()).Write();
+            if (state != ShutterLinkState.Online)
+                Machine.TransitionToState(new OfflineState(Machine));
+            }
 
         /// <summary>
         ///     Cancels any existing timeout and starts a new one with the specified time interval.

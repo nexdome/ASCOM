@@ -322,8 +322,8 @@ namespace TA.NexDome.DeviceInterface.StateMachine
 
         public void ShutterEncoderTickReceived(int encoderPosition)
             {
-            ShutterStepPosition = encoderPosition;
-            //CurrentState.RotationDetected();
+            // The state must process the position update because it needs to make decisions based on the relative position.
+            //ShutterStepPosition = encoderPosition;
             ShutterState.EncoderTickReceived(encoderPosition);
             }
 

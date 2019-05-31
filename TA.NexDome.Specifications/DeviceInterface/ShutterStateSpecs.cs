@@ -142,10 +142,10 @@ namespace TA.NexDome.Specifications.DeviceInterface
         private static TestableOpeningState testableState;
         Establish context = () =>
             {
-            Context = ContextBuilder
-                .Build();
-            testableState = new TestableOpeningState(Machine);
-            Machine.Initialize(testableState);
+                Context = ContextBuilder
+                    .Build();
+                testableState = new TestableOpeningState(Machine);
+                Machine.Initialize(testableState);
             };
 
         Because of = () => testableState.TriggerWatchdogTimeout();
@@ -174,10 +174,10 @@ namespace TA.NexDome.Specifications.DeviceInterface
         private static TestableRequestStatusState testableState;
         Establish context = () =>
             {
-            Context = ContextBuilder
-                .Build();
-            testableState = new TestableRequestStatusState(Machine);
-            Machine.Initialize(testableState);
+                Context = ContextBuilder
+                    .Build();
+                testableState = new TestableRequestStatusState(Machine);
+                Machine.Initialize(testableState);
             };
 
         Because of = () => testableState.TriggerWatchdogTimeout();
@@ -204,7 +204,7 @@ namespace TA.NexDome.Specifications.DeviceInterface
     [Subject(typeof(RequestStatusState), "triggers")]
     internal class when_when_in_shutter_request_status_state_and_closed_status_received : with_state_machine_context
         {
-        Establish context = () => Context=ContextBuilder
+        Establish context = () => Context = ContextBuilder
             .WithShutterInRequestStatusState()
             .Build();
         Because of = () => Machine.HardwareStatusReceived(ShutterStatus.FullyClosed().Build());
@@ -214,7 +214,7 @@ namespace TA.NexDome.Specifications.DeviceInterface
     [Subject(typeof(RequestStatusState), "triggers")]
     internal class when_when_in_shutter_request_status_state_and_open_status_received : with_state_machine_context
         {
-        Establish context = () => Context=ContextBuilder
+        Establish context = () => Context = ContextBuilder
             .WithShutterInRequestStatusState()
             .Build();
         Because of = () => Machine.HardwareStatusReceived(ShutterStatus.FullyOpen().Build());
@@ -224,7 +224,7 @@ namespace TA.NexDome.Specifications.DeviceInterface
     [Subject(typeof(RequestStatusState), "triggers")]
     internal class when_when_in_shutter_request_status_state_and_partially_open_status_received : with_state_machine_context
         {
-        Establish context = () => Context=ContextBuilder
+        Establish context = () => Context = ContextBuilder
             .WithShutterInRequestStatusState()
             .Build();
         Because of = () => Machine.HardwareStatusReceived(ShutterStatus.PartiallyOpen().Build());
@@ -234,10 +234,132 @@ namespace TA.NexDome.Specifications.DeviceInterface
     [Subject(typeof(RequestStatusState), "triggers")]
     internal class when_when_in_shutter_request_status_state_and_link_goes_offline : with_state_machine_context
         {
-        Establish context = () => Context=ContextBuilder
+        Establish context = () => Context = ContextBuilder
             .WithShutterInRequestStatusState()
             .Build();
         Because of = () => Machine.ShutterLinkStateChanged(ShutterLinkState.Start);
         Behaves_like<an_offline_shutter> _;
+        }
+
+    [Subject(typeof(OpenState), "triggers")]
+    internal class when_open_and_shutter_closing_received : with_state_machine_context
+        {
+        Establish context = () => Context = ContextBuilder
+            .WithShutterFullyOpen()
+            .Build();
+        Because of = () => Machine.ShutterDirectionReceived(ShutterDirection.Closing);
+        Behaves_like<a_moving_shutter> _;
+        It should_be_in_closing_state = () => Machine.ShutterState.ShouldBeOfExactType<ClosingState>();
+        It should_be_closing = () => Machine.ShutterMovementDirection.ShouldEqual(ShutterDirection.Closing);
+        }
+
+    [Subject(typeof(OpenState), "triggers")]
+    internal class when_open_and_shutter_position_received : with_state_machine_context
+        {
+        const int ExpectedStepPosition = 213;
+        Establish context = () => Context = ContextBuilder
+            .WithShutterFullyOpen()
+            .Build();
+        Because of = () => Machine.ShutterEncoderTickReceived(ExpectedStepPosition);
+        Behaves_like<a_moving_shutter> _;
+        It should_be_in_closing_state = () => Machine.ShutterState.ShouldBeOfExactType<ClosingState>();
+        It should_be_closing = () => Machine.ShutterMovementDirection.ShouldEqual(ShutterDirection.Closing);
+        It should_update_the_view_model = () => Machine.ShutterStepPosition.ShouldEqual(ExpectedStepPosition);
+        }
+
+    [Subject(typeof(OpenState), "triggers")]
+    internal class when_partially_open_and_greater_shutter_position_received : with_state_machine_context
+        {
+        const int ExpectedStepPosition = 400;   // partially open is 250 steps
+        Establish context = () => Context = ContextBuilder
+            .WithShutterPartiallyOpen()
+            .Build();
+        Because of = () => Machine.ShutterEncoderTickReceived(ExpectedStepPosition);
+        Behaves_like<a_moving_shutter> _;
+        It should_be_in_opening_state = () => Machine.ShutterState.ShouldBeOfExactType<OpeningState>();
+        It should_be_opening = () => Machine.ShutterMovementDirection.ShouldEqual(ShutterDirection.Opening);
+        It should_update_the_view_model = () => Machine.ShutterStepPosition.ShouldEqual(ExpectedStepPosition);
+        }
+
+    [Subject(typeof(OpenState), "triggers")]
+    internal class when_partially_open_and_lesser_shutter_position_received : with_state_machine_context
+        {
+        const int ExpectedStepPosition = 100;   // partially open is 250 steps
+        Establish context = () => Context = ContextBuilder
+            .WithShutterPartiallyOpen()
+            .Build();
+        Because of = () => Machine.ShutterEncoderTickReceived(ExpectedStepPosition);
+        Behaves_like<a_moving_shutter> _;
+        It should_be_in_closing_state = () => Machine.ShutterState.ShouldBeOfExactType<ClosingState>();
+        It should_be_closing = () => Machine.ShutterMovementDirection.ShouldEqual(ShutterDirection.Closing);
+        It should_update_the_view_model = () => Machine.ShutterStepPosition.ShouldEqual(ExpectedStepPosition);
+        }
+
+    [Subject(typeof(OpenState), "triggers")]
+    internal class when_open_and_shutter_close_requested : with_state_machine_context
+        {
+        Establish context = () => Context = ContextBuilder
+            .WithShutterFullyOpen()
+            .Build();
+        Because of = () => Machine.CloseShutter();
+        Behaves_like<a_moving_shutter> _;
+        It should_be_in_closing_state = () => Machine.ShutterState.ShouldBeOfExactType<ClosingState>();
+        It should_be_closing = () => Machine.ShutterMovementDirection.ShouldEqual(ShutterDirection.Closing);
+        It should_invoke_close_shutter_action =
+            () => A.CallTo(() => Actions.CloseShutter()).MustHaveHappenedOnceExactly();
+        }
+
+    [Subject(typeof(ClosingState), "triggers")]
+    internal class when_closing_and_encoder_tick_received : with_state_machine_context
+        {
+        const int ExpectedStepPosition = 100;
+        Establish context = () => Context = ContextBuilder
+            .WithClosingShutter()
+            .Build();
+        Because of = () => Machine.ShutterEncoderTickReceived(ExpectedStepPosition);
+        Behaves_like<a_moving_shutter> _;
+        It should_be_opening = () => Machine.ShutterMovementDirection.ShouldEqual(ShutterDirection.Closing);
+        It should_be_in_closing_state = () => Machine.ShutterState.ShouldBeOfExactType<ClosingState>();
+        It should_update_the_view_model_position = () => Machine.ShutterStepPosition.ShouldEqual(ExpectedStepPosition);
+        }
+
+    [Subject(typeof(ClosingState), "triggers")]
+    internal class when_closing_and_link_goes_offline : with_state_machine_context
+        {
+        const int ExpectedStepPosition = 100;
+        Establish context = () => Context = ContextBuilder
+            .WithClosingShutter()
+            .Build();
+        Because of = () => Machine.ShutterLinkStateChanged(ShutterLinkState.Detect);
+        Behaves_like<an_offline_shutter> _;
+        }
+
+    [Subject(typeof(ClosingState), "triggers")]
+    internal class when_closing_and_timeout_occurs : with_state_machine_context
+        {
+        Establish context = () =>
+            {
+                Context = ContextBuilder
+                    .Build();
+
+                testableState = new TestableClosingState(Machine);
+                Machine.Initialize(testableState);
+            };
+        Because of = () => testableState.TriggerWatchdogTimeout();
+        It should_send_emergency_stop = () => A.CallTo(() => Actions.PerformEmergencyStop()).MustHaveHappenedOnceExactly();
+        It should_request_status = () => A.CallTo(() => Actions.RequestShutterStatus()).MustHaveHappenedOnceExactly();
+        It should_be_in_request_status_state = () => Machine.ShutterState.ShouldBeOfExactType<RequestStatusState>();
+
+        static TestableClosingState testableState;
+
+        private class TestableClosingState : ClosingState
+            {
+            public TestableClosingState(ControllerStateMachine machine) : base(machine) { }
+            internal void TriggerWatchdogTimeout()
+                {
+                CancelTimeout(); // Cancels any pending timeout which would interfere with the test in progress.
+                HandleTimeout(); // Manually trigger the timeout.
+                }
+            }
         }
     }
