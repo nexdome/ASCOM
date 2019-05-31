@@ -32,5 +32,21 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter {
             base.EncoderTickReceived(encoderPosition);
             ResetTimeout(EncoderTickTimeout);
             }
+
+        /// <inheritdoc />
+        public override void StatusUpdateReceived(IShutterStatus status)
+            {
+            base.StatusUpdateReceived(status);
+            Machine.UpdateStatus(status);
+            Machine.TransitionToState(new OpenState(Machine));
+            }
+
+        /// <inheritdoc />
+        protected override void HandleTimeout()
+            {
+            base.HandleTimeout();
+            Machine.ControllerActions.PerformEmergencyStop();
+            Machine.TransitionToState(new RequestStatusState(Machine));
+            }
         }
     }

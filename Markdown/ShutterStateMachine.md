@@ -42,7 +42,8 @@ state RequestStatus <<Warning>>
 RequestStatus: OnEnter {actions.RequestShutterStatus}
 RequestStatus --> Closed : ShutterStatusReceived && Closed
 RequestStatus --> Open : ShutterStatusReceived && !Closed
-
+RequestStatus --> RequestStatus : __timeout__\nactions.EmergencyStop
+RequestStatus --> Offline : XBee->Offline
 
 @enduml
 ```
