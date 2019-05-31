@@ -210,6 +210,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             else if (status.ClosedSensorActive)
                 ShutterPosition = SensorState.Closed;
             else ShutterPosition = SensorState.Indeterminate;
+            ShutterStepPosition = status.Position;
             }
 
         private SensorState SetInferredShutterPosition(SensorState statusShutterSensor)

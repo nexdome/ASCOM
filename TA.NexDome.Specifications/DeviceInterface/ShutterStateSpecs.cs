@@ -333,6 +333,19 @@ namespace TA.NexDome.Specifications.DeviceInterface
         }
 
     [Subject(typeof(ClosingState), "triggers")]
+    internal class when_closing_and_closed_status_received : with_state_machine_context
+        {
+        const int ExpectedStepPosition = 100;
+        Establish context = () => Context = ContextBuilder
+            .WithClosingShutter()
+            .Build();
+        Because of = () => Machine.HardwareStatusReceived(ShutterStatus.FullyClosed().Build());
+        Behaves_like<a_stopped_shutter> _;
+        It should_update_the_view_model_position = () => Machine.ShutterStepPosition.ShouldEqual(0);
+        It should_be_in_closed_state = () => Machine.ShutterState.ShouldBeOfExactType<ClosedState>();
+        }
+
+    [Subject(typeof(ClosingState), "triggers")]
     internal class when_closing_and_link_goes_offline : with_state_machine_context
         {
         const int ExpectedStepPosition = 100;

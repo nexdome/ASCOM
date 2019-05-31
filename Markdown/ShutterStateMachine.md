@@ -20,7 +20,9 @@ Closed --> Offline : __XBee offline__
 state Open <<Ready>>
 Open: OnEnter {Shutter motor = stopped}
 Open --> Closing : __ShutterClosingReceived__
-Open --> Closing : __ShutterPositionReceived__
+Open --> Opening : __ShutterOpeningReceived__
+Open --> Closing : ShutterPositionReceived\n(<current)
+Open --> Opening : ShutterPositionReceived\n(>current)
 Open --> Closing : __CloseShutterRequested__\nactions.CloseShutter
 Open --> Offline : __XBee offline__
 

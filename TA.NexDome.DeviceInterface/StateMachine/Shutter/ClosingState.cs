@@ -35,6 +35,17 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter {
             }
 
         /// <inheritdoc />
+        public override void StatusUpdateReceived(IShutterStatus status)
+            {
+            base.StatusUpdateReceived(status);
+            Machine.UpdateStatus(status);
+            if (status.ClosedSensorActive)
+                Machine.TransitionToState(new ClosedState(Machine));
+            else
+                Machine.TransitionToState(new OpenState(Machine));
+            }
+
+        /// <inheritdoc />
         protected override void HandleTimeout()
             {
             base.HandleTimeout();
