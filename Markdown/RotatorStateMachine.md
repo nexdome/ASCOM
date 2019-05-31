@@ -5,7 +5,7 @@ title Rotator State Machine
 [*] --> Ready
 
 state Ready <<Safe>>
-Ready : OnEnter {azimuth motor = stopped; atHome = HomeSensorActive}
+Ready : OnEnter {azimuth motor = stopped; direction = none}
 Ready --> Rotating : RotationDetected
 Ready --> Rotating : __RotateToAzimuth__\nactions.RotateToAzimuth
 

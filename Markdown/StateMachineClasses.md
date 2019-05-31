@@ -30,8 +30,10 @@ abstract class ShutterStateBase
 class OpenState<<Ready>>
 class ClosedState<<Ready>>
 class OfflineState<<Warning>>
+class RequestStatusState <<Warning>>
 .IShutterState <|-- ShutterStateBase
 ShutterStateBase <|-- OfflineState
+ShutterStateBase <|-- RequestStatusState 
 ShutterStateBase <|-- OpenState
 ShutterStateBase <|-- ClosedState
 ShutterStateBase <|-- OpeningState

@@ -1,5 +1,8 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © -2019 Tigra Astronomy, all rights reserved.
+
+using TA.NexDome.SharedTypes;
+
 namespace TA.NexDome.DeviceInterface.StateMachine.Rotator {
     class ReadyState : RotatorStateBase
         {
@@ -9,6 +12,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Rotator {
             {
             base.OnEnter();
             Machine.AzimuthMotorActive = false;
+            Machine.AzimuthDirection = RotationDirection.None;
             Machine.RotatorInReadyState.Set();
             }
 

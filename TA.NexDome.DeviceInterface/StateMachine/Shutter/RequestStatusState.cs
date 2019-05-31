@@ -28,5 +28,14 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
             else
                 Machine.TransitionToState(new OpenState(Machine));
             }
+
+        /// <inheritdoc />
+        protected override void HandleTimeout()
+            {
+            base.HandleTimeout();
+            ResetTimeout(StatusReceiveTimeout);
+            Machine.ControllerActions.PerformEmergencyStop();
+            Machine.ControllerActions.RequestShutterStatus();
+            }
         }
     }

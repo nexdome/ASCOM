@@ -33,26 +33,6 @@ namespace TA.NexDome.Specifications.DeviceInterface
         It should_not_signal_ready = () => Machine.ShutterInReadyState.WaitOne(0).ShouldBeFalse();
         }
 
-    [Subject(typeof(RequestStatusState), "triggers")]
-    internal class when_requesting_status_and_status_received_and_shutter_open : with_state_machine_context
-        {
-        Establish context = () => Context = ContextBuilder
-            .WithShutterInRequestStatusState()
-            .Build();
-        Because of = () => Machine.HardwareStatusReceived(ShutterStatus.FullyOpen().Build());
-        Behaves_like<an_open_shutter> _;
-        }
-
-    [Subject(typeof(RequestStatusState), "triggers")]
-    internal class when_requesting_status_and_status_received_and_shutter_closed : with_state_machine_context
-        {
-        Establish context = () => Context = ContextBuilder
-            .WithShutterInRequestStatusState()
-            .Build();
-        Behaves_like<a_closed_shutter> _;
-        Because of = () => Machine.HardwareStatusReceived(ShutterStatus.FullyClosed().Build());
-        }
-
     [Subject(typeof(ClosedState), "triggers")]
     internal class when_closed_and_shutter_opening_received : with_state_machine_context
         {
@@ -239,6 +219,35 @@ namespace TA.NexDome.Specifications.DeviceInterface
             .Build();
         Because of = () => Machine.ShutterLinkStateChanged(ShutterLinkState.Start);
         Behaves_like<an_offline_shutter> _;
+        }
+
+    [Subject(typeof(RequestStatusState), "triggers")]
+    internal class when_when_in_shutter_request_status_state_and_timeout_occurs : with_state_machine_context
+        {
+        Establish context = () =>
+            {
+            Context = ContextBuilder
+                .Build();
+
+            testableState = new TestableRequestStatusState(Machine);
+            Machine.Initialize(testableState);
+            };
+        Because of = () => testableState.TriggerWatchdogTimeout();
+        It should_perform_emergency_stop = () => A.CallTo(()=> Machine.ControllerActions.PerformEmergencyStop()).MustHaveHappenedOnceExactly();
+        It should_request_status = () => A.CallTo(()=>Machine.ControllerActions.RequestShutterStatus()).MustHaveHappenedTwiceExactly();
+        static TestableRequestStatusState testableState;
+
+        private class TestableRequestStatusState : RequestStatusState {
+            /// <inheritdoc />
+            public TestableRequestStatusState(ControllerStateMachine machine) : base(machine) { }
+
+            internal void TriggerWatchdogTimeout()
+                {
+                CancelTimeout(); // Cancels any pending timeout which would interfere with the test in progress.
+                HandleTimeout(); // Manually trigger the timeout.
+                }
+
+            }
         }
 
     [Subject(typeof(OpenState), "triggers")]
