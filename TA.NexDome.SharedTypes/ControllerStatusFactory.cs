@@ -92,7 +92,7 @@ namespace TA.NexDome.SharedTypes
         /// <returns>
         ///     An object implementing <see cref="IRotatorStatus" /> populated with the status values.
         /// </returns>
-        public static IRotatorStatus FromRotatorStatusPacket(string status)
+        public IRotatorStatus FromRotatorStatusPacket(string status)
             {
             var match = RotatorStatusRegex.Match(status);
             var captures = match.Groups["Values"].Captures;
@@ -111,7 +111,7 @@ namespace TA.NexDome.SharedTypes
         ///     An object implementing <see cref="IShutterStatus" /> populated with the status
         ///     values.
         /// </returns>
-        public static IShutterStatus FromShutterStatusPacket(string status)
+        public IShutterStatus FromShutterStatusPacket(string status)
             {
             var match = ShutterStatusRegex.Match(status);
             var captures = match.Groups["Values"].Captures;

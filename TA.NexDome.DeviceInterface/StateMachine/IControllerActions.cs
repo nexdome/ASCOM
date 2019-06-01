@@ -4,8 +4,6 @@
 // 
 // File: IControllerActions.cs  Last modified: 2018-03-28@00:57 by Tim Long
 
-using TA.NexDome.SharedTypes;
-
 namespace TA.NexDome.DeviceInterface.StateMachine
     {
     public interface IControllerActions
@@ -39,12 +37,6 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         ///     Requests that the controller rotates to the azimuth that it considers to be the home position.
         /// </summary>
         void RotateToHomePosition();
-
-        /// <summary>
-        ///     Sets the state of the user output pins.
-        /// </summary>
-        /// <param name="newState">An octet with the state of the user pins in bits 0..3.</param>
-        void SetUserOutputPins(Octet newState);
 
         /// <summary>
         ///     Requests that the rotator controller send a status report on the current state of the rotator hardware.

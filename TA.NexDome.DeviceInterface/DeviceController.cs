@@ -73,10 +73,8 @@ namespace TA.NexDome.DeviceInterface
             {
             SubscribeControllerEvents();
             channel.Open();
-            if (performOnConnectActions)
-                stateMachine.Initialize(new RequestStatus(stateMachine));
-            else
-                stateMachine.Initialize(new Ready(stateMachine));
+            stateMachine.Initialize(new TA.NexDome.DeviceInterface.StateMachine.Rotator.RequestStatusState(stateMachine));
+            stateMachine.Initialize(new TA.NexDome.DeviceInterface.StateMachine.Shutter.OfflineState(stateMachine));
             stateMachine.WaitForReady(TimeSpan.FromSeconds(5));
             if (performOnConnectActions && configuration.PerformShutterRecovery) PerformShutterRecovery();
             }

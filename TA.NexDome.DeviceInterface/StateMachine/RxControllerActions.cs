@@ -20,38 +20,35 @@ namespace TA.NexDome.DeviceInterface.StateMachine
 
         public void RequestHardwareStatus()
             {
-            channel.Send(Constants.CmdGetInfo);
+            RequestRotatorStatus();
+            RequestShutterStatus();
             }
 
         public void PerformEmergencyStop()
             {
-            channel.Send(Constants.CmdEmergencyStop);
+            channel.Send(Constants.CmdHardStopRotator);
+            channel.Send(Constants.CmdHardStopShutter);
             }
 
         public void RotateToAzimuth(int degreesClockwiseFromNorth)
             {
-            var cmd = string.Format(Constants.CmdGotoAz, degreesClockwiseFromNorth);
+            var cmd = string.Format(Constants.CmdGotoAzimuthTemplate, degreesClockwiseFromNorth);
             channel.Send(cmd);
             }
 
         public void OpenShutter()
             {
-            channel.Send(Constants.CmdOpen);
+            channel.Send(Constants.CmdOpenShutter);
             }
 
         public void CloseShutter()
             {
-            channel.Send(Constants.CmdClose);
+            channel.Send(Constants.CmdCloseShutter);
             }
 
         public void RotateToHomePosition()
             {
             channel.Send(Constants.CmdGotoHome);
-            }
-
-        public void SetUserOutputPins(Octet newState)
-            {
-            channel.Send(string.Format(Constants.CmdSetUserPins, (byte)newState));
             }
 
         /// <inheritdoc />

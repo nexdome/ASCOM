@@ -73,7 +73,6 @@
     <Compile Include="StateMachine\Shutter\ShutterStateBase.cs" />
     <Compile Include="StateMachine\StateLoggingDecorator.cs" />
     <Compile Include="StateMachine\Uninitialized.cs" />
-    <Compile Include="StatusTransaction.cs" />
     <Compile Include="TransactionException.cs" />
     <Compile Include="TransactionExtensions.cs" />
   </ItemGroup>

@@ -48,23 +48,33 @@ namespace TA.NexDome.DeviceInterface
             return shutterCurrentValues.Trace("ShutterCurrent");
         }
 
-        public static IObservable<IList<char>> BufferByPredicates(this IObservable<char> source,
-            Predicate<char> bufferOpening, Predicate<char> bufferClosing)
+        public static IObservable<IList<char>> BufferByPredicates(this IObservable<char> source, Predicate<char> bufferOpening, Predicate<char> bufferClosing)
         {
             return source.Buffer(source.Where(c => bufferOpening(c)), x => source.Where(c => bufferClosing(c)));
         }
 
-        public static IObservable<IRotatorStatus> RotatorStatusUpdates(this IObservable<char> source,
-            ControllerStatusFactory factory)
+        public static IObservable<IRotatorStatus> RotatorStatusUpdates(this IObservable<char> source, ControllerStatusFactory factory)
         {
             var buffers = source.Publish(s =>
                 s.BufferByPredicates(p => p == 'S', q => q=='#'));
             var statusValues = from buffer in buffers
                 let message = new string(buffer.ToArray())
-                let status = ControllerStatusFactory.FromRotatorStatusPacket(message)
+                where message.StartsWith(Constants.RotatorStatusReply)
+                let status = factory.FromRotatorStatusPacket(message)
                 select status;
             return statusValues.Trace("StatusUpdates");
+        }
 
+        public static IObservable<IShutterStatus> ShutterStatusUpdates(this IObservable<char> source, ControllerStatusFactory factory)
+        {
+            var buffers = source.Publish(s =>
+                s.BufferByPredicates(p => p == 'S', q => q=='#'));
+            var statusValues = from buffer in buffers
+                let message = new string(buffer.ToArray())
+                where message.StartsWith(Constants.ShutterStatusReply)
+                let status = factory.FromShutterStatusPacket(message)
+                select status;
+            return statusValues.Trace("StatusUpdates");
         }
 
         public static IObservable<IHardwareStatus> StatusUpdates(this IObservable<char> source,

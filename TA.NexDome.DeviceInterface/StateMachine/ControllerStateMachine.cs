@@ -262,7 +262,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         /// </exception>
         public void WaitForReady(TimeSpan timeout)
             {
-            bool signalled = InReadyState.WaitOne(timeout);
+            bool signalled = RotatorInReadyState.WaitOne(timeout)
             if (!signalled)
                 {
                 string message = $"State machine did not enter the ready state within the allotted time of {timeout}";

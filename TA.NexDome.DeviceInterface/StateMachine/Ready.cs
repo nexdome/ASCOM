@@ -67,7 +67,6 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         public override void SetUserOutputPins(Octet newState)
             {
             base.SetUserOutputPins(newState);
-            machine.ControllerActions.SetUserOutputPins(newState);
             }
 
         public override void RequestHardwareStatus()
