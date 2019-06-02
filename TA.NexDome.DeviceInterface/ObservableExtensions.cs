@@ -6,105 +6,100 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Text.RegularExpressions;
+using TA.Ascom.ReactiveCommunications;
 using TA.Ascom.ReactiveCommunications.Diagnostics;
 using TA.NexDome.SharedTypes;
 
 namespace TA.NexDome.DeviceInterface
-{
-    internal static class ObservableExtensions
     {
+    internal static class ObservableExtensions
+        {
         /// <summary>
         ///     Extracts azimuth encoder ticks from a source sequence and emits
         ///     the encoder values as an observable sequence of integers.
         /// </summary>
         /// <param name="source"></param>
         public static IObservable<int> AzimuthEncoderTicks(this IObservable<char> source)
-        {
+            {
             const string azimuthEncoderPattern = @"^P(?<Azimuth>\d{1,4})[^0-9]";
             var azimuthEncoderRegex =
                 new Regex(azimuthEncoderPattern, RegexOptions.Compiled | RegexOptions.ExplicitCapture);
             var buffers = source.Publish(s => s.BufferByPredicates(p => p == 'P', q => !char.IsDigit(q)));
             var azimuthValues = from buffer in buffers
-                let message = new string(buffer.ToArray())
-                let patternMatch = azimuthEncoderRegex.Match(message)
-                where patternMatch.Success
-                let azimuth = int.Parse(patternMatch.Groups["Azimuth"].Value)
-                select azimuth;
+                                let message = new string(buffer.ToArray())
+                                let patternMatch = azimuthEncoderRegex.Match(message)
+                                where patternMatch.Success
+                                let azimuth = int.Parse(patternMatch.Groups["Azimuth"].Value)
+                                select azimuth;
             return azimuthValues.Trace("EncoderTicks");
-        }
+            }
 
         public static IObservable<int> ShutterCurrentReadings(this IObservable<char> source)
-        {
+            {
             const string shutterCurrentPattern = @"^Z(?<Current>\d{1,3})";
             var shutterCurrentRegex =
                 new Regex(shutterCurrentPattern, RegexOptions.Compiled | RegexOptions.ExplicitCapture);
             var buffers = source.Publish(s => s.BufferByPredicates(p => p == 'Z', q => !char.IsDigit(q)));
             var shutterCurrentValues = from buffer in buffers
-                let message = new string(buffer.ToArray())
-                let patternMatch = shutterCurrentRegex.Match(message)
-                where patternMatch.Success
-                let shutterCurrent = int.Parse(patternMatch.Groups["Current"].Value)
-                select shutterCurrent;
+                                       let message = new string(buffer.ToArray())
+                                       let patternMatch = shutterCurrentRegex.Match(message)
+                                       where patternMatch.Success
+                                       let shutterCurrent = int.Parse(patternMatch.Groups["Current"].Value)
+                                       select shutterCurrent;
             return shutterCurrentValues.Trace("ShutterCurrent");
-        }
+            }
 
-        public static IObservable<IList<char>> BufferByPredicates(this IObservable<char> source, Predicate<char> bufferOpening, Predicate<char> bufferClosing)
-        {
-            return source.Buffer(source.Where(c => bufferOpening(c)), x => source.Where(c => bufferClosing(c)));
-        }
+        public static IObservable<IList<char>> BufferByPredicates(this IObservable<char> source, Predicate<char> bufferOpening, Predicate<char> bufferClosing) => source.Buffer(source.Where(c => bufferOpening(c)), x => source.Where(c => bufferClosing(c)));
 
         public static IObservable<IRotatorStatus> RotatorStatusUpdates(this IObservable<char> source, ControllerStatusFactory factory)
-        {
-            var buffers = source.Publish(s =>
-                s.BufferByPredicates(p => p == 'S', q => q=='#'));
-            var statusValues = from buffer in buffers
-                let message = new string(buffer.ToArray())
-                where message.StartsWith(Constants.RotatorStatusReply)
-                let status = factory.FromRotatorStatusPacket(message)
-                select status;
-            return statusValues.Trace("StatusUpdates");
-        }
+            {
+            var responses = source.Publish(s =>
+                s.BufferByPredicates(p => p == ':', q => q == '#'));
+            var statusValues = from response in responses
+                               let message = new string(response.ToArray())
+                               where message.StartsWith(Constants.RotatorStatusReply)
+                               let status = factory.FromRotatorStatusPacket(message)
+                               select status;
+            return statusValues.Trace("IRotatorStatus");
+            }
+
+        public static IObservable<RotationDirection> RotatorDirectionUpdates(this IObservable<char> source)
+            {
+            var tokenizedResponses = source.DelimitedMessageStrings();
+            var shutterDirectionSequence = from notification in tokenizedResponses
+                                           where RotatorDirections.Contains(notification)
+                                           let ordinal = ShutterDirections.IndexOf(notification)
+                                           let direction = ordinal == 1
+                                               ? RotationDirection.CounterClockwise
+                                               : RotationDirection.Clockwise
+                                           select direction;
+            return shutterDirectionSequence.Trace("RotatorDirection");
+            }
 
         public static IObservable<IShutterStatus> ShutterStatusUpdates(this IObservable<char> source, ControllerStatusFactory factory)
-        {
-            var buffers = source.Publish(s =>
-                s.BufferByPredicates(p => p == 'S', q => q=='#'));
-            var statusValues = from buffer in buffers
-                let message = new string(buffer.ToArray())
-                where message.StartsWith(Constants.ShutterStatusReply)
-                let status = factory.FromShutterStatusPacket(message)
-                select status;
-            return statusValues.Trace("StatusUpdates");
-        }
-
-        public static IObservable<IHardwareStatus> StatusUpdates(this IObservable<char> source,
-            ControllerStatusFactory factory)
-        {
-            const string validStatusCharacters = "V+-0123456789,";
-            const string statusPattern = @"^(?<Status>V4(,\d{1,3}){22})";
-            var statusRegex = new Regex(statusPattern, RegexOptions.Compiled | RegexOptions.ExplicitCapture);
-            var buffers = source.Publish(s =>
-                s.BufferByPredicates(p => p == 'V', q => !validStatusCharacters.Contains(q)));
-            var statusValues = from buffer in buffers
-                let message = new string(buffer.ToArray())
-                let patternMatch = statusRegex.Match(message)
-                where patternMatch.Success
-                let status = patternMatch.Groups["Status"].Value
-                let harwareStatus = factory.FromStatusPacket(status)
-                select harwareStatus;
-            return statusValues.Trace("StatusUpdates");
-        }
+            {
+            var responses = source.Publish(s =>
+                s.BufferByPredicates(p => p == ':', q => q == '#'));
+            var statusValues = from response in responses
+                               let message = new string(response.ToArray())
+                               where message.StartsWith(Constants.ShutterStatusReply)
+                               let status = factory.FromShutterStatusPacket(message)
+                               select status;
+            return statusValues.Trace("IShutterStatus");
+            }
 
         public static IObservable<ShutterDirection> ShutterDirectionUpdates(this IObservable<char> source)
-        {
-            // Note: The zero-based index in the string must match the ordinal values in ShutterDirection
-            const string shutterMovementIndicators = "SCO";
-            var shutterDirectionSequence = from c in source
-                where shutterMovementIndicators.Contains(c)
-                let ordinal = shutterMovementIndicators.IndexOf(c)
-                let direction = (ShutterDirection) ordinal
-                select direction;
+            {
+            var tokenizedResponses = source.DelimitedMessageStrings();
+            var shutterDirectionSequence = from notification in tokenizedResponses
+                                           where ShutterDirections.Contains(notification)
+                                           let ordinal = ShutterDirections.IndexOf(notification)
+                                           let direction = (ShutterDirection)ordinal
+                                           select direction;
             return shutterDirectionSequence.Trace("ShutterDirection");
+            }
+
+        private static readonly List<string> ShutterDirections = new List<string>() { "None", ":Closing#", ":Opening#" };
+        private static readonly List<string> RotatorDirections = new List<string>() { "None", ":Left#", ":Right#" };
         }
     }
-}

@@ -1,9 +1,9 @@
 ﻿using System;
 
 namespace TA.NexDome.SharedTypes
-{
-    public class DeviceControllerOptions
     {
+    public class DeviceControllerOptions
+        {
         public bool PerformShutterRecovery { get; set; } = true;
 
         public TimeSpan MaximumShutterCloseTime { get; set; }
@@ -17,5 +17,7 @@ namespace TA.NexDome.SharedTypes
         public bool IgnoreHardwareShutterSensor { get; set; }
 
         public TimeSpan ShutterTickTimeout { get; set; }
+
+        public TimeSpan RotatorTickTimeout { get; set; }
+        }
     }
-}

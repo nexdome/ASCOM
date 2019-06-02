@@ -15,8 +15,8 @@ namespace TA.NexDome.SharedTypes
     /// </summary>
     public sealed class ControllerStatusFactory
         {
-        private const string rotatorStatusPattern = @"^(?<Status>SER(,(?<Values>\d{1,6}))+)#$";
-        private const string shutterStatusPattern = @"^(?<Status>SES(,(?<Values>\d{1,6}))+)#$";
+        private const string rotatorStatusPattern = @"^(?<Status>:SER(,(?<Values>\d{1,6}))+)#$";
+        private const string shutterStatusPattern = @"^(?<Status>:SES(,(?<Values>\d{1,6}))+)#$";
         private static readonly Logger log = LogManager.GetCurrentClassLogger();
         private static readonly char[] fieldDelimiters = {','};
         private static readonly Regex RotatorStatusRegex = new Regex(rotatorStatusPattern,
@@ -158,6 +158,9 @@ namespace TA.NexDome.SharedTypes
                     };
                 return status;
                 }
+
+            /// <inheritdoc />
+            public override string ToString() => $"{nameof(AtHome)}: {AtHome}, {nameof(Azimuth)}: {Azimuth}, {nameof(DeadZone)}: {DeadZone}, {nameof(DomeCircumference)}: {DomeCircumference}, {nameof(HomePosition)}: {HomePosition}";
             }
 
         class ShutterStatus : IShutterStatus
@@ -188,6 +191,8 @@ namespace TA.NexDome.SharedTypes
                 return status;
                 }
 
+            /// <inheritdoc />
+            public override string ToString() => $"{nameof(ClosedSensorActive)}: {ClosedSensorActive}, {nameof(OpenSensorActive)}: {OpenSensorActive}, {nameof(Position)}: {Position}";
             }
         }
     }

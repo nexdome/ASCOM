@@ -16,13 +16,14 @@ using TA.NexDome.SharedTypes;
 namespace TA.NexDome.DeviceInterface
     {
     [NotifyPropertyChanged]
-    public class DeviceController : INotifyPropertyChanged
+    public class DeviceController : INotifyPropertyChanged, IDisposable
         {
         [NotNull] private readonly ICommunicationChannel channel;
         private readonly DeviceControllerOptions configuration;
         [NotNull] private readonly List<IDisposable> disposableSubscriptions = new List<IDisposable>();
         [NotNull] private readonly ControllerStateMachine stateMachine;
         [NotNull] private readonly ControllerStatusFactory statusFactory;
+        private bool disposed = false;
 
         public DeviceController(ICommunicationChannel channel, ControllerStatusFactory factory,
             ControllerStateMachine machine, DeviceControllerOptions configuration)
@@ -116,19 +117,53 @@ namespace TA.NexDome.DeviceInterface
 
         private void SubscribeStatusUpdates()
             {
-            var statusUpdates = channel.ObservableReceivedCharacters.StatusUpdates(statusFactory);
-            var statusUpdateSubscription = statusUpdates
-                //.ObserveOn(Scheduler.Default)
-                .Subscribe(StatusUpdateOnNext,
-                    ex => throw new InvalidOperationException(
-                        "Status Update sequence produced an unexpected error (see inner exception)", ex),
-                    () => throw new InvalidOperationException(
-                        "Status Update sequence completed unexpectedly, this is probably a bug")
-                );
+            SubscribeRotatorStatusUpdates();
+            SubscribeShutterStatusUpdates();
+            }
+
+        private void SubscribeShutterStatusUpdates()
+            {
+            var shutterUpdates = channel.ObservableReceivedCharacters.ShutterStatusUpdates(statusFactory);
+            var shutterStatusUpdateSubscription = shutterUpdates.Subscribe(ShutterStatusUpdateOnNext,
+                ex => throw new InvalidOperationException(
+                    "Shutter Status Update sequence produced an unexpected error (see inner exception)", ex),
+                () => throw new InvalidOperationException(
+                    "Shutter Status Update sequence completed unexpectedly, this is probably a bug")
+
+            );
+            disposableSubscriptions.Add(shutterStatusUpdateSubscription);
+            }
+
+        private void SubscribeRotatorStatusUpdates()
+            {
+            var rotatorStatusUpdates = channel.ObservableReceivedCharacters.RotatorStatusUpdates(statusFactory);
+            var statusUpdateSubscription = rotatorStatusUpdates.Subscribe(RotatorStatusUpdateOnNext,
+                ex => throw new InvalidOperationException(
+                    "Rotator Status Update sequence produced an unexpected error (see inner exception)", ex),
+                () => throw new InvalidOperationException(
+                    "Rotator Status Update sequence completed unexpectedly, this is probably a bug")
+
+            );
             disposableSubscriptions.Add(statusUpdateSubscription);
             }
 
-        private void StatusUpdateOnNext(IHardwareStatus statusNotification)
+        private void RotatorStatusUpdateOnNext(IRotatorStatus statusNotification)
+            {
+            try
+                {
+                stateMachine.HardwareStatusReceived(statusNotification);
+                }
+            catch (Exception ex)
+                {
+                Log.Error()
+                    .Exception(ex)
+                    .Message($"Error while processing status notification: {statusNotification}")
+                    .Write();
+                }
+
+            }
+
+        private void ShutterStatusUpdateOnNext(IShutterStatus statusNotification)
             {
             try
                 {
@@ -174,12 +209,7 @@ namespace TA.NexDome.DeviceInterface
 
         private void SubscribeRotationDirection()
             {
-            var rotationDirectionSequence = from c in channel.ObservableReceivedCharacters
-                                            where c == 'L' || c == 'R'
-                                            let direction = c == 'L'
-                                                ? RotationDirection.CounterClockwise
-                                                : RotationDirection.Clockwise
-                                            select direction;
+            var rotationDirectionSequence = channel.ObservableReceivedCharacters.RotatorDirectionUpdates();
             var rotationDirectionSubscription = rotationDirectionSequence
                 .Trace("RotationDirection")
                 //.ObserveOn(Scheduler.Default)
@@ -299,5 +329,30 @@ namespace TA.NexDome.DeviceInterface
             // Potentially throws TimeoutException - let this propagate to the client application.
             stateMachine.WaitForReady(timeout);
             }
+
+        private void ReleaseUnmanagedResources()
+            {
+            }
+
+        private void Dispose(bool disposing)
+            {
+            if (disposed) return;
+            ReleaseUnmanagedResources();
+            if (disposing)
+                {
+                channel.Dispose();
+                }
+            disposed = true;
+            }
+
+        /// <inheritdoc />
+        public void Dispose()
+            {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+            }
+
+        /// <inheritdoc />
+        ~DeviceController() => Dispose(false);
         }
     }

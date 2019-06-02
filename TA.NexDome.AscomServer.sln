@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration", "Configurat
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.NexDome.DeviceInterface.TestHarness", "TA.NextDome.DeviceInterface.TestHarness\TA.NexDome.DeviceInterface.TestHarness.csproj", "{B1DDA1DA-FB6D-4F33-8066-6B3EC0315C96}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		TA.NexDome.SharedCode\TA.NexDome.SharedCode.projitems*{1224a06b-5a84-452f-af63-cf8ef7d6713e}*SharedItemsImports = 4
@@ -51,6 +53,10 @@ Global
 		{F1CF8488-83A4-447D-A0A3-EA6A04D4AAE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1CF8488-83A4-447D-A0A3-EA6A04D4AAE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1CF8488-83A4-447D-A0A3-EA6A04D4AAE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1DDA1DA-FB6D-4F33-8066-6B3EC0315C96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1DDA1DA-FB6D-4F33-8066-6B3EC0315C96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1DDA1DA-FB6D-4F33-8066-6B3EC0315C96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1DDA1DA-FB6D-4F33-8066-6B3EC0315C96}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

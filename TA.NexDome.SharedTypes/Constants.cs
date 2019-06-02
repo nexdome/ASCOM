@@ -6,14 +6,14 @@
     /// </summary>
     public class Constants
         {
-        public const string RotatorStatusReply = "SER,";
+        public const string RotatorStatusReply = ":SER,";
 
-        public const string ShutterStatusReply ="SES,";
+        public const string ShutterStatusReply =":SES,";
 
         #region NexDome Responses
 
-        public const string RequestRotatorStatus = "SRR";
-        public const string RequestShutterStatus = "SRS";
+        public const string RequestRotatorStatus = "@SRR";
+        public const string RequestShutterStatus = "@SRS";
         #endregion
 
         #region NexDome Command Codes
