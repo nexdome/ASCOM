@@ -1,7 +1,6 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
@@ -31,57 +30,6 @@ namespace TA.NexDome.SharedTypes
             {
             Contract.Requires(timeSource != null);
             this.timeSource = timeSource;
-            }
-
-        /// <summary>
-        ///     Creates a <see cref="IHardwareStatus" /> object from the text of a status packet
-        /// </summary>
-        public IHardwareStatus FromStatusPacket(string packet)
-            {
-            Contract.Requires(!string.IsNullOrEmpty(packet));
-            Contract.Ensures(Contract.Result<IHardwareStatus>() != null);
-            var elements = packet.Split(fieldDelimiters);
-            switch (elements[0])
-                {
-                    case "V4":
-                        return ParseV4StatusElements(elements);
-                    default:
-                        throw new ApplicationException("Unsupported firmware version");
-                }
-            }
-
-        private HardwareStatus ParseV4StatusElements(IReadOnlyList<string> elements)
-            {
-            log.Info("V4 status");
-            var elementsLength = elements.Count;
-            if (elementsLength != 23)
-                {
-                var message = $"V4 GINF packet had wrong number of elements: expected 23, found {elementsLength}";
-                log.Error(message);
-                var ex = new ArgumentException(message, "status");
-                ex.Data["V4 Status Elements"] = elements;
-                ex.Data["ExpectedElements"] = 23;
-                ex.Data["ActualElements"] = elementsLength;
-                throw ex;
-                }
-
-            try
-                {
-                var status = new HardwareStatus
-                    {
-                    TimeStamp = timeSource.GetCurrentTime(),
-                    DomeCircumference = 0,
-                    HomePosition = 0,
-                    AtHome = false,
-                    DeadZone = 0
-                    };
-                return status;
-                }
-            catch (Exception ex)
-                {
-                log.Error(ex, "Exception while creating status information");
-                throw;
-                }
             }
 
         /// <summary>

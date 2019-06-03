@@ -291,7 +291,7 @@ namespace TA.NexDome.Server
         private static List<string> s_ComObjectAssys; // Dynamically loaded assemblies containing served COM objects
         private static List<Type> s_ComObjectTypes; // Served COM object types
         private static ArrayList s_ClassFactories; // Served COM object class factories
-        private static readonly string s_appId = "{0bac7ff1-ebe6-4df7-87df-d433a81d65cb}"; // Our AppId
+        private static readonly string s_appId = "{0efed6b0-bf69-4fd1-8e43-784d0f905426}"; // Our AppId
         private static readonly object lockObject = new object();
         #endregion
 

@@ -119,14 +119,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <TransformOnBuild>true</TransformOnBuild>
     </None>
-    <None Include="NLog.Debug.config">
-      <DependentUpon>NLog.config</DependentUpon>
-      <IsTransformFile>true</IsTransformFile>
-    </None>
-    <None Include="NLog.Release.config">
-      <DependentUpon>NLog.config</DependentUpon>
-      <IsTransformFile>true</IsTransformFile>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

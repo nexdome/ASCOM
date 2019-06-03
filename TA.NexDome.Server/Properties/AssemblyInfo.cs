@@ -10,5 +10,5 @@ using System.Reflection;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("ASCOM server for Digital Domeworks")]
-[assembly: AssemblyDescription("ASCOM multi-interface server for Digital Domeworks")]
+[assembly: AssemblyTitle("ASCOM server for NexDome")]
+[assembly: AssemblyDescription("ASCOM multi-interface server for NexDome")]

@@ -1,5 +1,6 @@
 ﻿using FakeItEasy;
 using System;
+using JetBrains.Annotations;
 using TA.NexDome.DeviceInterface.StateMachine;
 using TA.NexDome.DeviceInterface.StateMachine.Shutter;
 using TA.NexDome.SharedTypes;
@@ -27,13 +28,14 @@ namespace TA.NexDome.Specifications.Builders
         private bool rotatorIsRotating = false;
         private Type rotatorStartType = typeof(TA.NexDome.DeviceInterface.StateMachine.Rotator.ReadyState);
         private Type shutterStartType = typeof(TA.NexDome.DeviceInterface.StateMachine.Shutter.OfflineState);
-        SensorState shutterSensorState = SensorState.Indeterminate;
+        [UsedImplicitly] SensorState shutterSensorState = SensorState.Indeterminate;
         int shutterStepPosition = 0;
 
         internal StateMachineContext Build()
             {
             var machine = new ControllerStateMachine(actions, deviceControllerOptions, new SystemDateTimeUtcClock());
             machine.ShutterStepPosition = shutterStepPosition;
+            machine.ShutterLimitSwitches = shutterSensorState;
             var context = new StateMachineContext
                 {
                 Actions = actions,

@@ -135,7 +135,7 @@
             this.ProductTitle.Name = "ProductTitle";
             this.ProductTitle.Size = new System.Drawing.Size(760, 64);
             this.ProductTitle.TabIndex = 3;
-            this.ProductTitle.Text = "Digital Domeworks 2018";
+            this.ProductTitle.Text = "NexDome";
             this.ProductTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label1

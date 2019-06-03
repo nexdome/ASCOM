@@ -15,11 +15,8 @@ namespace TA.NexDome.Server
     /// </summary>
     public static class SharedResources
         {
-        public const string DomeDriverId = "ASCOM.DigitalDomeworks2018.Dome";
-        public const string SwitchDriverId = "ASCOM.DigitalDomeworks2018.Switch";
-        public const string DomeDriverName = "Digital Domeworks 2018 Reboot";
-        public const string SwitchDriverName = "Digital Domeworks 2018 Reboot";
-
+        public const string DomeDriverId = "ASCOM.NexDome.Dome";
+        public const string DomeDriverName = "NexDome";
         private static readonly ILogger Log;
 
         static SharedResources()

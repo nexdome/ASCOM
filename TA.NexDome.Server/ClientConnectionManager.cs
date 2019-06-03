@@ -21,7 +21,7 @@ namespace TA.NexDome.Server
     ///     Manages client (driver) connections to the shared device controller. Uses the Reader
     ///     Writer Lock pattern to ensure thread safety.
     /// </summary>
-    [ReaderWriterSynchronized]
+    //[ReaderWriterSynchronized]
     public class ClientConnectionManager
         {
         [Reference] private readonly ILogger log = LogManager.GetCurrentClassLogger();

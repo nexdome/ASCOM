@@ -160,7 +160,7 @@
             this.AzimuthMotorAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.AzimuthMotorAnnunciator.Cadence = ASCOM.Controls.CadencePattern.BlinkAlarm;
             this.AzimuthMotorAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
-            this.AzimuthMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.AzimuthMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.AzimuthMotorAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.AzimuthMotorAnnunciator.Location = new System.Drawing.Point(95, 0);
             this.AzimuthMotorAnnunciator.Mute = false;
@@ -312,7 +312,7 @@
             this.ShutterMotorAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.ShutterMotorAnnunciator.Cadence = ASCOM.Controls.CadencePattern.BlinkAlarm;
             this.ShutterMotorAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
-            this.ShutterMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.ShutterMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.ShutterMotorAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.ShutterMotorAnnunciator.Location = new System.Drawing.Point(95, 17);
             this.ShutterMotorAnnunciator.Mute = false;
@@ -390,7 +390,7 @@
             this.ShutterIndeterminateAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.ShutterIndeterminateAnnunciator.Cadence = ASCOM.Controls.CadencePattern.BlinkAlarm;
             this.ShutterIndeterminateAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
-            this.ShutterIndeterminateAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.ShutterIndeterminateAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.ShutterIndeterminateAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.ShutterIndeterminateAnnunciator.Location = new System.Drawing.Point(317, 17);
             this.ShutterIndeterminateAnnunciator.Mute = false;
@@ -468,8 +468,7 @@
             this.Location = global::TA.NexDome.Server.Properties.Settings.Default.MainFormLocation;
             this.Name = "ServerStatusDisplay";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "DIgital Domeworks ASCOM Server";
-            this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
+            this.Text = "NexDome ASCOM Server";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.LocationChanged += new System.EventHandler(this.frmMain_LocationChanged);

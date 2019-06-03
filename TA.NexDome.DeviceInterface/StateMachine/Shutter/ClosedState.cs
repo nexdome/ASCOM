@@ -9,6 +9,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter {
             {
             base.OnEnter();
             Machine.ShutterDisposition = ShutterDisposition.Closed;
+            Machine.ShutterMotorActive = false;
             Machine.ShutterInReadyState.Set();
             }
 

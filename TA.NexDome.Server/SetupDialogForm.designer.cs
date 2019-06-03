@@ -326,7 +326,7 @@ namespace TA.NexDome.Server
             this.Name = "SetupDialogForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "ASCOM Drivers for Digital Domeworks Setup";
+            this.Text = "Configure NexDome ASCOm Server";
             this.Load += new System.EventHandler(this.SetupDialogForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ShutterOpenCloseTimeSeconds)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.FullRotationTimeSeconds)).EndInit();
