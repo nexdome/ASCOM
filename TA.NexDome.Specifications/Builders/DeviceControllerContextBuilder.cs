@@ -67,8 +67,6 @@ namespace TA.NexDome.Specifications.Builders
             var controllerActions = new RxControllerActions(channel);
             var controllerStateMachine = new ControllerStateMachine(controllerActions, controllerOptions, timeSource);
             controllerStateMachine.ShutterLimitSwitches = initialShutterState;
-            if (startInReadyState)
-                controllerStateMachine.Initialize(new Ready(controllerStateMachine));
 
             // Build the device controller
             var controller = new DeviceController(channel, statusFactory, controllerStateMachine, controllerOptions);
