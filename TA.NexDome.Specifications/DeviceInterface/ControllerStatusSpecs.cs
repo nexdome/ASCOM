@@ -42,7 +42,7 @@ namespace TA.NexDome.Specifications.DeviceInterface
         It should_set_deadzone = () => status.DeadZone.ShouldEqual(0);
         static IRotatorStatus status;
         static ControllerStatusFactory factory;
-        const string RealWorldStatusPacket = "SER,450,1,55080,34567,0#";
+        const string RealWorldStatusPacket = ":SER,450,1,55080,34567,0#";
         }
 
     [Subject(typeof(IShutterStatus), "Instance creation")]
@@ -51,11 +51,11 @@ namespace TA.NexDome.Specifications.DeviceInterface
         Establish context = () =>
             factory = new ControllerStatusFactory(new FakeClock(DateTime.MinValue.ToUniversalTime()));
         Because of = () => status = factory.FromShutterStatusPacket(RealWorldStatusPacket);
-        It should_set_the_position = () => status.Position.ShouldEqual(46000);
+        It should_set_the_position = () => status.Position.ShouldEqual(-600);
         It should_be_open = () => status.OpenSensorActive.ShouldBeTrue();
         It should_not_be_closed = () => status.ClosedSensorActive.ShouldBeFalse();
         static IShutterStatus status;
         static ControllerStatusFactory factory;
-        const string RealWorldStatusPacket = "SES,46000,1,0#";
+        const string RealWorldStatusPacket = ":SES,-600,1,0#";
         }
     }

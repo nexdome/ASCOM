@@ -63,7 +63,6 @@
     <Compile Include="DeviceInterface\Behaviours\view_model_is_updated_from_rotator_status.cs" />
     <Compile Include="DeviceInterface\ConnectionSpecs.cs" />
     <Compile Include="DeviceInterface\ControllerStateMachineBehaviours.cs" />
-    <Compile Include="DeviceInterface\ControllerStateMachineSpecs.cs" />
     <Compile Include="DeviceInterface\ControllerStatusSpecs.cs" />
     <Compile Include="DeviceInterface\RotatorStateSpecs.cs" />
     <Compile Include="DeviceInterface\ShutterStateSpecs.cs" />

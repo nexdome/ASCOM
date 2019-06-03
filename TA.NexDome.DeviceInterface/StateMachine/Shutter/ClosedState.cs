@@ -8,6 +8,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter {
         public override void OnEnter()
             {
             base.OnEnter();
+            Machine.ShutterDisposition = ShutterDisposition.Closed;
             Machine.ShutterInReadyState.Set();
             }
 

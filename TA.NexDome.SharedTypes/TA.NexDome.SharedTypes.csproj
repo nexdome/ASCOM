@@ -62,6 +62,7 @@
     <Compile Include="SemanticVersion.cs" />
     <Compile Include="SensorState.cs" />
     <Compile Include="ShutterDirection.cs" />
+    <Compile Include="ShutterDisposition.cs" />
     <Compile Include="ShutterLinkState.cs" />
   </ItemGroup>
   <ItemGroup>

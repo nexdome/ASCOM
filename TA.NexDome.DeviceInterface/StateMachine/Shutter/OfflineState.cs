@@ -11,10 +11,11 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
         public override void OnEnter()
             {
             base.OnEnter();
+            Machine.ShutterDisposition = ShutterDisposition.Offline;
             Machine.ShutterStepPosition = 0;
             Machine.ShutterMotorActive = false;
             Machine.ShutterMovementDirection = ShutterDirection.None;
-            Machine.ShutterPosition = SensorState.Indeterminate;
+            Machine.ShutterLimitSwitches = SensorState.Indeterminate;
             }
 
         /// <inheritdoc />

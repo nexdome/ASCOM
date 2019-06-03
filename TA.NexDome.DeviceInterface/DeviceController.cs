@@ -40,7 +40,7 @@ namespace TA.NexDome.DeviceInterface
 
         public float AzimuthDegrees => AzimuthEncoderPosition * DegreesPerTick;
 
-        private float DegreesPerTick => 360f / stateMachine.HardwareStatus?.DomeCircumference ?? 100;
+        private float DegreesPerTick => 360f / stateMachine.DomeCircumference;
 
         /// <summary>
         ///     <c>true</c> if any part of the building is moving.
@@ -60,11 +60,11 @@ namespace TA.NexDome.DeviceInterface
 
         public bool ShutterMotorActive => stateMachine.ShutterMotorActive;
 
-        public SensorState ShutterPosition => stateMachine.ShutterPosition;
+        public SensorState ShutterLimitSwitches => stateMachine.ShutterLimitSwitches;
+
+        public ShutterDisposition ShutterDisposition => stateMachine.ShutterDisposition;
 
         public bool AtHome => stateMachine.AtHome;
-
-        public IHardwareStatus CurrentStatus => stateMachine.HardwareStatus;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -92,9 +92,9 @@ namespace TA.NexDome.DeviceInterface
             {
             Log.Debug()
                 .Message("Shutter recovery heuristic.")
-                .Property(nameof(ShutterPosition), ShutterPosition)
+                .Property(nameof(ShutterLimitSwitches), ShutterLimitSwitches)
                 .Write();
-            if (ShutterPosition == SensorState.Indeterminate)
+            if (ShutterLimitSwitches == SensorState.Indeterminate)
                 {
                 Log.Info()
                     .Message("Shutter position is indeterminate, attempting to close the shutter.")
@@ -106,13 +106,51 @@ namespace TA.NexDome.DeviceInterface
             Log.Debug("Shutter recovery heuristic finished");
             }
 
+
+        /// <summary>
+        /// Uses a variety of pattern matches over the input character stream (defined in 
+        /// <see cref="ObservableExtensions"/>) to generate a number of observable sequences. For
+        /// example, there is an observable sequence of azimuth positions. Each of these sequences
+        /// is then subscribed to an <c>*OnNext()</c> handler method, which catches any exceptions
+        /// generated and passes the sequence elements on to the state machine. Thus the state
+        /// machine "reacts" to the serial input. Each sequence is assumed to only produce correct
+        /// and valid values. Each of the sequences produced is added to
+        /// <see cref="disposableSubscriptions"/> for later disposal and cleanup.
+        /// </summary>
         private void SubscribeControllerEvents()
             {
             SubscribeAzimuthEncoderTicks();
+            SubscribeShutterPositionTicks();
             SubscribeRotationDirection();
-            SubscribeShutterCurrentReadings();
             SubscribeShutterDirection();
             SubscribeStatusUpdates();
+            SubscribeLinkStateUpdates();
+            }
+
+        private void SubscribeLinkStateUpdates()
+            {
+            var linkStateUpdates = channel.ObservableReceivedCharacters.LinkStatusUpdates();
+            var subscription = linkStateUpdates.Subscribe(LinkStateUpdateOnNext,
+                ex => throw new InvalidOperationException(
+                    "Shutter Status Update sequence produced an unexpected error (see inner exception)", ex),
+                () => throw new InvalidOperationException(
+                    "Shutter Status Update sequence completed unexpectedly, this is probably a bug"));
+            disposableSubscriptions.Add(subscription);
+            }
+
+        private void LinkStateUpdateOnNext(ShutterLinkState state)
+            {
+            try
+                {
+                stateMachine.ShutterLinkStateChanged(state);
+                }
+            catch (Exception ex)
+                {
+                Log.Error()
+                    .Exception(ex)
+                    .Message("Error while processing link state update: {linkState}", state)
+                    .Write();
+                }
             }
 
         private void SubscribeStatusUpdates()
@@ -192,21 +230,6 @@ namespace TA.NexDome.DeviceInterface
             disposableSubscriptions.Add(shutterDirectionSubscription);
             }
 
-        private void SubscribeShutterCurrentReadings()
-            {
-            var shutterCurrentReadings = channel.ObservableReceivedCharacters.ShutterCurrentReadings();
-            var shutterCurrentSubscription = shutterCurrentReadings
-                //.ObserveOn(Scheduler.Default)
-                .Subscribe(
-                    stateMachine.ShutterMotorCurrentReceived,
-                    ex => throw new InvalidOperationException(
-                        "Shutter Current sequence produced an unexpected error (see inner exception)", ex),
-                    () => throw new InvalidOperationException(
-                        "ShutterCurrent sequence completed unexpectedly, this is probably a bug")
-                );
-            disposableSubscriptions.Add(shutterCurrentSubscription);
-            }
-
         private void SubscribeRotationDirection()
             {
             var rotationDirectionSequence = channel.ObservableReceivedCharacters.RotatorDirectionUpdates();
@@ -227,7 +250,6 @@ namespace TA.NexDome.DeviceInterface
             {
             var azimuthEncoderTicks = channel.ObservableReceivedCharacters.AzimuthEncoderTicks();
             var azimuthEncoderSubscription = azimuthEncoderTicks
-                //.ObserveOn(Scheduler.Default)
                 .Subscribe(
                     stateMachine.AzimuthEncoderTickReceived,
                     ex => throw new InvalidOperationException(
@@ -238,8 +260,46 @@ namespace TA.NexDome.DeviceInterface
             disposableSubscriptions.Add(azimuthEncoderSubscription);
             }
 
+        private void SubscribeShutterPositionTicks()
+            {
+            var shutterPositionTicks = channel.ObservableReceivedCharacters.ShutterPositionTicks();
+            var subscription = shutterPositionTicks.Subscribe(ShutterPositionTickOnNext,
+                    ex => throw new InvalidOperationException(
+                        "Encoder tick sequence produced an unexpected error (see ineer exception)", ex),
+                    () => throw new InvalidOperationException(
+                        "Encoder tick sequence completed unexpectedly, this is probably a bug")
+                );
+            disposableSubscriptions.Add(subscription);
+            }
+
+        private void ShutterPositionTickOnNext(int position)
+            {
+            try
+                {
+                stateMachine.ShutterEncoderTickReceived(position);
+                }
+            catch (Exception ex)
+                {
+                Log.Error()
+                    .Exception(ex)
+                    .Message("Error while processing shutter position: {position}", position)
+                    .Write();
+                }
+            }
+
         private void RotationDirectionOnNext(RotationDirection direction)
             {
+            try
+                {
+                stateMachine.RotationDirectionReceived(direction);
+                }
+            catch (Exception ex)
+                {
+                Log.Error()
+                    .Exception(ex)
+                    .Message("Error while processing rotation direction: {direction}", direction)
+                    .Write();
+                }
             }
 
         public void Close()
@@ -256,12 +316,6 @@ namespace TA.NexDome.DeviceInterface
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
-        public void SetUserOutputPin(int pinNumber, bool state)
-            {
-            var newState = UserPins.WithBitSetTo(pinNumber, state);
-            stateMachine.SetUserOutputPins(newState);
-            }
 
         public void RequestEmergencyStop()
             {
@@ -283,25 +337,24 @@ namespace TA.NexDome.DeviceInterface
 
         public void OpenShutter()
             {
-            if (ShutterPosition == SensorState.Open)
+            if (ShutterLimitSwitches == SensorState.Open)
                 {
                 Log.Warn()
-                    .Message("Ignoring OpenShutter request because ShutterPosition is {state}")
-                    .Property("state", ShutterPosition)
+                    .Message("Ignoring OpenShutter request because ShutterPosition is {state}", ShutterLimitSwitches)
+                    .Property("state", ShutterLimitSwitches)
                     .Write();
                 return;
                 }
-            Log.Info().Message("Closing shutter").Write();
+            Log.Info().Message("Opening shutter").Write();
             stateMachine.OpenShutter();
             }
 
         public void CloseShutter()
             {
-            if (ShutterPosition == SensorState.Closed)
+            if (ShutterLimitSwitches == SensorState.Closed)
                 {
                 Log.Warn()
-                    .Message("Ignoring CloseShutter request because ShutterPosition is {state}")
-                    .Property("state", ShutterPosition)
+                    .Message("Ignoring CloseShutter request because {limits} {disposition}", ShutterLimitSwitches,ShutterDisposition)
                     .Write();
                 return;
                 }
@@ -316,7 +369,7 @@ namespace TA.NexDome.DeviceInterface
         public void Park()
             {
             TimeSpan timeout;
-            if (ShutterPosition != SensorState.Closed)
+            if (ShutterLimitSwitches != SensorState.Closed)
                 {
                 stateMachine.CloseShutter();
                 timeout = configuration.MaximumFullRotationTime + configuration.MaximumShutterCloseTime;

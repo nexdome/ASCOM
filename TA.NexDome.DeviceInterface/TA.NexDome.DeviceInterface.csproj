@@ -43,27 +43,20 @@
   <ItemGroup>
     <Compile Include="CommunicationsStackBuilder.cs" />
     <Compile Include="DeviceController.cs" />
-    <Compile Include="INotifyHardwareStateChanged.cs" />
     <Compile Include="ITransactionProcessorFactory.cs" />
     <Compile Include="ObservableExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReactiveTransactionProcessorFactory.cs" />
-    <Compile Include="StateMachine\ControllerStateBase.cs" />
     <Compile Include="StateMachine\ControllerStateMachine.cs" />
     <Compile Include="StateMachine\IControllerActions.cs" />
-    <Compile Include="StateMachine\IControllerState.cs" />
     <Compile Include="StateMachine\IRotatorState.cs" />
     <Compile Include="StateMachine\IShutterState.cs" />
     <Compile Include="StateMachine\IState.cs" />
-    <Compile Include="StateMachine\Ready.cs" />
-    <Compile Include="StateMachine\RequestStatus.cs" />
-    <Compile Include="StateMachine\Rotating.cs" />
     <Compile Include="StateMachine\Rotator\ReadyState.cs" />
     <Compile Include="StateMachine\Rotator\RequestStatusState.cs" />
     <Compile Include="StateMachine\Rotator\RotatingState.cs" />
     <Compile Include="StateMachine\Rotator\RotatorStateBase.cs" />
     <Compile Include="StateMachine\RxControllerActions.cs" />
-    <Compile Include="StateMachine\ShutterMoving.cs" />
     <Compile Include="StateMachine\Shutter\ClosedState.cs" />
     <Compile Include="StateMachine\Shutter\ClosingState.cs" />
     <Compile Include="StateMachine\Shutter\OfflineState.cs" />
@@ -71,8 +64,6 @@
     <Compile Include="StateMachine\Shutter\OpenState.cs" />
     <Compile Include="StateMachine\Shutter\RequestStatusState.cs" />
     <Compile Include="StateMachine\Shutter\ShutterStateBase.cs" />
-    <Compile Include="StateMachine\StateLoggingDecorator.cs" />
-    <Compile Include="StateMachine\Uninitialized.cs" />
     <Compile Include="TransactionException.cs" />
     <Compile Include="TransactionExtensions.cs" />
   </ItemGroup>

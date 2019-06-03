@@ -15,15 +15,48 @@ namespace TA.NexDome.DeviceInterface
     internal static class ObservableExtensions
         {
         /// <summary>
+        /// Creates a sequence of buffers, where the start and end of each buffer are triggered when
+        /// the input sequence matches a predicate. This is used by many of the other extension
+        /// methods in this class and is a handy way to buffer up responses based on start and stop
+        /// characters.
+        /// </summary>
+        /// <param name="source">The source sequence, an <see cref="IObservable{char}"/>.</param>
+        /// <param name="bufferOpening">The buffer opening predicate.</param>
+        /// <param name="bufferClosing">The buffer closing predicate.</param>
+        /// <returns>An observable sequence of buffers.</returns>
+        public static IObservable<IList<char>> BufferByPredicates(this IObservable<char> source, Predicate<char> bufferOpening, Predicate<char> bufferClosing) => source.Buffer(source.Where(c => bufferOpening(c)), x => source.Where(c => bufferClosing(c)));
+
+        /// <summary>
+        ///     Extracts shutter position ticks from a source sequence and emits
+        ///     the position values as an observable sequence of integers.
+        /// </summary>
+        /// <param name="source">The input sequence.</param>
+        public static IObservable<int> ShutterPositionTicks(this IObservable<char> source)
+            {
+            const string pattern = @"^S(?<Position>-?\d{1,6})[^0-9]";
+            var regex =
+                new Regex(pattern,
+                    RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.CultureInvariant);
+            var buffers = source.Publish(s => s.BufferByPredicates(p => p == 'S', q => !char.IsDigit(q)));
+            var positionValues = from buffer in buffers
+                                 let message = new string(buffer.ToArray())
+                                 let patternMatch = regex.Match(message)
+                                 where patternMatch.Success
+                                 let position = int.Parse(patternMatch.Groups["Position"].Value)
+                                 select position;
+            return positionValues.Trace("ShutterPosition");
+            }
+
+        /// <summary>
         ///     Extracts azimuth encoder ticks from a source sequence and emits
         ///     the encoder values as an observable sequence of integers.
         /// </summary>
         /// <param name="source"></param>
         public static IObservable<int> AzimuthEncoderTicks(this IObservable<char> source)
             {
-            const string azimuthEncoderPattern = @"^P(?<Azimuth>\d{1,4})[^0-9]";
+            const string azimuthEncoderPattern = @"^P(?<Azimuth>-?\d{1,6})[^0-9]";
             var azimuthEncoderRegex =
-                new Regex(azimuthEncoderPattern, RegexOptions.Compiled | RegexOptions.ExplicitCapture);
+                new Regex(azimuthEncoderPattern, RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.CultureInvariant);
             var buffers = source.Publish(s => s.BufferByPredicates(p => p == 'P', q => !char.IsDigit(q)));
             var azimuthValues = from buffer in buffers
                                 let message = new string(buffer.ToArray())
@@ -34,30 +67,31 @@ namespace TA.NexDome.DeviceInterface
             return azimuthValues.Trace("EncoderTicks");
             }
 
-        public static IObservable<int> ShutterCurrentReadings(this IObservable<char> source)
+        public static IObservable<ShutterLinkState> LinkStatusUpdates(this IObservable<char> source)
             {
-            const string shutterCurrentPattern = @"^Z(?<Current>\d{1,3})";
-            var shutterCurrentRegex =
-                new Regex(shutterCurrentPattern, RegexOptions.Compiled | RegexOptions.ExplicitCapture);
-            var buffers = source.Publish(s => s.BufferByPredicates(p => p == 'Z', q => !char.IsDigit(q)));
-            var shutterCurrentValues = from buffer in buffers
-                                       let message = new string(buffer.ToArray())
-                                       let patternMatch = shutterCurrentRegex.Match(message)
-                                       where patternMatch.Success
-                                       let shutterCurrent = int.Parse(patternMatch.Groups["Current"].Value)
-                                       select shutterCurrent;
-            return shutterCurrentValues.Trace("ShutterCurrent");
+            const string linkStatePattern = @"^XB->(?<State>[a-zA-Z]+)[\r\n]?$";
+            var linkStateRegex = new Regex(linkStatePattern, RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.CultureInvariant);
+            var buffers = source.Publish(s => s.BufferByPredicates(p => p == 'X', char.IsWhiteSpace));
+            var linkStateValues = from buffer in buffers
+                                  let message = new string(buffer.ToArray())
+                                  let patternMatch = linkStateRegex.Match(message)
+                                  where patternMatch.Success
+                                  let linkState = (ShutterLinkState)Enum.Parse(typeof(ShutterLinkState), patternMatch.Groups["State"].Value)
+                                  select linkState;
+            return linkStateValues.Trace("Link State");
             }
 
-        public static IObservable<IList<char>> BufferByPredicates(this IObservable<char> source, Predicate<char> bufferOpening, Predicate<char> bufferClosing) => source.Buffer(source.Where(c => bufferOpening(c)), x => source.Where(c => bufferClosing(c)));
 
         public static IObservable<IRotatorStatus> RotatorStatusUpdates(this IObservable<char> source, ControllerStatusFactory factory)
             {
+            var regex = new Regex(ControllerStatusFactory.RotatorStatusPattern,
+                RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture);
             var responses = source.Publish(s =>
                 s.BufferByPredicates(p => p == ':', q => q == '#'));
             var statusValues = from response in responses
                                let message = new string(response.ToArray())
                                where message.StartsWith(Constants.RotatorStatusReply)
+                               where regex.IsMatch(message)
                                let status = factory.FromRotatorStatusPacket(message)
                                select status;
             return statusValues.Trace("IRotatorStatus");
@@ -78,11 +112,14 @@ namespace TA.NexDome.DeviceInterface
 
         public static IObservable<IShutterStatus> ShutterStatusUpdates(this IObservable<char> source, ControllerStatusFactory factory)
             {
+            var regex = new Regex(ControllerStatusFactory.ShutterStatusPattern,
+                RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture);
             var responses = source.Publish(s =>
                 s.BufferByPredicates(p => p == ':', q => q == '#'));
             var statusValues = from response in responses
                                let message = new string(response.ToArray())
                                where message.StartsWith(Constants.ShutterStatusReply)
+                               where regex.IsMatch(message)
                                let status = factory.FromShutterStatusPacket(message)
                                select status;
             return statusValues.Trace("IShutterStatus");

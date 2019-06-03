@@ -13,6 +13,6 @@ namespace TA.NexDome.Specifications.DeviceInterface.Behaviours
         It should_have_a_direction =
             () => Machine.ShutterMovementDirection.ShouldNotEqual(ShutterDirection.None);
         It should_not_signal_ready = () => Machine.ShutterInReadyState.WaitOne(0).ShouldBeFalse();
-        It should_have_open_position = () => Machine.ShutterPosition.ShouldEqual(SensorState.Open);
+        It should_have_open_position = () => Machine.ShutterLimitSwitches.ShouldEqual(SensorState.Open);
         }
     }

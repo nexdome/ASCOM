@@ -12,15 +12,14 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Threading.Tasks;
+using TA.NexDome.DeviceInterface.StateMachine.Rotator;
 using TA.NexDome.SharedTypes;
 
 namespace TA.NexDome.DeviceInterface.StateMachine
     {
     [NotifyPropertyChanged]
-    public class ControllerStateMachine : INotifyHardwareStateChanged
+    public class ControllerStateMachine : INotifyPropertyChanged
         {
-        internal readonly ManualResetEvent InReadyState = new ManualResetEvent(false);
         internal readonly ManualResetEvent ShutterInReadyState = new ManualResetEvent(false);
         internal readonly ManualResetEvent RotatorInReadyState = new ManualResetEvent(false);
         [CanBeNull] internal CancellationTokenSource KeepAliveCancellationSource;
@@ -31,7 +30,6 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             ControllerActions = controllerActions;
             Options = options;
             Clock = clock;
-            CurrentState = new Uninitialized();
             }
 
         internal IControllerActions ControllerActions { get; }
@@ -39,11 +37,6 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         internal DeviceControllerOptions Options { get; }
 
         public IClock Clock { get; }
-
-        internal IControllerState CurrentState { get; private set; }
-
-        [CanBeNull]
-        public IHardwareStatus HardwareStatus { get; private set; }
 
         [CanBeNull]
         public IRotatorStatus RotatorStatus { get; private set; }
@@ -54,7 +47,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
 
         public bool AtHome { get; set; }
 
-        public SensorState ShutterPosition { get; set; }
+        public SensorState ShutterLimitSwitches { get; set; }
 
         /// <summary>
         ///     The state of the user output pins. Bits 0..3 are significant, other bits are unused.
@@ -87,12 +80,6 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        ///     Initializes the state machine and optionally sets the starting state.
-        /// </summary>
-        /// <param name="startState"></param>
-        public void Initialize(IControllerState startState) => TransitionToState(startState);
-
-        /// <summary>
         ///     Initializes the specified rotator initial state.
         /// </summary>
         /// <param name="rotatorInitialState">
@@ -118,12 +105,10 @@ namespace TA.NexDome.DeviceInterface.StateMachine
                 case IShutterState shutter:
                     ShutterState = shutter;
                     break;
-                case IControllerState state:
-                    CurrentState = state;
-                    break;
                 }
             }
 
+        [NotNull]
         private IState GetCurrentState<TState>(TState targetState) where TState : IState
             {
             switch (targetState)
@@ -132,8 +117,6 @@ namespace TA.NexDome.DeviceInterface.StateMachine
                     return RotatorState;
                 case IShutterState state:
                     return ShutterState;
-                case IControllerState state:
-                    return CurrentState;
                 default:
                     throw new InvalidOperationException("Funky state type");
                 }
@@ -142,16 +125,17 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         public void TransitionToState<TState>([NotNull] TState targetState) where TState : class, IState
             {
             if (targetState == null) throw new ArgumentNullException(nameof(targetState));
+            IState state = null;
             try
                 {
-                var state = GetCurrentState(targetState);
+                state = GetCurrentState(targetState);
                 state?.OnExit();
                 }
             catch (Exception ex)
                 {
                 Log.Error()
                     .Exception(ex)
-                    .Message($"Unexpected exception leaving state {CurrentState.Name}")
+                    .Message($"Unexpected exception leaving state {state?.Name ?? "Null state"}")
                     .Write();
                 }
 
@@ -186,7 +170,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             ShutterMotorActive = false;
             ShutterMovementDirection = ShutterDirection.None;
             ShutterMotorCurrent = 0;
-            ShutterPosition = SetInferredShutterPosition(status.ShutterSensor);
+            ShutterLimitSwitches = SetInferredShutterPosition(status.ShutterSensor);
             AtHome = status.AtHome;
             UserPins = status.UserPins;
             }
@@ -201,15 +185,17 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             HomePosition = status.HomePosition;
             }
 
+        public ShutterDisposition ShutterDisposition { get; internal set; } = SharedTypes.ShutterDisposition.Offline;
+
         internal void UpdateStatus(IShutterStatus status)
             {
             ShutterMotorActive = false;
             ShutterMovementDirection = ShutterDirection.None;
             if (status.OpenSensorActive)
-                ShutterPosition = SensorState.Open;
+                ShutterLimitSwitches = SensorState.Open;
             else if (status.ClosedSensorActive)
-                ShutterPosition = SensorState.Closed;
-            else ShutterPosition = SensorState.Indeterminate;
+                ShutterLimitSwitches = SensorState.Closed;
+            else ShutterLimitSwitches = SensorState.Indeterminate;
             ShutterStepPosition = status.Position;
             }
 
@@ -225,12 +211,6 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             }
 
         internal void RequestHardwareStatus() => ControllerActions.RequestHardwareStatus();
-
-        public void ShutterMotorCurrentReceived(int current)
-            {
-            ShutterMotorCurrent = current;
-            CurrentState.ShutterMovementDetected();
-            }
 
         public void ShutterDirectionReceived(ShutterDirection direction)
             {
@@ -248,7 +228,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         public void RotationDirectionReceived(RotationDirection direction)
             {
             AzimuthDirection = direction;
-            CurrentState.RotationDetected();
+            RotatorState.RotationDetected();
             }
 
         /// <summary>
@@ -281,36 +261,13 @@ namespace TA.NexDome.DeviceInterface.StateMachine
 
         public void CloseShutter() => ShutterState.CloseShutter();
 
-        public void RotateToHomePosition() => CurrentState.RotateToHomePosition();
-
-        public void SetUserOutputPins(Octet newState)
-            {
-            UserPins = newState;
-            CurrentState.SetUserOutputPins(newState);
-            }
+        public void RotateToHomePosition() => RotatorState.RotateToHomePosition();
 
         internal void ResetKeepAliveTimer()
             {
             Log.Debug().Message("Keep-alive timer reset").Write();
             KeepAliveCancellationSource?.Cancel(); // Cancel any previous timer
             KeepAliveCancellationSource = new CancellationTokenSource();
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            PollStatusAfterKeepAliveIntervalAsync(KeepAliveCancellationSource.Token); // Do not await the result
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            }
-
-        private async Task PollStatusAfterKeepAliveIntervalAsync(CancellationToken cancel)
-            {
-            await Task.Delay(Options.KeepAliveTimerInterval, cancel);
-            if (cancel.IsCancellationRequested)
-                {
-                Log.Debug("KeepAlive poll cancelled");
-                return;
-                }
-            Log.Debug()
-                .Message("Keep-alive timer expired - generating status request")
-                .Write();
-            CurrentState.RequestHardwareStatus();
             }
 
         #region State triggers
@@ -329,20 +286,6 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             }
 
         public int ShutterStepPosition { get; set; }
-
-        public void HardwareStatusReceived(IHardwareStatus status)
-            {
-            Log.Info()
-                .Message("Status update {status}", status)
-                .Write();
-            /*
-             * [TPL] update the status records first, before allowing the state machine to transition.
-             * Otherwise there could be a race condition where a new state sees the old status data.
-             */
-            HardwareStatus = status;
-            UpdateStatus(status);
-            CurrentState.StatusUpdateReceived(status);
-            }
 
         public void HardwareStatusReceived(IRotatorStatus status)
             {

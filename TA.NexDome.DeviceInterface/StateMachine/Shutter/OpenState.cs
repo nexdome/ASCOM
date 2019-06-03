@@ -10,7 +10,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter {
         public override void OnEnter()
             {
             base.OnEnter();
-            Machine.ShutterPosition = SensorState.Open;
+            Machine.ShutterDisposition = ShutterDisposition.Open;
             Machine.ShutterInReadyState.Set();
             }
 

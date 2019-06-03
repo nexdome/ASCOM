@@ -12,6 +12,7 @@ namespace TA.NexDome.Specifications.DeviceInterface.Behaviours
             () => Machine.ShutterMovementDirection.ShouldEqual(ShutterDirection.None);
         It should_be_ready = () => Machine.ShutterInReadyState.WaitOne(0).ShouldBeTrue();
         It should_be_in_open_state = () => Machine.ShutterState.ShouldBeOfExactType<OpenState>();
-        It should_have_open_position = () => Machine.ShutterPosition.ShouldEqual(SensorState.Open);
+        It should_have_open_disposition = () => Machine.ShutterDisposition.ShouldEqual(ShutterDisposition.Open);
+        It should_not_be_at_the_closed_limit = () => Machine.ShutterLimitSwitches.ShouldNotEqual(SensorState.Closed);
         }
     }

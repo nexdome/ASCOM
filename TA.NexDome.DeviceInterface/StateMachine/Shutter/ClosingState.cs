@@ -12,9 +12,10 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter {
         public override void OnEnter()
             {
             base.OnEnter();
+            Machine.ShutterDisposition = ShutterDisposition.Closing;
             Machine.ShutterMotorActive = true;
             Machine.ShutterMovementDirection = ShutterDirection.Closing;
-            Machine.ShutterPosition = SensorState.Open;
+            Machine.ShutterLimitSwitches = SensorState.Open;
             ResetTimeout(EncoderTickTimeout);
             }
 

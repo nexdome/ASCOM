@@ -66,7 +66,7 @@ namespace TA.NexDome.Specifications.Builders
 
             var controllerActions = new RxControllerActions(channel);
             var controllerStateMachine = new ControllerStateMachine(controllerActions, controllerOptions, timeSource);
-            controllerStateMachine.ShutterPosition = initialShutterState;
+            controllerStateMachine.ShutterLimitSwitches = initialShutterState;
             if (startInReadyState)
                 controllerStateMachine.Initialize(new Ready(controllerStateMachine));
 

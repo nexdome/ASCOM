@@ -103,6 +103,7 @@ namespace TA.NexDome.Specifications.DeviceInterface
             .Build();
         Because of = () => Machine.HardwareStatusReceived(ShutterStatus.FullyOpen().Build());
         Behaves_like<an_open_shutter> _;
+        It should_set_the_sesnsor_state = () => Machine.ShutterLimitSwitches.ShouldEqual(SensorState.Open);
         }
 
     [Subject(typeof(OpeningState), "triggers")]
@@ -113,6 +114,8 @@ namespace TA.NexDome.Specifications.DeviceInterface
             .Build();
         Because of = () => Machine.HardwareStatusReceived(ShutterStatus.PartiallyOpen().Build());
         Behaves_like<a_stopped_shutter> _;
+        It should_set_the_sesnsor_state = () => Machine.ShutterLimitSwitches.ShouldEqual(SensorState.Indeterminate);
+        It should_be_in_open_state = () => Machine.ShutterState.ShouldBeOfExactType<OpenState>();
         }
 
 
@@ -192,7 +195,7 @@ namespace TA.NexDome.Specifications.DeviceInterface
         }
 
     [Subject(typeof(RequestStatusState), "triggers")]
-    internal class when_when_in_shutter_request_status_state_and_open_status_received : with_state_machine_context
+    internal class when_in_shutter_request_status_state_and_open_status_received : with_state_machine_context
         {
         Establish context = () => Context = ContextBuilder
             .WithShutterInRequestStatusState()
@@ -335,7 +338,7 @@ namespace TA.NexDome.Specifications.DeviceInterface
     [Subject(typeof(ClosingState), "triggers")]
     internal class when_closing_and_closed_status_received : with_state_machine_context
         {
-        const int ExpectedStepPosition = 100;
+        const int ExpectedStepPosition = 0;
         Establish context = () => Context = ContextBuilder
             .WithClosingShutter()
             .Build();
@@ -343,6 +346,22 @@ namespace TA.NexDome.Specifications.DeviceInterface
         Behaves_like<a_stopped_shutter> _;
         It should_update_the_view_model_position = () => Machine.ShutterStepPosition.ShouldEqual(0);
         It should_be_in_closed_state = () => Machine.ShutterState.ShouldBeOfExactType<ClosedState>();
+        It should_set_the_sensor_state = () => Machine.ShutterLimitSwitches.ShouldEqual(SensorState.Closed);
+        }
+
+    [Subject(typeof(ClosingState), "triggers")]
+    internal class when_closing_and_partially_open_status_received : with_state_machine_context
+        {
+        const int ExpectedStepPosition = 250;
+        Establish context = () => Context = ContextBuilder
+            .WithClosingShutter()
+            .Build();
+        Because of = () => Machine.HardwareStatusReceived(ShutterStatus.PartiallyOpen().Build());
+        Behaves_like<a_stopped_shutter> _;
+        It should_update_the_view_model_position = () => Machine.ShutterStepPosition.ShouldEqual(250);
+        It should_be_in_open_state = () => Machine.ShutterState.ShouldBeOfExactType<OpenState>();
+        It should_set_the_disposition = () => Machine.ShutterDisposition.ShouldEqual(ShutterDisposition.Open);
+        It should_set_the_limit_switches = () => Machine.ShutterLimitSwitches.ShouldEqual(SensorState.Indeterminate);
         }
 
     [Subject(typeof(ClosingState), "triggers")]

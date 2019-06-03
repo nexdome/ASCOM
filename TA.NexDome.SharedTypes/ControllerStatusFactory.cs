@@ -15,13 +15,15 @@ namespace TA.NexDome.SharedTypes
     /// </summary>
     public sealed class ControllerStatusFactory
         {
-        private const string rotatorStatusPattern = @"^(?<Status>:SER(,(?<Values>\d{1,6}))+)#$";
-        private const string shutterStatusPattern = @"^(?<Status>:SES(,(?<Values>\d{1,6}))+)#$";
+        public static string RotatorStatusPattern { get; } = @"^(?<Status>:SER(,(?<Values>-?\d{1,6}))+)#$";
+
+        public static string ShutterStatusPattern { get; } = @"^(?<Status>:SES(,(?<Values>-?\d{1,6}))+)#$";
+
         private static readonly Logger log = LogManager.GetCurrentClassLogger();
         private static readonly char[] fieldDelimiters = {','};
-        private static readonly Regex RotatorStatusRegex = new Regex(rotatorStatusPattern,
+        private static readonly Regex RotatorStatusRegex = new Regex(RotatorStatusPattern,
             RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.CultureInvariant);
-        private static readonly Regex ShutterStatusRegex = new Regex(shutterStatusPattern,
+        private static readonly Regex ShutterStatusRegex = new Regex(ShutterStatusPattern,
             RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.CultureInvariant);
         private readonly IClock timeSource;
 
