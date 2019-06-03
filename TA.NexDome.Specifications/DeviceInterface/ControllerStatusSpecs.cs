@@ -11,7 +11,7 @@ using TA.NexDome.Specifications.Fakes;
 namespace TA.NexDome.Specifications.DeviceInterface
     {
     [Ignore("Deprecated code")]
-    [Subject(typeof(HardwareStatus), "creation")]
+    [Subject(typeof(ControllerStatusFactory), "creation")]
     internal class when_creating_a_rotator_status
         {
         Establish context = () =>

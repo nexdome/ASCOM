@@ -52,7 +52,6 @@ namespace TA.NexDome.Specifications.Builders
         PropertyChangedEventHandler propertyChangedAction;
         List<Tuple<string, Action>> propertyChangeObservers = new List<Tuple<string, Action>>();
         SensorState initialShutterState;
-        bool startInReadyState;
 
         public DeviceControllerContext Build()
             {
@@ -67,8 +66,6 @@ namespace TA.NexDome.Specifications.Builders
             var controllerActions = new RxControllerActions(channel);
             var controllerStateMachine = new ControllerStateMachine(controllerActions, controllerOptions, timeSource);
             controllerStateMachine.ShutterLimitSwitches = initialShutterState;
-            if (startInReadyState)
-                controllerStateMachine.Initialize(new Ready(controllerStateMachine));
 
             // Build the device controller
             var controller = new DeviceController(channel, statusFactory, controllerStateMachine, controllerOptions);
@@ -101,7 +98,6 @@ namespace TA.NexDome.Specifications.Builders
         /// <param name="connectionString">The connection string to use when creating and opening the channel.</param>
         public DeviceControllerContextBuilder WithStateMachineInitializedAndReady(string connectionString)
             {
-            startInReadyState = true;
             return WithOpenConnection(connectionString);
             }
 

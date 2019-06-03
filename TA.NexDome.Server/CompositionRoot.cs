@@ -5,9 +5,6 @@
 // File: CompositionRoot.cs  Last modified: 2018-06-17@17:22 by Tim Long
 
 using System;
-using System.IO;
-using System.Reflection;
-using Newtonsoft.Json.Linq;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Modules;
@@ -16,9 +13,10 @@ using NLog.Fluent;
 using TA.Ascom.ReactiveCommunications;
 using TA.NexDome.DeviceInterface;
 using TA.NexDome.DeviceInterface.StateMachine;
+using TA.NexDome.Server.Properties;
 using TA.NexDome.SharedTypes;
 
-namespace TA.NextDome.DeviceInterface.TestHarness
+namespace TA.NexDome.Server
     {
     public static class CompositionRoot
         {
@@ -66,7 +64,7 @@ namespace TA.NextDome.DeviceInterface.TestHarness
             Bind<ICommunicationChannel>()
                 .ToMethod(BuildCommunicationsChannel)
                 .InSessionScope();
-            Bind<ChannelFactory>().ToMethod(BuildChannelFactory).InSessionScope();
+            Bind<ChannelFactory>().ToSelf().InSessionScope();
             Bind<IClock>().To<SystemDateTimeUtcClock>().InSingletonScope();
             Bind<IControllerActions>().To<RxControllerActions>().InSessionScope();
             Bind<DeviceControllerOptions>().ToMethod(BuildDeviceOptions).InSessionScope();
@@ -74,41 +72,24 @@ namespace TA.NextDome.DeviceInterface.TestHarness
 
         private ICommunicationChannel BuildCommunicationsChannel(IContext context)
             {
-            var settings = LoadSettings();
             var channelFactory = Kernel.Get<ChannelFactory>();
-            var channel = channelFactory.FromConnectionString((string) settings["ConnectionString"]);
+            var channel = channelFactory.FromConnectionString(Settings.Default.ConnectionString);
             return channel;
-            }
-
-        private ChannelFactory BuildChannelFactory(IContext arg)
-            {
-            var factory = new ChannelFactory();
-            return factory;
             }
 
         private DeviceControllerOptions BuildDeviceOptions(IContext arg)
             {
             var options = new DeviceControllerOptions
                 {
-                PerformShutterRecovery = false,
-                MaximumShutterCloseTime = TimeSpan.FromSeconds(120),
-                MaximumFullRotationTime = TimeSpan.FromSeconds(120),
-                KeepAliveTimerInterval = TimeSpan.FromSeconds(600),
-                CurrentDrawDetectionThreshold = 20,
-                IgnoreHardwareShutterSensor = false,
-                ShutterTickTimeout = TimeSpan.FromSeconds(2.5),
-                RotatorTickTimeout = TimeSpan.FromSeconds(2.5),
+                PerformShutterRecovery = Settings.Default.PerformShutterRecovery,
+                MaximumShutterCloseTime = TimeSpan.FromSeconds((double) Settings.Default.ShutterOpenCloseTimeSeconds),
+                MaximumFullRotationTime = TimeSpan.FromSeconds((double) Settings.Default.FullRotationTimeSeconds),
+                KeepAliveTimerInterval = Settings.Default.KeepAliveTimerPeriod,
+                CurrentDrawDetectionThreshold = Settings.Default.CurrentDrawDetectionThreshold,
+                IgnoreHardwareShutterSensor = Settings.Default.IgnoreHardwareShutterSensor,
+                ShutterTickTimeout = Settings.Default.ShutterTickTimeout
                 };
             return options;
-            }
-
-        private JObject LoadSettings()
-            {
-            var location = Assembly.GetExecutingAssembly().Location;
-            var workingDirectory = Path.GetDirectoryName(location);
-            var sourceFile = Path.Combine(workingDirectory, "TestSettings.json");
-            JObject settings = JObject.Parse(File.ReadAllText(sourceFile));
-            return settings;
             }
         }
     }
