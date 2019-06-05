@@ -7,7 +7,6 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -16,20 +15,13 @@ namespace TA.NexDome.Server
     [ComVisible(false)] // Form not registered for COM!
     public partial class SetupDialogForm : Form
         {
-        public SetupDialogForm()
-            {
-            InitializeComponent();
-            }
+        public SetupDialogForm() => InitializeComponent();
 
         private void cmdOK_Click(object sender, EventArgs e) // OK button event handler
-            {
-            communicationSettingsControl1.Save();
-            }
+=> communicationSettingsControl1.Save();
 
         private void cmdCancel_Click(object sender, EventArgs e) // Cancel button event handler
-            {
-            Close();
-            }
+=> Close();
 
         private void BrowseToAscom(object sender, EventArgs e) // Click on ASCOM logo event handler
             {
@@ -50,7 +42,7 @@ namespace TA.NexDome.Server
 
         private void SetupDialogForm_Load(object sender, EventArgs e)
             {
-            var onlineClients = SharedResources.ConnectionManager.OnlineClientCount;
+            int onlineClients = SharedResources.ConnectionManager.OnlineClientCount;
             if (onlineClients == 0)
                 {
                 communicationSettingsControl1.Enabled = true;
@@ -91,24 +83,6 @@ namespace TA.NexDome.Server
             ShutterOpenCloseTimeSeconds.Value = 240;
             }
 
-        private void IgnoreShutterSensor_CheckedChanged(object sender, EventArgs e)
-            {
-            if (IgnoreShutterSensor.Checked)
-                {
-                var result = MessageBox.Show(
-                    "This is a potentially unsafe setting.\nPlease be sure you understand the implications\nbefore enabling this!",
-                    "Potentially unsafe configuration", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning,
-                    MessageBoxDefaultButton.Button2);
-                if (result != DialogResult.OK)
-                    IgnoreShutterSensor.Checked = false;
-                }
-
-            SetControlAppearance();
-            }
-
-        private void SetControlAppearance()
-            {
-            IgnoreShutterSensor.ForeColor = IgnoreShutterSensor.Checked ? Color.DarkRed : DefaultForeColor;
-            }
-    }
+        private void SetControlAppearance() { }
+        }
     }

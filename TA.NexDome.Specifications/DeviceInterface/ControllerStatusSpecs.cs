@@ -54,8 +54,9 @@ namespace TA.NexDome.Specifications.DeviceInterface
         It should_set_the_position = () => status.Position.ShouldEqual(-600);
         It should_be_open = () => status.OpenSensorActive.ShouldBeTrue();
         It should_not_be_closed = () => status.ClosedSensorActive.ShouldBeFalse();
+        It should_have_expected_limit_of_travel = () => status.LimitOfTravel.ShouldEqual(46000);
         static IShutterStatus status;
         static ControllerStatusFactory factory;
-        const string RealWorldStatusPacket = ":SES,-600,1,0#";
+        const string RealWorldStatusPacket = ":SES,-600,46000,1,0#";
         }
     }

@@ -47,12 +47,11 @@
             this.ShutterOpeningAnnunciator = new ASCOM.Controls.Annunciator();
             this.ShutterMotorAnnunciator = new ASCOM.Controls.Annunciator();
             this.ShutterClosingAnnunciator = new ASCOM.Controls.Annunciator();
-            this.ShutterCurrentAnnunciator = new ASCOM.Controls.Annunciator();
-            this.ShutterOpenAnnunciator = new ASCOM.Controls.Annunciator();
-            this.ShutterClosedAnnunciator = new ASCOM.Controls.Annunciator();
-            this.ShutterIndeterminateAnnunciator = new ASCOM.Controls.Annunciator();
+            this.ShutterPercentOpenAnnunciator = new ASCOM.Controls.Annunciator();
+            this.ShutterDispositionAnnunciator = new ASCOM.Controls.Annunciator();
+            this.ShutterLinkStateAnnunciator = new ASCOM.Controls.Annunciator();
             this.SetupCommand = new System.Windows.Forms.Button();
-            this.ShutterCurrentBar = new System.Windows.Forms.ProgressBar();
+            this.ShutterPositionBar = new System.Windows.Forms.ProgressBar();
             this.OpenButton = new System.Windows.Forms.Button();
             this.CloseButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
@@ -114,10 +113,9 @@
             this.annunciatorPanel1.Controls.Add(this.ShutterOpeningAnnunciator);
             this.annunciatorPanel1.Controls.Add(this.ShutterMotorAnnunciator);
             this.annunciatorPanel1.Controls.Add(this.ShutterClosingAnnunciator);
-            this.annunciatorPanel1.Controls.Add(this.ShutterCurrentAnnunciator);
-            this.annunciatorPanel1.Controls.Add(this.ShutterOpenAnnunciator);
-            this.annunciatorPanel1.Controls.Add(this.ShutterClosedAnnunciator);
-            this.annunciatorPanel1.Controls.Add(this.ShutterIndeterminateAnnunciator);
+            this.annunciatorPanel1.Controls.Add(this.ShutterPercentOpenAnnunciator);
+            this.annunciatorPanel1.Controls.Add(this.ShutterDispositionAnnunciator);
+            this.annunciatorPanel1.Controls.Add(this.ShutterLinkStateAnnunciator);
             this.annunciatorPanel1.Location = new System.Drawing.Point(96, 12);
             this.annunciatorPanel1.Name = "annunciatorPanel1";
             this.annunciatorPanel1.Size = new System.Drawing.Size(387, 37);
@@ -136,7 +134,7 @@
             this.RotationTitle.Name = "RotationTitle";
             this.RotationTitle.Size = new System.Drawing.Size(64, 17);
             this.RotationTitle.TabIndex = 1;
-            this.RotationTitle.Text = "Azimuth";
+            this.RotationTitle.Text = "Rotator";
             // 
             // CounterClockwiseAnnunciator
             // 
@@ -160,7 +158,7 @@
             this.AzimuthMotorAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.AzimuthMotorAnnunciator.Cadence = ASCOM.Controls.CadencePattern.BlinkAlarm;
             this.AzimuthMotorAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
-            this.AzimuthMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.AzimuthMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.AzimuthMotorAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.AzimuthMotorAnnunciator.Location = new System.Drawing.Point(95, 0);
             this.AzimuthMotorAnnunciator.Mute = false;
@@ -312,7 +310,7 @@
             this.ShutterMotorAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.ShutterMotorAnnunciator.Cadence = ASCOM.Controls.CadencePattern.BlinkAlarm;
             this.ShutterMotorAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
-            this.ShutterMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.ShutterMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.ShutterMotorAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.ShutterMotorAnnunciator.Location = new System.Drawing.Point(95, 17);
             this.ShutterMotorAnnunciator.Mute = false;
@@ -336,68 +334,52 @@
             this.ShutterClosingAnnunciator.TabIndex = 9;
             this.ShutterClosingAnnunciator.Text = "▼";
             // 
-            // ShutterCurrentAnnunciator
+            // ShutterPercentOpenAnnunciator
             // 
-            this.ShutterCurrentAnnunciator.ActiveColor = System.Drawing.Color.LightGoldenrodYellow;
-            this.ShutterCurrentAnnunciator.AutoSize = true;
-            this.ShutterCurrentAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.ShutterCurrentAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
-            this.ShutterCurrentAnnunciator.ForeColor = System.Drawing.Color.LightGoldenrodYellow;
-            this.ShutterCurrentAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
-            this.ShutterCurrentAnnunciator.Location = new System.Drawing.Point(171, 17);
-            this.ShutterCurrentAnnunciator.Mute = false;
-            this.ShutterCurrentAnnunciator.Name = "ShutterCurrentAnnunciator";
-            this.ShutterCurrentAnnunciator.Size = new System.Drawing.Size(32, 17);
-            this.ShutterCurrentAnnunciator.TabIndex = 10;
-            this.ShutterCurrentAnnunciator.Tag = "{0:D3}";
-            this.ShutterCurrentAnnunciator.Text = "000";
+            this.ShutterPercentOpenAnnunciator.ActiveColor = System.Drawing.Color.LightGoldenrodYellow;
+            this.ShutterPercentOpenAnnunciator.AutoSize = true;
+            this.ShutterPercentOpenAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.ShutterPercentOpenAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
+            this.ShutterPercentOpenAnnunciator.ForeColor = System.Drawing.Color.LightGoldenrodYellow;
+            this.ShutterPercentOpenAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.ShutterPercentOpenAnnunciator.Location = new System.Drawing.Point(171, 17);
+            this.ShutterPercentOpenAnnunciator.Mute = false;
+            this.ShutterPercentOpenAnnunciator.Name = "ShutterPercentOpenAnnunciator";
+            this.ShutterPercentOpenAnnunciator.Size = new System.Drawing.Size(32, 17);
+            this.ShutterPercentOpenAnnunciator.TabIndex = 10;
+            this.ShutterPercentOpenAnnunciator.Tag = "{0:D3}%";
+            this.ShutterPercentOpenAnnunciator.Text = "000";
             // 
             // ShutterOpenAnnunciator
             // 
-            this.ShutterOpenAnnunciator.ActiveColor = System.Drawing.Color.LightGoldenrodYellow;
-            this.ShutterOpenAnnunciator.AutoSize = true;
-            this.ShutterOpenAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.ShutterOpenAnnunciator.Cadence = ASCOM.Controls.CadencePattern.Wink;
-            this.ShutterOpenAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
-            this.ShutterOpenAnnunciator.ForeColor = System.Drawing.Color.LightGoldenrodYellow;
-            this.ShutterOpenAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
-            this.ShutterOpenAnnunciator.Location = new System.Drawing.Point(209, 17);
-            this.ShutterOpenAnnunciator.Mute = false;
-            this.ShutterOpenAnnunciator.Name = "ShutterOpenAnnunciator";
-            this.ShutterOpenAnnunciator.Size = new System.Drawing.Size(40, 17);
-            this.ShutterOpenAnnunciator.TabIndex = 11;
-            this.ShutterOpenAnnunciator.Text = "Open";
+            this.ShutterDispositionAnnunciator.ActiveColor = System.Drawing.Color.LightGoldenrodYellow;
+            this.ShutterDispositionAnnunciator.AutoSize = true;
+            this.ShutterDispositionAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.ShutterDispositionAnnunciator.Cadence = ASCOM.Controls.CadencePattern.Wink;
+            this.ShutterDispositionAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
+            this.ShutterDispositionAnnunciator.ForeColor = System.Drawing.Color.LightGoldenrodYellow;
+            this.ShutterDispositionAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.ShutterDispositionAnnunciator.Location = new System.Drawing.Point(209, 17);
+            this.ShutterDispositionAnnunciator.Mute = false;
+            this.ShutterDispositionAnnunciator.Name = "ShutterDispositionAnnunciator";
+            this.ShutterDispositionAnnunciator.Size = new System.Drawing.Size(40, 17);
+            this.ShutterDispositionAnnunciator.TabIndex = 11;
+            this.ShutterDispositionAnnunciator.Text = "Open";
             // 
             // ShutterClosedAnnunciator
             // 
-            this.ShutterClosedAnnunciator.ActiveColor = System.Drawing.Color.DarkSeaGreen;
-            this.ShutterClosedAnnunciator.AutoSize = true;
-            this.ShutterClosedAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.ShutterClosedAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
-            this.ShutterClosedAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
-            this.ShutterClosedAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
-            this.ShutterClosedAnnunciator.Location = new System.Drawing.Point(255, 17);
-            this.ShutterClosedAnnunciator.Mute = false;
-            this.ShutterClosedAnnunciator.Name = "ShutterClosedAnnunciator";
-            this.ShutterClosedAnnunciator.Size = new System.Drawing.Size(56, 17);
-            this.ShutterClosedAnnunciator.TabIndex = 13;
-            this.ShutterClosedAnnunciator.Text = "Closed";
-            // 
-            // ShutterIndeterminateAnnunciator
-            // 
-            this.ShutterIndeterminateAnnunciator.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
-            this.ShutterIndeterminateAnnunciator.AutoSize = true;
-            this.ShutterIndeterminateAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.ShutterIndeterminateAnnunciator.Cadence = ASCOM.Controls.CadencePattern.BlinkAlarm;
-            this.ShutterIndeterminateAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
-            this.ShutterIndeterminateAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
-            this.ShutterIndeterminateAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
-            this.ShutterIndeterminateAnnunciator.Location = new System.Drawing.Point(317, 17);
-            this.ShutterIndeterminateAnnunciator.Mute = false;
-            this.ShutterIndeterminateAnnunciator.Name = "ShutterIndeterminateAnnunciator";
-            this.ShutterIndeterminateAnnunciator.Size = new System.Drawing.Size(64, 17);
-            this.ShutterIndeterminateAnnunciator.TabIndex = 15;
-            this.ShutterIndeterminateAnnunciator.Text = "Unknown";
+            this.ShutterLinkStateAnnunciator.ActiveColor = System.Drawing.Color.DarkSeaGreen;
+            this.ShutterLinkStateAnnunciator.AutoSize = true;
+            this.ShutterLinkStateAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.ShutterLinkStateAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
+            this.ShutterLinkStateAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.ShutterLinkStateAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.ShutterLinkStateAnnunciator.Location = new System.Drawing.Point(255, 17);
+            this.ShutterLinkStateAnnunciator.Mute = false;
+            this.ShutterLinkStateAnnunciator.Name = "ShutterLinkStateAnnunciator";
+            this.ShutterLinkStateAnnunciator.Size = new System.Drawing.Size(56, 17);
+            this.ShutterLinkStateAnnunciator.TabIndex = 13;
+            this.ShutterLinkStateAnnunciator.Text = "Closed";
             // 
             // SetupCommand
             // 
@@ -408,16 +390,15 @@
             this.SetupCommand.Text = "Setup...";
             this.SetupCommand.UseVisualStyleBackColor = true;
             // 
-            // ShutterCurrentBar
+            // ShutterPositionBar
             // 
-            this.ShutterCurrentBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.ShutterPositionBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.ShutterCurrentBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.ShutterCurrentBar.Location = new System.Drawing.Point(210, 58);
-            this.ShutterCurrentBar.Maximum = 20;
-            this.ShutterCurrentBar.Name = "ShutterCurrentBar";
-            this.ShutterCurrentBar.Size = new System.Drawing.Size(273, 10);
-            this.ShutterCurrentBar.TabIndex = 11;
+            this.ShutterPositionBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.ShutterPositionBar.Location = new System.Drawing.Point(180, 58);
+            this.ShutterPositionBar.Name = "ShutterPositionBar";
+            this.ShutterPositionBar.Size = new System.Drawing.Size(303, 10);
+            this.ShutterPositionBar.TabIndex = 11;
             // 
             // OpenButton
             // 
@@ -442,9 +423,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(93, 55);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(108, 13);
+            this.label2.Size = new System.Drawing.Size(81, 13);
             this.label2.TabIndex = 14;
-            this.label2.Text = "Shutter Motor Current";
+            this.label2.Text = "Shutter Position";
             // 
             // ServerStatusDisplay
             // 
@@ -462,7 +443,7 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.registeredClientCount);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.ShutterCurrentBar);
+            this.Controls.Add(this.ShutterPositionBar);
             this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::TA.NexDome.Server.Properties.Settings.Default, "MainFormLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Location = global::TA.NexDome.Server.Properties.Settings.Default.MainFormLocation;
@@ -497,8 +478,8 @@
         private ASCOM.Controls.Annunciator ShutterOpeningAnnunciator;
         private ASCOM.Controls.Annunciator ShutterMotorAnnunciator;
         private ASCOM.Controls.Annunciator ShutterClosingAnnunciator;
-        private ASCOM.Controls.Annunciator ShutterCurrentAnnunciator;
-        private System.Windows.Forms.ProgressBar ShutterCurrentBar;
+        private ASCOM.Controls.Annunciator ShutterPercentOpenAnnunciator;
+        private System.Windows.Forms.ProgressBar ShutterPositionBar;
         private System.Windows.Forms.Button OpenButton;
         private System.Windows.Forms.Button CloseButton;
         private ASCOM.Controls.Annunciator AtHomeAnnunciator;
@@ -506,10 +487,9 @@
         private ASCOM.Controls.Annunciator UserPin2Annunciator;
         private ASCOM.Controls.Annunciator UserPin3Annunciator;
         private ASCOM.Controls.Annunciator UserPin4Annunciator;
-        private ASCOM.Controls.Annunciator ShutterOpenAnnunciator;
-        private ASCOM.Controls.Annunciator ShutterClosedAnnunciator;
-        private ASCOM.Controls.Annunciator ShutterIndeterminateAnnunciator;
+        private ASCOM.Controls.Annunciator ShutterDispositionAnnunciator;
         private System.Windows.Forms.Label label2;
-    }
+        private ASCOM.Controls.Annunciator ShutterLinkStateAnnunciator;
+        }
 }
 

@@ -42,5 +42,12 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Rotator
             base.HandleTimeout();
             Machine.TransitionToState(new RequestStatusState(Machine));
             }
+
+        /// <inheritdoc />
+        public override void HardStopRequested()
+            {
+            base.HardStopRequested();
+            Machine.TransitionToState(new RequestStatusState(Machine));
+            }
         }
     }

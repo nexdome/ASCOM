@@ -37,5 +37,9 @@ namespace TA.NexDome.DeviceInterface.StateMachine {
         /// </summary>
         void RequestHardwareStatus();
 
+        /// <summary>
+        /// Attempts to stop any rotation in progress as quickly as possible.
+        /// </summary>
+        void HardStopRequested();
         }
     }

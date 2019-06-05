@@ -31,35 +31,33 @@ namespace TA.NexDome.Server
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.ToolTip toolTip1;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetupDialogForm));
-            this.communicationSettingsControl1 = new CommunicationSettingsControl();
-            this.PerformShutterRecovery = new System.Windows.Forms.CheckBox();
+            this.communicationSettingsControl1 = new TA.NexDome.Server.CommunicationSettingsControl();
             this.ShutterOpenCloseTimeSeconds = new System.Windows.Forms.NumericUpDown();
             this.FullRotationTimeSeconds = new System.Windows.Forms.NumericUpDown();
             this.PresetHD6 = new System.Windows.Forms.Button();
             this.PresetHD10 = new System.Windows.Forms.Button();
             this.PresetHD15 = new System.Windows.Forms.Button();
-            this.IgnoreShutterSensor = new System.Windows.Forms.CheckBox();
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.picASCOM = new System.Windows.Forms.PictureBox();
             this.AboutBox = new System.Windows.Forms.Button();
             this.ConnectionErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.CommunicationsGroup = new System.Windows.Forms.GroupBox();
-            this.StartupOptionsGroup = new System.Windows.Forms.GroupBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.ShutterOpenCloseTimeSeconds)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FullRotationTimeSeconds)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ConnectionErrorProvider)).BeginInit();
             this.CommunicationsGroup.SuspendLayout();
-            this.StartupOptionsGroup.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // toolTip1
@@ -76,23 +74,9 @@ namespace TA.NexDome.Server
             this.communicationSettingsControl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.communicationSettingsControl1.Location = new System.Drawing.Point(6, 19);
             this.communicationSettingsControl1.Name = "communicationSettingsControl1";
-            this.communicationSettingsControl1.Size = new System.Drawing.Size(253, 36);
+            this.communicationSettingsControl1.Size = new System.Drawing.Size(354, 36);
             this.communicationSettingsControl1.TabIndex = 7;
             toolTip1.SetToolTip(this.communicationSettingsControl1, resources.GetString("communicationSettingsControl1.ToolTip"));
-            // 
-            // PerformShutterRecovery
-            // 
-            this.PerformShutterRecovery.AutoSize = true;
-            this.PerformShutterRecovery.Checked = global::TA.NexDome.Server.Properties.Settings.Default.PerformShutterRecovery;
-            this.PerformShutterRecovery.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.PerformShutterRecovery.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::TA.NexDome.Server.Properties.Settings.Default, "PerformShutterRecovery", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.PerformShutterRecovery.Location = new System.Drawing.Point(7, 20);
-            this.PerformShutterRecovery.Name = "PerformShutterRecovery";
-            this.PerformShutterRecovery.Size = new System.Drawing.Size(266, 17);
-            this.PerformShutterRecovery.TabIndex = 0;
-            this.PerformShutterRecovery.Text = "Close shutter if position is not known upon connect";
-            toolTip1.SetToolTip(this.PerformShutterRecovery, resources.GetString("PerformShutterRecovery.ToolTip"));
-            this.PerformShutterRecovery.UseVisualStyleBackColor = true;
             // 
             // ShutterOpenCloseTimeSeconds
             // 
@@ -159,25 +143,11 @@ namespace TA.NexDome.Server
             this.PresetHD15.UseVisualStyleBackColor = true;
             this.PresetHD15.Click += new System.EventHandler(this.PresetHD15_Click);
             // 
-            // IgnoreShutterSensor
-            // 
-            this.IgnoreShutterSensor.AutoSize = true;
-            this.IgnoreShutterSensor.Checked = global::TA.NexDome.Server.Properties.Settings.Default.IgnoreHardwareShutterSensor;
-            this.IgnoreShutterSensor.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::TA.NexDome.Server.Properties.Settings.Default, "IgnoreHardwareShutterSensor", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.IgnoreShutterSensor.Location = new System.Drawing.Point(7, 20);
-            this.IgnoreShutterSensor.Name = "IgnoreShutterSensor";
-            this.IgnoreShutterSensor.Size = new System.Drawing.Size(222, 17);
-            this.IgnoreShutterSensor.TabIndex = 0;
-            this.IgnoreShutterSensor.Text = "Enable shutter position inference heuristic";
-            toolTip1.SetToolTip(this.IgnoreShutterSensor, resources.GetString("IgnoreShutterSensor.ToolTip"));
-            this.IgnoreShutterSensor.UseVisualStyleBackColor = true;
-            this.IgnoreShutterSensor.CheckedChanged += new System.EventHandler(this.IgnoreShutterSensor_CheckedChanged);
-            // 
             // cmdOK
             // 
-            this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdOK.Location = new System.Drawing.Point(327, 323);
+            this.cmdOK.Location = new System.Drawing.Point(422, 308);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 0;
@@ -187,9 +157,9 @@ namespace TA.NexDome.Server
             // 
             // cmdCancel
             // 
-            this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(327, 353);
+            this.cmdCancel.Location = new System.Drawing.Point(422, 338);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 1;
@@ -202,10 +172,10 @@ namespace TA.NexDome.Server
             this.picASCOM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
             this.picASCOM.Image = global::TA.NexDome.Server.Properties.Resources.ASCOM;
-            this.picASCOM.Location = new System.Drawing.Point(340, 9);
+            this.picASCOM.Location = new System.Drawing.Point(412, 9);
             this.picASCOM.Name = "picASCOM";
-            this.picASCOM.Size = new System.Drawing.Size(48, 56);
-            this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.picASCOM.Size = new System.Drawing.Size(69, 82);
+            this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picASCOM.TabIndex = 3;
             this.picASCOM.TabStop = false;
             this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
@@ -213,8 +183,8 @@ namespace TA.NexDome.Server
             // 
             // AboutBox
             // 
-            this.AboutBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.AboutBox.Location = new System.Drawing.Point(327, 295);
+            this.AboutBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.AboutBox.Location = new System.Drawing.Point(422, 236);
             this.AboutBox.Name = "AboutBox";
             this.AboutBox.Size = new System.Drawing.Size(59, 23);
             this.AboutBox.TabIndex = 8;
@@ -231,22 +201,12 @@ namespace TA.NexDome.Server
             // CommunicationsGroup
             // 
             this.CommunicationsGroup.Controls.Add(this.communicationSettingsControl1);
-            this.CommunicationsGroup.Location = new System.Drawing.Point(12, 12);
+            this.CommunicationsGroup.Location = new System.Drawing.Point(12, 185);
             this.CommunicationsGroup.Name = "CommunicationsGroup";
-            this.CommunicationsGroup.Size = new System.Drawing.Size(303, 74);
+            this.CommunicationsGroup.Size = new System.Drawing.Size(370, 74);
             this.CommunicationsGroup.TabIndex = 9;
             this.CommunicationsGroup.TabStop = false;
             this.CommunicationsGroup.Text = "Communications";
-            // 
-            // StartupOptionsGroup
-            // 
-            this.StartupOptionsGroup.Controls.Add(this.PerformShutterRecovery);
-            this.StartupOptionsGroup.Location = new System.Drawing.Point(12, 92);
-            this.StartupOptionsGroup.Name = "StartupOptionsGroup";
-            this.StartupOptionsGroup.Size = new System.Drawing.Size(303, 70);
-            this.StartupOptionsGroup.TabIndex = 10;
-            this.StartupOptionsGroup.TabStop = false;
-            this.StartupOptionsGroup.Text = "Startup Options";
             // 
             // groupBox1
             // 
@@ -258,9 +218,9 @@ namespace TA.NexDome.Server
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(13, 169);
+            this.groupBox1.Location = new System.Drawing.Point(12, 265);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(302, 111);
+            this.groupBox1.Size = new System.Drawing.Size(369, 111);
             this.groupBox1.TabIndex = 11;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Timeouts";
@@ -292,15 +252,27 @@ namespace TA.NexDome.Server
             this.label1.TabIndex = 0;
             this.label1.Text = "Full rotation (seconds)";
             // 
-            // groupBox2
+            // pictureBox1
             // 
-            this.groupBox2.Controls.Add(this.IgnoreShutterSensor);
-            this.groupBox2.Location = new System.Drawing.Point(13, 287);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(302, 100);
-            this.groupBox2.TabIndex = 12;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Experimental";
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox1.Image = global::TA.NexDome.Server.Properties.Resources.TiGra_Astronomy_Icon_256x256;
+            this.pictureBox1.Location = new System.Drawing.Point(412, 97);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(69, 82);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 12;
+            this.pictureBox1.TabStop = false;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackColor = System.Drawing.Color.White;
+            this.pictureBox2.Image = global::TA.NexDome.Server.Properties.Resources.NexDome;
+            this.pictureBox2.Location = new System.Drawing.Point(12, 12);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(370, 167);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pictureBox2.TabIndex = 13;
+            this.pictureBox2.TabStop = false;
             // 
             // SetupDialogForm
             // 
@@ -308,10 +280,10 @@ namespace TA.NexDome.Server
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cmdCancel;
-            this.ClientSize = new System.Drawing.Size(398, 390);
-            this.Controls.Add(this.groupBox2);
+            this.ClientSize = new System.Drawing.Size(493, 388);
+            this.Controls.Add(this.pictureBox2);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.StartupOptionsGroup);
             this.Controls.Add(this.CommunicationsGroup);
             this.Controls.Add(this.AboutBox);
             this.Controls.Add(this.picASCOM);
@@ -326,7 +298,7 @@ namespace TA.NexDome.Server
             this.Name = "SetupDialogForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Configure NexDome ASCOm Server";
+            this.Text = "Configure NexDome ASCOM Server";
             this.Load += new System.EventHandler(this.SetupDialogForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ShutterOpenCloseTimeSeconds)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.FullRotationTimeSeconds)).EndInit();
@@ -334,14 +306,11 @@ namespace TA.NexDome.Server
             ((System.ComponentModel.ISupportInitialize)(this.ConnectionErrorProvider)).EndInit();
             this.CommunicationsGroup.ResumeLayout(false);
             this.CommunicationsGroup.PerformLayout();
-            this.StartupOptionsGroup.ResumeLayout(false);
-            this.StartupOptionsGroup.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -354,8 +323,6 @@ namespace TA.NexDome.Server
         private System.Windows.Forms.Button AboutBox;
         private System.Windows.Forms.ErrorProvider ConnectionErrorProvider;
         private System.Windows.Forms.GroupBox CommunicationsGroup;
-        private System.Windows.Forms.GroupBox StartupOptionsGroup;
-        private System.Windows.Forms.CheckBox PerformShutterRecovery;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.NumericUpDown ShutterOpenCloseTimeSeconds;
         private System.Windows.Forms.Label label2;
@@ -365,7 +332,7 @@ namespace TA.NexDome.Server
         private System.Windows.Forms.Button PresetHD6;
         private System.Windows.Forms.NumericUpDown FullRotationTimeSeconds;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.CheckBox IgnoreShutterSensor;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pictureBox2;
         }
 }

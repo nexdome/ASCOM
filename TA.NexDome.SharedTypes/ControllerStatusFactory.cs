@@ -119,6 +119,9 @@ namespace TA.NexDome.SharedTypes
             public int Position { get; private set; }
 
             /// <inheritdoc />
+            public int LimitOfTravel { get; private set; }
+
+            /// <inheritdoc />
             public bool OpenSensorActive { get; private set; }
 
             /// <inheritdoc />
@@ -135,8 +138,9 @@ namespace TA.NexDome.SharedTypes
                 var status = new ShutterStatus()
                     {
                     Position = int.Parse(values[0]),
-                    OpenSensorActive = values[1] == "1",
-                    ClosedSensorActive = values[2] == "1"
+                    LimitOfTravel = int.Parse(values[1]),
+                    OpenSensorActive = values[2] == "1",
+                    ClosedSensorActive = values[3] == "1"
                     };
                 return status;
                 }

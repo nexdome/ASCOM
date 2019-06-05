@@ -131,18 +131,6 @@ and experimentation (no serial port or dome hardware
 required). Otherwise, select the COM port where your
 Digital Domeworks hardware is connected.</value>
   </data>
-  <data name="PerformShutterRecovery.ToolTip" xml:space="preserve">
-    <value>Controls "shutter auto-recovery". When the Digital
-Domeworks hardware is powered on, it has no way
-of knowing whether the shutter is open or closed
-until a successful open or close operation completes.
-When this option is enabled, if the shutter position is
-"indeterminate" upon connecting, then a close
-instruction will be issued in an attempt to
-unambiguously determine the shutter state.
-This is highly recommended for remote controlled
-installations.</value>
-  </data>
   <data name="ShutterOpenCloseTimeSeconds.ToolTip" xml:space="preserve">
     <value>Determines the maximum time that the
 ASCOM driver will wait for certain synchronous
@@ -157,29 +145,6 @@ ASCOM driver will wait for certain synchronous
 operations to complete. Set this to slightly more
 than the worst case time (in seconds)
 for a full 360° rotation of your dome.</value>
-  </data>
-  <data name="IgnoreShutterSensor.ToolTip" xml:space="preserve">
-    <value>This is a potentially unsafe setting and should not be enabled
-without careful consideration.
-
-When enabled, the driver ignores the shutter position reported
-by Digital Domeworks and uses a heuristic to infer the shutter
-position based on the shutter operation history. If the heuristic
-has insufficient information, then it falls back to using the
-position reported by Digital Domeworks.
-
-The heuristic takes into account the length of time the shutter
-was detected as moving and how much current was drawn by
-the shutter motor.
-
-This option  is designed to work around a problem where some
-Digital Domeworks installations give an unreliable indication of
-the shutter position. If you get shutter errors in your application
-even when the shutter appears to work correctly, you can try
-enabling this option. The heuristic is not foolproof and this
-option should be used with care.
-
-Default: disabled.</value>
   </data>
   <metadata name="ConnectionErrorProvider.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>

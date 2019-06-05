@@ -99,15 +99,15 @@ namespace TA.NexDome.DeviceInterface
 
         public static IObservable<RotationDirection> RotatorDirectionUpdates(this IObservable<char> source)
             {
-            var tokenizedResponses = source.DelimitedMessageStrings();
-            var shutterDirectionSequence = from notification in tokenizedResponses
-                                           where RotatorDirections.Contains(notification)
-                                           let ordinal = ShutterDirections.IndexOf(notification)
-                                           let direction = ordinal == 1
-                                               ? RotationDirection.CounterClockwise
-                                               : RotationDirection.Clockwise
-                                           select direction;
-            return shutterDirectionSequence.Trace("RotatorDirection");
+            var responses = source.DelimitedMessageStrings();
+            var directions = from notification in responses
+                             where RotatorDirections.Contains(notification, StringComparer.InvariantCultureIgnoreCase)
+                             let ordinal = RotatorDirections.IndexOf(notification.ToLowerInvariant())
+                             let direction = ordinal == 1
+                                 ? RotationDirection.CounterClockwise
+                                 : RotationDirection.Clockwise
+                             select direction;
+            return directions.Trace("RotatorDirection");
             }
 
         public static IObservable<IShutterStatus> ShutterStatusUpdates(this IObservable<char> source, ControllerStatusFactory factory)
@@ -127,16 +127,16 @@ namespace TA.NexDome.DeviceInterface
 
         public static IObservable<ShutterDirection> ShutterDirectionUpdates(this IObservable<char> source)
             {
-            var tokenizedResponses = source.DelimitedMessageStrings();
-            var shutterDirectionSequence = from notification in tokenizedResponses
-                                           where ShutterDirections.Contains(notification)
-                                           let ordinal = ShutterDirections.IndexOf(notification)
-                                           let direction = (ShutterDirection)ordinal
-                                           select direction;
-            return shutterDirectionSequence.Trace("ShutterDirection");
+            var responses = source.DelimitedMessageStrings();
+            var directions = from notification in responses
+                             where ShutterDirections.Contains(notification, StringComparer.InvariantCultureIgnoreCase)
+                             let ordinal = ShutterDirections.IndexOf(notification.ToLowerInvariant())
+                             let direction = (ShutterDirection)ordinal
+                             select direction;
+            return directions.Trace("ShutterDirection");
             }
 
-        private static readonly List<string> ShutterDirections = new List<string>() { "None", ":Closing#", ":Opening#" };
-        private static readonly List<string> RotatorDirections = new List<string>() { "None", ":Left#", ":Right#" };
+        private static readonly List<string> ShutterDirections = new List<string>() { "None", ":close#", ":open#" };
+        private static readonly List<string> RotatorDirections = new List<string>() { "None", ":left#", ":right#" };
         }
     }

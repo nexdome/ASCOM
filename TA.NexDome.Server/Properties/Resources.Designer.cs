@@ -93,6 +93,26 @@ namespace TA.NexDome.Server.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap NexDome {
+            get {
+                object obj = ResourceManager.GetObject("NexDome", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TiGra_Astronomy_Icon_256x256 {
+            get {
+                object obj = ResourceManager.GetObject("TiGra_Astronomy_Icon_256x256", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap TigraAstronomyLogo {
             get {
                 object obj = ResourceManager.GetObject("TigraAstronomyLogo", resourceCulture);

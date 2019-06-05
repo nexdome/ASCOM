@@ -148,5 +148,68 @@ namespace TA.NexDome.Server.Properties {
                 return ((global::System.TimeSpan)(this["ShutterTickTimeout"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SerialAssertDTR {
+            get {
+                return ((bool)(this["SerialAssertDTR"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SerialAssertRTS {
+            get {
+                return ((bool)(this["SerialAssertRTS"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("115200")]
+        public uint SerialBaudRate {
+            get {
+                return ((uint)(this["SerialBaudRate"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("None")]
+        public global::System.IO.Ports.Parity SerialParity {
+            get {
+                return ((global::System.IO.Ports.Parity)(this["SerialParity"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8")]
+        public uint SerialDataBits {
+            get {
+                return ((uint)(this["SerialDataBits"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("One")]
+        public global::System.IO.Ports.StopBits SerialStopBits {
+            get {
+                return ((global::System.IO.Ports.StopBits)(this["SerialStopBits"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("RequestToSend")]
+        public global::System.IO.Ports.Handshake SerialHandshake {
+            get {
+                return ((global::System.IO.Ports.Handshake)(this["SerialHandshake"]));
+            }
+        }
     }
 }

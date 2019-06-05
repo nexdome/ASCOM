@@ -21,9 +21,29 @@ namespace TA.NexDome.Server
             InitializeComponent();
             }
 
-        public void Save()
+            public void Save()
+                {
+                BuildConnectionString();
+                Settings.Default.Save();
+                }
+
+        protected static void BuildConnectionString()
             {
-            Settings.Default.Save();
+            /*  Connection String syntax for serial channel
+                     COMXXX or comXXX where XXX = 1 to 999 - required
+                     :bbbbbbb where bbbbbbb=100 to 9999999 for baud rate - optional
+                     ,string where string in (None| Even| Odd| Mark| Space) for parity - optional
+                     ,d where d= 7 or 8 for databits - optional
+                     ,string where string in (Zero| OnePointFive| One| Two) for stopbits - optional
+                     ,string where string in (dtr| nodtr) for DTR bit state - optional
+                     ,string where string in (rts| norts) for RTS bit state - optional
+                     ,string where string in (None|XOnXOff|RequestToSend|RequestToSendXOnXOff) for handshake - optional
+                    */
+            var dtr = Properties.Settings.Default.SerialAssertDTR ? "dtr" : "nodtr";
+            var rts = Settings.Default.SerialAssertRTS ? "rts" : "norts";
+            var connection =
+                $"{Settings.Default.CommPortName}:{Settings.Default.SerialBaudRate},{Settings.Default.SerialParity},{Settings.Default.SerialDataBits},{Settings.Default.SerialStopBits},{dtr},{rts},{Settings.Default.SerialHandshake}";
+            Settings.Default.ConnectionString = connection;
             }
 
         private void CommunicationSettingsControl_Load(object sender, EventArgs e)
@@ -35,18 +55,9 @@ namespace TA.NexDome.Server
             CommPortName.Items.AddRange(ports.ToArray());
             var currentIndex = CommPortName.Items.IndexOf(currentSelection);
             CommPortName.SelectedIndex = currentIndex;
+            BuildConnectionString();
             }
 
-        private void BuildConnectionString()
-            {
-                BuildSerialConnectionString();
-            }
-
-        private void BuildSerialConnectionString()
-            {
-            var candidate = new SerialDeviceEndpoint(CommPortName.Text);
-            Settings.Default.ConnectionString = candidate.ToString();
-            }
 
         private void CommPortName_SelectedIndexChanged(object sender, EventArgs e)
             {

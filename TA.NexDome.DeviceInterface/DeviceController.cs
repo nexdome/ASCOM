@@ -9,7 +9,6 @@ using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using TA.Ascom.ReactiveCommunications;
-using TA.Ascom.ReactiveCommunications.Diagnostics;
 using TA.NexDome.DeviceInterface.StateMachine;
 using TA.NexDome.SharedTypes;
 
@@ -64,7 +63,12 @@ namespace TA.NexDome.DeviceInterface
 
         public ShutterDisposition ShutterDisposition => stateMachine.ShutterDisposition;
 
+        public int ShutterPercentOpen =>
+            (int)((float)stateMachine.ShutterStepPosition / (float)stateMachine.ShutterLimitOfTravel * 100f);
+
         public bool AtHome => stateMachine.AtHome;
+
+        public ShutterLinkState ShutterLinkState => stateMachine.ShutterLinkState;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -219,9 +223,7 @@ namespace TA.NexDome.DeviceInterface
         private void SubscribeShutterDirection()
             {
             var shutterDirectionSubscription = channel.ObservableReceivedCharacters.ShutterDirectionUpdates()
-                //.ObserveOn(Scheduler.Default)
-                .Subscribe(
-                    stateMachine.ShutterDirectionReceived,
+                .Subscribe(stateMachine.ShutterDirectionReceived,
                     ex => throw new InvalidOperationException(
                         "Shutter Direction sequence produced an unexpected error (see ineer exception)", ex),
                     () => throw new InvalidOperationException(
@@ -234,12 +236,9 @@ namespace TA.NexDome.DeviceInterface
             {
             var rotationDirectionSequence = channel.ObservableReceivedCharacters.RotatorDirectionUpdates();
             var rotationDirectionSubscription = rotationDirectionSequence
-                .Trace("RotationDirection")
-                //.ObserveOn(Scheduler.Default)
-                .Subscribe(
-                    stateMachine.RotationDirectionReceived,
+                .Subscribe(stateMachine.RotationDirectionReceived,
                     ex => throw new InvalidOperationException(
-                        "RotationDirection sequence produced an unexpected error (see ineer exception)", ex),
+                        "RotationDirection sequence produced an unexpected error (see inner exception)", ex),
                     () => throw new InvalidOperationException(
                         "RotationDirection sequence completed unexpectedly, this is probably a bug")
                 );
@@ -354,7 +353,7 @@ namespace TA.NexDome.DeviceInterface
             if (ShutterLimitSwitches == SensorState.Closed)
                 {
                 Log.Warn()
-                    .Message("Ignoring CloseShutter request because {limits} {disposition}", ShutterLimitSwitches,ShutterDisposition)
+                    .Message("Ignoring CloseShutter request because {limits} {disposition}", ShutterLimitSwitches, ShutterDisposition)
                     .Write();
                 return;
                 }

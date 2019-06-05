@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TA.DigitalDomeworks.Server.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TA.NexDome.Server.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="CommPortName" Type="System.String" Scope="User">
@@ -34,6 +34,27 @@
     </Setting>
     <Setting Name="ShutterTickTimeout" Type="System.TimeSpan" Scope="Application">
       <Value Profile="(Default)">00:00:05</Value>
+    </Setting>
+    <Setting Name="SerialAssertDTR" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="SerialAssertRTS" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="SerialBaudRate" Type="System.UInt32" Scope="Application">
+      <Value Profile="(Default)">115200</Value>
+    </Setting>
+    <Setting Name="SerialParity" Type="System.IO.Ports.Parity" Scope="Application">
+      <Value Profile="(Default)">None</Value>
+    </Setting>
+    <Setting Name="SerialDataBits" Type="System.UInt32" Scope="Application">
+      <Value Profile="(Default)">8</Value>
+    </Setting>
+    <Setting Name="SerialStopBits" Type="System.IO.Ports.StopBits" Scope="Application">
+      <Value Profile="(Default)">One</Value>
+    </Setting>
+    <Setting Name="SerialHandshake" Type="System.IO.Ports.Handshake" Scope="Application">
+      <Value Profile="(Default)">RequestToSend</Value>
     </Setting>
   </Settings>
 </SettingsFile>

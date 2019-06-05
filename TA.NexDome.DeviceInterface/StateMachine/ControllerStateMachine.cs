@@ -12,7 +12,6 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using TA.NexDome.DeviceInterface.StateMachine.Rotator;
 using TA.NexDome.SharedTypes;
 
 namespace TA.NexDome.DeviceInterface.StateMachine
@@ -190,6 +189,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         internal void UpdateStatus(IShutterStatus status)
             {
             ShutterMotorActive = false;
+            ShutterLimitOfTravel = status.LimitOfTravel;
             ShutterMovementDirection = ShutterDirection.None;
             if (status.OpenSensorActive)
                 ShutterLimitSwitches = SensorState.Open;
@@ -198,6 +198,8 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             else ShutterLimitSwitches = SensorState.Indeterminate;
             ShutterStepPosition = status.Position;
             }
+
+        public int ShutterLimitOfTravel { get; private set; } = 46000;
 
         private SensorState SetInferredShutterPosition(SensorState statusShutterSensor)
             {
@@ -223,6 +225,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             {
             Log.Warn().Message("Emergency Stop requested").Write();
             ControllerActions.PerformEmergencyStop();
+            RotatorState.HardStopRequested();
             }
 
         public void RotationDirectionReceived(RotationDirection direction)

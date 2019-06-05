@@ -50,6 +50,9 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Rotator
         /// <inheritdoc />
         public virtual void RequestHardwareStatus() => Log.Debug().Message("Request status").Write();
 
+        /// <inheritdoc />
+        public virtual void HardStopRequested() => Log.Debug().Message("Hard stop").Write();
+
         /// <summary>
         ///     Cancels any existing timeout and starts a new one with the specified time interval.
         /// </summary>
