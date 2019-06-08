@@ -63,6 +63,8 @@ namespace TA.NexDome.DeviceInterface
 
         public ShutterDisposition ShutterDisposition => stateMachine.ShutterDisposition;
 
+        public float ShutterBatteryVolts { get; private set; } = Constants.BatteryHalfChargedVolts;
+
         public int ShutterPercentOpen =>
             (int)((float)stateMachine.ShutterStepPosition / (float)stateMachine.ShutterLimitOfTravel * 100f);
 
@@ -129,6 +131,7 @@ namespace TA.NexDome.DeviceInterface
             SubscribeShutterDirection();
             SubscribeStatusUpdates();
             SubscribeLinkStateUpdates();
+            SubscribeShutterVolts();
             }
 
         private void SubscribeLinkStateUpdates()
@@ -243,6 +246,13 @@ namespace TA.NexDome.DeviceInterface
                         "RotationDirection sequence completed unexpectedly, this is probably a bug")
                 );
             disposableSubscriptions.Add(rotationDirectionSubscription);
+            }
+
+        private void SubscribeShutterVolts()
+            {
+            var observableBatteryVolts = channel.ObservableReceivedCharacters.BatteryVoltageUpdates();
+            var subscription = observableBatteryVolts.Subscribe(value => ShutterBatteryVolts = value);
+            disposableSubscriptions.Add(subscription);
             }
 
         private void SubscribeAzimuthEncoderTicks()

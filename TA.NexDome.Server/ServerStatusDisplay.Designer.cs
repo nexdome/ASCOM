@@ -32,7 +32,7 @@
             this.registeredClientCount = new System.Windows.Forms.Label();
             this.OnlineClients = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.annunciatorPanel1 = new ASCOM.Controls.AnnunciatorPanel();
+            this.statusAnnunciatorPanel = new ASCOM.Controls.AnnunciatorPanel();
             this.RotationTitle = new ASCOM.Controls.Annunciator();
             this.CounterClockwiseAnnunciator = new ASCOM.Controls.Annunciator();
             this.AzimuthMotorAnnunciator = new ASCOM.Controls.Annunciator();
@@ -50,18 +50,23 @@
             this.ShutterPercentOpenAnnunciator = new ASCOM.Controls.Annunciator();
             this.ShutterDispositionAnnunciator = new ASCOM.Controls.Annunciator();
             this.ShutterLinkStateAnnunciator = new ASCOM.Controls.Annunciator();
+            this.batteryVoltsAnnunciator = new ASCOM.Controls.Annunciator();
             this.SetupCommand = new System.Windows.Forms.Button();
             this.ShutterPositionBar = new System.Windows.Forms.ProgressBar();
             this.OpenButton = new System.Windows.Forms.Button();
             this.CloseButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.annunciatorPanel1.SuspendLayout();
+            this.batteryVoltsBar = new System.Windows.Forms.ProgressBar();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.statusAnnunciatorPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(93, 75);
+            this.label1.Location = new System.Drawing.Point(213, 103);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(94, 13);
             this.label1.TabIndex = 0;
@@ -70,7 +75,7 @@
             // registeredClientCount
             // 
             this.registeredClientCount.AutoSize = true;
-            this.registeredClientCount.Location = new System.Drawing.Point(193, 75);
+            this.registeredClientCount.Location = new System.Drawing.Point(313, 103);
             this.registeredClientCount.Name = "registeredClientCount";
             this.registeredClientCount.Size = new System.Drawing.Size(13, 13);
             this.registeredClientCount.TabIndex = 1;
@@ -79,7 +84,7 @@
             // OnlineClients
             // 
             this.OnlineClients.AutoSize = true;
-            this.OnlineClients.Location = new System.Drawing.Point(291, 75);
+            this.OnlineClients.Location = new System.Drawing.Point(411, 103);
             this.OnlineClients.Name = "OnlineClients";
             this.OnlineClients.Size = new System.Drawing.Size(13, 13);
             this.OnlineClients.TabIndex = 3;
@@ -88,38 +93,39 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(245, 75);
+            this.label3.Location = new System.Drawing.Point(365, 103);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(40, 13);
             this.label3.TabIndex = 2;
             this.label3.Text = "Online:";
             // 
-            // annunciatorPanel1
+            // statusAnnunciatorPanel
             // 
-            this.annunciatorPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.statusAnnunciatorPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.annunciatorPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.annunciatorPanel1.Controls.Add(this.RotationTitle);
-            this.annunciatorPanel1.Controls.Add(this.CounterClockwiseAnnunciator);
-            this.annunciatorPanel1.Controls.Add(this.AzimuthMotorAnnunciator);
-            this.annunciatorPanel1.Controls.Add(this.ClockwiseAnnunciator);
-            this.annunciatorPanel1.Controls.Add(this.AzimuthPositionAnnunciator);
-            this.annunciatorPanel1.Controls.Add(this.AtHomeAnnunciator);
-            this.annunciatorPanel1.Controls.Add(this.UserPin1Annunciator);
-            this.annunciatorPanel1.Controls.Add(this.UserPin2Annunciator);
-            this.annunciatorPanel1.Controls.Add(this.UserPin3Annunciator);
-            this.annunciatorPanel1.Controls.Add(this.UserPin4Annunciator);
-            this.annunciatorPanel1.Controls.Add(this.ShutterTitle);
-            this.annunciatorPanel1.Controls.Add(this.ShutterOpeningAnnunciator);
-            this.annunciatorPanel1.Controls.Add(this.ShutterMotorAnnunciator);
-            this.annunciatorPanel1.Controls.Add(this.ShutterClosingAnnunciator);
-            this.annunciatorPanel1.Controls.Add(this.ShutterPercentOpenAnnunciator);
-            this.annunciatorPanel1.Controls.Add(this.ShutterDispositionAnnunciator);
-            this.annunciatorPanel1.Controls.Add(this.ShutterLinkStateAnnunciator);
-            this.annunciatorPanel1.Location = new System.Drawing.Point(96, 12);
-            this.annunciatorPanel1.Name = "annunciatorPanel1";
-            this.annunciatorPanel1.Size = new System.Drawing.Size(387, 37);
-            this.annunciatorPanel1.TabIndex = 5;
+            this.statusAnnunciatorPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.statusAnnunciatorPanel.Controls.Add(this.RotationTitle);
+            this.statusAnnunciatorPanel.Controls.Add(this.CounterClockwiseAnnunciator);
+            this.statusAnnunciatorPanel.Controls.Add(this.AzimuthMotorAnnunciator);
+            this.statusAnnunciatorPanel.Controls.Add(this.ClockwiseAnnunciator);
+            this.statusAnnunciatorPanel.Controls.Add(this.AzimuthPositionAnnunciator);
+            this.statusAnnunciatorPanel.Controls.Add(this.AtHomeAnnunciator);
+            this.statusAnnunciatorPanel.Controls.Add(this.UserPin1Annunciator);
+            this.statusAnnunciatorPanel.Controls.Add(this.UserPin2Annunciator);
+            this.statusAnnunciatorPanel.Controls.Add(this.UserPin3Annunciator);
+            this.statusAnnunciatorPanel.Controls.Add(this.UserPin4Annunciator);
+            this.statusAnnunciatorPanel.Controls.Add(this.ShutterTitle);
+            this.statusAnnunciatorPanel.Controls.Add(this.ShutterOpeningAnnunciator);
+            this.statusAnnunciatorPanel.Controls.Add(this.ShutterMotorAnnunciator);
+            this.statusAnnunciatorPanel.Controls.Add(this.ShutterClosingAnnunciator);
+            this.statusAnnunciatorPanel.Controls.Add(this.ShutterPercentOpenAnnunciator);
+            this.statusAnnunciatorPanel.Controls.Add(this.ShutterDispositionAnnunciator);
+            this.statusAnnunciatorPanel.Controls.Add(this.ShutterLinkStateAnnunciator);
+            this.statusAnnunciatorPanel.Controls.Add(this.batteryVoltsAnnunciator);
+            this.statusAnnunciatorPanel.Location = new System.Drawing.Point(96, 12);
+            this.statusAnnunciatorPanel.Name = "statusAnnunciatorPanel";
+            this.statusAnnunciatorPanel.Size = new System.Drawing.Size(387, 37);
+            this.statusAnnunciatorPanel.TabIndex = 5;
             // 
             // RotationTitle
             // 
@@ -350,7 +356,7 @@
             this.ShutterPercentOpenAnnunciator.Tag = "{0:D3}%";
             this.ShutterPercentOpenAnnunciator.Text = "000";
             // 
-            // ShutterOpenAnnunciator
+            // ShutterDispositionAnnunciator
             // 
             this.ShutterDispositionAnnunciator.ActiveColor = System.Drawing.Color.LightGoldenrodYellow;
             this.ShutterDispositionAnnunciator.AutoSize = true;
@@ -366,7 +372,7 @@
             this.ShutterDispositionAnnunciator.TabIndex = 11;
             this.ShutterDispositionAnnunciator.Text = "Open";
             // 
-            // ShutterClosedAnnunciator
+            // ShutterLinkStateAnnunciator
             // 
             this.ShutterLinkStateAnnunciator.ActiveColor = System.Drawing.Color.DarkSeaGreen;
             this.ShutterLinkStateAnnunciator.AutoSize = true;
@@ -380,6 +386,22 @@
             this.ShutterLinkStateAnnunciator.Size = new System.Drawing.Size(56, 17);
             this.ShutterLinkStateAnnunciator.TabIndex = 13;
             this.ShutterLinkStateAnnunciator.Text = "Closed";
+            // 
+            // batteryVoltsAnnunciator
+            // 
+            this.batteryVoltsAnnunciator.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.batteryVoltsAnnunciator.AutoSize = true;
+            this.batteryVoltsAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.batteryVoltsAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
+            this.batteryVoltsAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.batteryVoltsAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.batteryVoltsAnnunciator.Location = new System.Drawing.Point(317, 17);
+            this.batteryVoltsAnnunciator.Mute = false;
+            this.batteryVoltsAnnunciator.Name = "batteryVoltsAnnunciator";
+            this.batteryVoltsAnnunciator.Size = new System.Drawing.Size(64, 17);
+            this.batteryVoltsAnnunciator.TabIndex = 18;
+            this.batteryVoltsAnnunciator.Tag = "{0:F2}V";
+            this.batteryVoltsAnnunciator.Text = "15.00 V";
             // 
             // SetupCommand
             // 
@@ -395,9 +417,12 @@
             this.ShutterPositionBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ShutterPositionBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.ShutterPositionBar.ForeColor = System.Drawing.Color.IndianRed;
             this.ShutterPositionBar.Location = new System.Drawing.Point(180, 58);
+            this.ShutterPositionBar.MarqueeAnimationSpeed = 0;
             this.ShutterPositionBar.Name = "ShutterPositionBar";
             this.ShutterPositionBar.Size = new System.Drawing.Size(303, 10);
+            this.ShutterPositionBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.ShutterPositionBar.TabIndex = 11;
             // 
             // OpenButton
@@ -427,18 +452,62 @@
             this.label2.TabIndex = 14;
             this.label2.Text = "Shutter Position";
             // 
+            // batteryVoltsBar
+            // 
+            this.batteryVoltsBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.batteryVoltsBar.Location = new System.Drawing.Point(180, 75);
+            this.batteryVoltsBar.MarqueeAnimationSpeed = 0;
+            this.batteryVoltsBar.Maximum = 150;
+            this.batteryVoltsBar.Minimum = 100;
+            this.batteryVoltsBar.Name = "batteryVoltsBar";
+            this.batteryVoltsBar.Size = new System.Drawing.Size(303, 10);
+            this.batteryVoltsBar.Step = 1;
+            this.batteryVoltsBar.TabIndex = 15;
+            this.batteryVoltsBar.Value = 125;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(93, 72);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(66, 13);
+            this.label4.TabIndex = 16;
+            this.label4.Text = "Battery Volts";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(177, 88);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(26, 13);
+            this.label5.TabIndex = 17;
+            this.label5.Text = "10V";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(463, 88);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(26, 13);
+            this.label6.TabIndex = 18;
+            this.label6.Text = "15V";
+            // 
             // ServerStatusDisplay
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(499, 105);
+            this.ClientSize = new System.Drawing.Size(499, 129);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.batteryVoltsBar);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.CloseButton);
             this.Controls.Add(this.OpenButton);
             this.Controls.Add(this.SetupCommand);
-            this.Controls.Add(this.annunciatorPanel1);
+            this.Controls.Add(this.statusAnnunciatorPanel);
             this.Controls.Add(this.OnlineClients);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.registeredClientCount);
@@ -454,8 +523,8 @@
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.LocationChanged += new System.EventHandler(this.frmMain_LocationChanged);
             this.VisibleChanged += new System.EventHandler(this.ServerStatusDisplay_VisibleChanged);
-            this.annunciatorPanel1.ResumeLayout(false);
-            this.annunciatorPanel1.PerformLayout();
+            this.statusAnnunciatorPanel.ResumeLayout(false);
+            this.statusAnnunciatorPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -467,7 +536,7 @@
         private System.Windows.Forms.Label registeredClientCount;
         private System.Windows.Forms.Label OnlineClients;
         private System.Windows.Forms.Label label3;
-        private ASCOM.Controls.AnnunciatorPanel annunciatorPanel1;
+        private ASCOM.Controls.AnnunciatorPanel statusAnnunciatorPanel;
         private ASCOM.Controls.Annunciator RotationTitle;
         private System.Windows.Forms.Button SetupCommand;
         private ASCOM.Controls.Annunciator CounterClockwiseAnnunciator;
@@ -490,6 +559,11 @@
         private ASCOM.Controls.Annunciator ShutterDispositionAnnunciator;
         private System.Windows.Forms.Label label2;
         private ASCOM.Controls.Annunciator ShutterLinkStateAnnunciator;
+        private ASCOM.Controls.Annunciator batteryVoltsAnnunciator;
+        private System.Windows.Forms.ProgressBar batteryVoltsBar;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
         }
 }
 

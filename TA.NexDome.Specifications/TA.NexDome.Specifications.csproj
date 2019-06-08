@@ -75,6 +75,7 @@
     <Compile Include="Fakes\TransactionExtensions.cs" />
     <Compile Include="Helpers\ObservableTestExtensions.cs" />
     <Compile Include="Helpers\TestData.cs" />
+    <Compile Include="MathExtensionSpecs.cs" />
     <Compile Include="ObservableExtensions\ObservableExtensionSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

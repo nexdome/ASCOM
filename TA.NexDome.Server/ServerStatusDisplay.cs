@@ -51,7 +51,7 @@ namespace TA.NexDome.Server
                 ShutterMotorAnnunciator, ShutterOpeningAnnunciator, ShutterClosingAnnunciator,
                 ShutterDispositionAnnunciator, ShutterLinkStateAnnunciator, 
                 UserPin1Annunciator, UserPin2Annunciator, UserPin3Annunciator, UserPin4Annunciator,
-                AtHomeAnnunciator
+                AtHomeAnnunciator, batteryVoltsAnnunciator
                 };
             annunciators.ForEach(p => p.Mute = false);
             annunciators.ForEach(p => p.Cadence = CadencePattern.SteadyOn);
@@ -221,6 +221,11 @@ namespace TA.NexDome.Server
                     .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(p => clickCommands.ForEach(q => q.CanExecuteChanged()))
             );
+            disposableSubscriptions.Add(
+                controller.GetObservableValueFor(p => p.ShutterBatteryVolts)
+                    .ObserveOn(SynchronizationContext.Current)
+                    .Subscribe(SetBatteryVolts)
+            );
             }
 
         private void SetUserPins(Octet pinState)
@@ -270,6 +275,47 @@ namespace TA.NexDome.Server
             {
             ShutterOpeningAnnunciator.Mute = direction != ShutterDirection.Opening;
             ShutterClosingAnnunciator.Mute = direction != ShutterDirection.Closing;
+            }
+
+        private void SetBatteryVolts(float volts)
+            {
+            /*
+             * Annunciator:
+             *      Steady/Green above 50% charge
+             *      SlowFlash/Yellow under 50% charge but above flat
+             *      Alarm/Red below flat voltage.
+             * Progress bar:
+             *      Clip to minimum 10V and maximum 15V
+             *      Colours as for annunciator.
+             */
+
+            var annunciatorValue = volts.Clip(0.0f, 15.0f);
+            var formatString = batteryVoltsAnnunciator.Tag.ToString();
+            batteryVoltsAnnunciator.Text = string.Format(formatString, annunciatorValue);
+            batteryVoltsAnnunciator.Mute = false;
+            var barValue = (int)(volts * 10f);
+            batteryVoltsBar.Value = barValue.Clip(100, 150);
+            if (volts >= Constants.BatteryHalfChargedVolts)
+                {
+                batteryVoltsAnnunciator.ActiveColor = Color.DarkSeaGreen;
+                batteryVoltsAnnunciator.Cadence = CadencePattern.SteadyOn;
+                batteryVoltsBar.ForeColor = Color.DarkSeaGreen;
+                return;
+                }
+            if (volts >= Constants.BatteryFullyDischargedVolts)
+                {
+                batteryVoltsAnnunciator.ActiveColor = Color.PaleGoldenrod;
+                batteryVoltsAnnunciator.Cadence = CadencePattern.BlinkFast;
+                batteryVoltsBar.ForeColor = Color.Orange;
+                return;
+                }
+            batteryVoltsAnnunciator.ActiveColor = Color.Crimson;
+            batteryVoltsAnnunciator.Cadence = CadencePattern.BlinkAlarm;
+            batteryVoltsBar.ForeColor = Color.Crimson;
+            if (volts <= Constants.BatteryFullyDischargedVolts)
+                {
+                batteryVoltsBar.Value = batteryVoltsBar.Maximum;
+                }
             }
 
         private void SetShutterDisposition(ShutterDisposition disposition)

@@ -106,7 +106,7 @@ namespace TA.NexDome.Server
             MainThreadId = GetCurrentThreadId();
             Thread.CurrentThread.Name = "Main Thread";
 
-            Application.EnableVisualStyles();
+            //Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             s_MainForm = new ServerStatusDisplay();
 //#if !DEBUG

@@ -6,17 +6,15 @@
     /// </summary>
     public class Constants
         {
-        public const string RotatorStatusReply = ":SER,";
-
-        public const string ShutterStatusReply =":SES,";
-
         #region NexDome Responses
-
-        public const string RequestRotatorStatus = "@SRR";
-        public const string RequestShutterStatus = "@SRS";
+        public const string RotatorStatusReply = ":SER,";
+        public const string ShutterStatusReply =":SES,";
+        public const string BatteryVoltageNotification = ":BV";
         #endregion
 
         #region NexDome Command Codes
+        public const string RequestRotatorStatus = "@SRR";
+        public const string RequestShutterStatus = "@SRS";
         public const string CmdHardStopShutter = "SWS";
         public const string CmdHardStopRotator = "SWR";
         public const string CmdOpenShutter = "OPS";
@@ -42,5 +40,10 @@
         #region Custom Actions
         #endregion Custom Actions
 
+        #region Magic Numbers
+        public const float BatteryFullyChargedVolts = 12.72f;
+        public const float BatteryHalfChargedVolts = 12.18f;
+        public const float BatteryFullyDischargedVolts = 10.2f;
+        #endregion
         }
     }
