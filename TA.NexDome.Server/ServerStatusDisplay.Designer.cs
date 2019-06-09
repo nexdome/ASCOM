@@ -124,7 +124,7 @@
             this.statusAnnunciatorPanel.Controls.Add(this.batteryVoltsAnnunciator);
             this.statusAnnunciatorPanel.Location = new System.Drawing.Point(96, 12);
             this.statusAnnunciatorPanel.Name = "statusAnnunciatorPanel";
-            this.statusAnnunciatorPanel.Size = new System.Drawing.Size(387, 37);
+            this.statusAnnunciatorPanel.Size = new System.Drawing.Size(420, 37);
             this.statusAnnunciatorPanel.TabIndex = 5;
             // 
             // RotationTitle
@@ -164,7 +164,7 @@
             this.AzimuthMotorAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.AzimuthMotorAnnunciator.Cadence = ASCOM.Controls.CadencePattern.BlinkAlarm;
             this.AzimuthMotorAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
-            this.AzimuthMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.AzimuthMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.AzimuthMotorAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.AzimuthMotorAnnunciator.Location = new System.Drawing.Point(95, 0);
             this.AzimuthMotorAnnunciator.Mute = false;
@@ -316,7 +316,7 @@
             this.ShutterMotorAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.ShutterMotorAnnunciator.Cadence = ASCOM.Controls.CadencePattern.BlinkAlarm;
             this.ShutterMotorAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
-            this.ShutterMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.ShutterMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.ShutterMotorAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.ShutterMotorAnnunciator.Location = new System.Drawing.Point(95, 17);
             this.ShutterMotorAnnunciator.Mute = false;
@@ -421,7 +421,7 @@
             this.ShutterPositionBar.Location = new System.Drawing.Point(180, 58);
             this.ShutterPositionBar.MarqueeAnimationSpeed = 0;
             this.ShutterPositionBar.Name = "ShutterPositionBar";
-            this.ShutterPositionBar.Size = new System.Drawing.Size(303, 10);
+            this.ShutterPositionBar.Size = new System.Drawing.Size(336, 10);
             this.ShutterPositionBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.ShutterPositionBar.TabIndex = 11;
             // 
@@ -454,13 +454,15 @@
             // 
             // batteryVoltsBar
             // 
+            this.batteryVoltsBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.batteryVoltsBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.batteryVoltsBar.Location = new System.Drawing.Point(180, 75);
             this.batteryVoltsBar.MarqueeAnimationSpeed = 0;
             this.batteryVoltsBar.Maximum = 150;
             this.batteryVoltsBar.Minimum = 100;
             this.batteryVoltsBar.Name = "batteryVoltsBar";
-            this.batteryVoltsBar.Size = new System.Drawing.Size(303, 10);
+            this.batteryVoltsBar.Size = new System.Drawing.Size(336, 10);
             this.batteryVoltsBar.Step = 1;
             this.batteryVoltsBar.TabIndex = 15;
             this.batteryVoltsBar.Value = 125;
@@ -485,8 +487,9 @@
             // 
             // label6
             // 
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(463, 88);
+            this.label6.Location = new System.Drawing.Point(496, 88);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(26, 13);
             this.label6.TabIndex = 18;
@@ -498,7 +501,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(499, 129);
+            this.ClientSize = new System.Drawing.Size(532, 129);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);

@@ -139,7 +139,7 @@ namespace TA.NexDome.DeviceInterface
         public static IObservable<float> BatteryVoltageUpdates(this IObservable<char> source)
             {
             const string voltageUpdatePattern = @"^:BV(?<Value>\d{1,5})#$";
-            const float aduToVref = 5f / 65535f * 3f;
+            const float aduToVref = 5f / 1023 * 3f;
             var regex = new Regex(voltageUpdatePattern, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture);
             var responses = source.DelimitedMessageStrings();
             var observableVolts = from response in responses

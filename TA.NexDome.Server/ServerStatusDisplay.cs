@@ -254,11 +254,10 @@ namespace TA.NexDome.Server
 
         private void SetShutterPercentOpen(int percent)
             {
+            var safeValue = percent.Clip(0, 100);
             var format = ShutterPercentOpenAnnunciator.Tag.ToString();
             var formattedValue = string.Format(format, percent);
             ShutterPercentOpenAnnunciator.Text = formattedValue;
-            // Auto-scale the progress bar
-            //ShutterPositionBar.Maximum = Math.Max(ShutterPositionBar.Maximum, percent);
             ShutterPositionBar.Value = percent;
             var controller = SharedResources.ConnectionManager.MaybeControllerInstance.Single();
             var moving = controller?.ShutterMotorActive ?? false;

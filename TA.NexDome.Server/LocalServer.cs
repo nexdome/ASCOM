@@ -56,6 +56,7 @@ namespace TA.NexDome.Server
                         case @"/register":
                         case "-regserver": // Emulate VB6
                         case @"/regserver":
+                            Log.Warn("Processing /register command line option");
                             RegisterObjects(); // Register each served object
                             bRet = false;
                             break;
@@ -64,7 +65,8 @@ namespace TA.NexDome.Server
                         case @"/unregister":
                         case "-unregserver": // Emulate VB6
                         case @"/unregserver":
-                            UnregisterObjects(); //Unregister each served object
+                            Log.Warn("Processing /unregister command line option");
+                        UnregisterObjects(); //Unregister each served object
                             bRet = false;
                             break;
 
@@ -405,6 +407,7 @@ namespace TA.NexDome.Server
         //
         private static void ElevateSelf(string arg)
             {
+            Log.Warn("Elevating to administrator with command line options: {options}", arg);
             var si = new ProcessStartInfo();
             si.Arguments = arg;
             si.WorkingDirectory = Environment.CurrentDirectory;
@@ -416,6 +419,7 @@ namespace TA.NexDome.Server
                 }
             catch (Win32Exception)
                 {
+                Log.Error("Elevation failed (user cancelled?)");
                 MessageBox.Show(
                     "The server was not " + (arg == "/register" ? "registered" : "unregistered") +
                     " because you did not allow it.", "ASCOM LocalServer", MessageBoxButtons.OK,
@@ -423,6 +427,7 @@ namespace TA.NexDome.Server
                 }
             catch (Exception ex)
                 {
+                Log.Error(ex,"Elevation failed (exception)");
                 MessageBox.Show(ex.ToString(), "ASCOM LocalServer", MessageBoxButtons.OK,
                     MessageBoxIcon.Stop);
                 }
@@ -441,6 +446,7 @@ namespace TA.NexDome.Server
         //
         private static void RegisterObjects()
             {
+            Log.Warn("Registering COM objects");
             if (!IsAdministrator)
                 {
                 ElevateSelf("/register");
@@ -575,6 +581,7 @@ namespace TA.NexDome.Server
         //
         private static void UnregisterObjects()
             {
+            Log.Warn("Unregistering COM objects");
             if (!IsAdministrator)
                 {
                 ElevateSelf("/unregister");
