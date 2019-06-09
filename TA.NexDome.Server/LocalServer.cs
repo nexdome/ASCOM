@@ -94,6 +94,14 @@ namespace TA.NexDome.Server
             Application.ThreadException += UnhandledThreadException;
             AppDomain.CurrentDomain.UnhandledException += UnhandledException;
 
+            Log.Info("Git Commit ID: {fullCommit}", GitVersionInformation.Sha);
+            Log.Info("Git Short ID: {shortCommit}", GitVersionInformation.ShortSha);
+            Log.Info("Commit Date: {commitDate}", GitVersionInformation.CommitDate);
+            Log.Info("Semantic version: {semVer}", GitVersionInformation.SemVer);
+            Log.Info("Full Semantic version: {fullSemVer}", GitVersionInformation.FullSemVer);
+            Log.Info("Build metadata: {buildMetadata}", GitVersionInformation.FullBuildMetaData);
+            Log.Info("Informational Version: {informationalVersion}", GitVersionInformation.InformationalVersion);
+
             var foundTypes = LoadComObjectAssemblies();
             if (foundTypes < 1)
                 return; // There is no point continuing if we found nothing to serve.
