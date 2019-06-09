@@ -12,6 +12,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter {
         public override void OnEnter()
             {
             base.OnEnter();
+            Machine.ShutterDisposition = ShutterDisposition.Opening;
             Machine.ShutterMotorActive = true;
             Machine.ShutterMovementDirection = ShutterDirection.Opening;
             Machine.ShutterLimitSwitches = SensorState.Open;
@@ -38,7 +39,6 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter {
         public override void StatusUpdateReceived(IShutterStatus status)
             {
             base.StatusUpdateReceived(status);
-            Machine.ShutterDisposition = ShutterDisposition.Opening;
             Machine.UpdateStatus(status);
             Machine.TransitionToState(new OpenState(Machine));
             }
