@@ -35,7 +35,7 @@ namespace TA.NexDome.AscomDome
         ~Dome() => ReleaseUnmanagedResources();
 
         /// <inheritdoc />
-        public void SetupDialog() { }
+        public void SetupDialog() => SharedResources.DoSetupDialog(clientId);
 
         /// <inheritdoc />
         public string Action(string ActionName, string ActionParameters) => null;
