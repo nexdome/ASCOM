@@ -15,12 +15,11 @@ namespace TA.NexDome.Specifications.Builders
 
         private DeviceControllerOptions deviceControllerOptions = new DeviceControllerOptions
             {
-            KeepAliveTimerInterval = TimeSpan.FromMinutes(3),
             MaximumFullRotationTime = TimeSpan.FromMinutes(1),
             MaximumShutterCloseTime = TimeSpan.FromMinutes(1),
-            PerformShutterRecovery = false,
-            IgnoreHardwareShutterSensor = false,
-            CurrentDrawDetectionThreshold = 10
+            ShutterTickTimeout = TimeSpan.FromSeconds(5),
+            RotatorTickTimeout = TimeSpan.FromSeconds(5),
+            HomeSensorAzimuth = 10.0m
             };
 
         private bool initializeRotatorStateMachine = false;

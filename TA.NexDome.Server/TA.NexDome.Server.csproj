@@ -65,6 +65,7 @@
       <DependentUpon>CommunicationSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="CompositionRoot.cs" />
+    <Compile Include="GitVersionExtensions.cs" />
     <Compile Include="ServerStatusDisplay.cs">
       <SubType>Form</SubType>
     </Compile>

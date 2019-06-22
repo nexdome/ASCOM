@@ -19,6 +19,7 @@ using ASCOM;
 using ASCOM.Utilities;
 using Microsoft.Win32;
 using NLog;
+using PostSharp.Aspects.Advices;
 
 namespace TA.NexDome.Server
     {
@@ -96,13 +97,7 @@ namespace TA.NexDome.Server
             Application.ThreadException += UnhandledThreadException;
             AppDomain.CurrentDomain.UnhandledException += UnhandledException;
 
-            Log.Info("Git Commit ID: {fullCommit}", GitVersionInformation.Sha);
-            Log.Info("Git Short ID: {shortCommit}", GitVersionInformation.ShortSha);
-            Log.Info("Commit Date: {commitDate}", GitVersionInformation.CommitDate);
-            Log.Info("Semantic version: {semVer}", GitVersionInformation.SemVer);
-            Log.Info("Full Semantic version: {fullSemVer}", GitVersionInformation.FullSemVer);
-            Log.Info("Build metadata: {buildMetadata}", GitVersionInformation.FullBuildMetaData);
-            Log.Info("Informational Version: {informationalVersion}", GitVersionInformation.InformationalVersion);
+            LogVersionStrings();
 
             var foundTypes = LoadComObjectAssemblies();
             if (foundTypes < 1)
@@ -154,6 +149,20 @@ namespace TA.NexDome.Server
                 Application.ThreadException -= UnhandledThreadException;
                 AppDomain.CurrentDomain.UnhandledException -= UnhandledException;
                 }
+            }
+
+        private static void LogVersionStrings()
+            {
+            //var assembly = Assembly.GetExecutingAssembly();
+            //var assemblyName = assembly.GetName().Name;
+            //var git = assembly.GetType(assemblyName + ".GitVersionInformation");
+            Log.Info("Git Commit ID: {fullCommit}", GitVersionInformation.Sha);
+            Log.Info("Git Short ID: {shortCommit}", GitVersionInformation.ShortSha);
+            Log.Info("Commit Date: {commitDate}", GitVersionInformation.CommitDate);
+            Log.Info("Semantic version: {semVer}", GitVersionInformation.SemVer);
+            Log.Info("Full Semantic version: {fullSemVer}", GitVersionInformation.FullSemVer);
+            Log.Info("Build metadata: {buildMetadata}", GitVersionInformation.FullBuildMetaData);
+            Log.Info("Informational Version: {informationalVersion}", GitVersionInformation.InformationalVersion);
             }
         #endregion
 

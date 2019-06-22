@@ -81,13 +81,11 @@ namespace TA.NexDome.Server
             {
             var options = new DeviceControllerOptions
                 {
-                PerformShutterRecovery = Settings.Default.PerformShutterRecovery,
+                HomeSensorAzimuth = Settings.Default.HomeSensorAzimuth,
                 MaximumShutterCloseTime = TimeSpan.FromSeconds((double) Settings.Default.ShutterOpenCloseTimeSeconds),
                 MaximumFullRotationTime = TimeSpan.FromSeconds((double) Settings.Default.FullRotationTimeSeconds),
-                KeepAliveTimerInterval = Settings.Default.KeepAliveTimerPeriod,
-                CurrentDrawDetectionThreshold = Settings.Default.CurrentDrawDetectionThreshold,
-                IgnoreHardwareShutterSensor = Settings.Default.IgnoreHardwareShutterSensor,
-                ShutterTickTimeout = Settings.Default.ShutterTickTimeout
+                ShutterTickTimeout = Settings.Default.ShutterTickTimeout,
+                RotatorTickTimeout = Settings.Default.RotatorTickTimeout
                 };
             return options;
             }

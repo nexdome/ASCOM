@@ -47,5 +47,9 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         ///     Requests that the shutter controller send a status report on the current state of the shutter hardware.
         /// </summary>
         void RequestShutterStatus();
+
+        void SetHomeSensorAzimuth(decimal azimuth);
+
+        void SavePersistentSettings();
         }
     }

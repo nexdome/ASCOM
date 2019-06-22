@@ -12,6 +12,7 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using TA.NexDome.DeviceInterface.StateMachine.Rotator;
 using TA.NexDome.SharedTypes;
 
 namespace TA.NexDome.DeviceInterface.StateMachine
@@ -156,24 +157,6 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         [NotifyPropertyChangedInvocator]
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        /// <summary>
-        ///     Update state machine properties from a <see cref="IHardwareStatus" /> record.
-        ///     By definition, when a status report is received, all movement has ceased.
-        /// </summary>
-        /// <param name="status">The status report received from the hardware.</param>
-        internal void UpdateStatus(IHardwareStatus status)
-            {
-            AzimuthEncoderPosition = status.CurrentAzimuth;
-            AzimuthMotorActive = false;
-            AzimuthDirection = RotationDirection.None;
-            ShutterMotorActive = false;
-            ShutterMovementDirection = ShutterDirection.None;
-            ShutterMotorCurrent = 0;
-            ShutterLimitSwitches = SetInferredShutterPosition(status.ShutterSensor);
-            AtHome = status.AtHome;
-            UserPins = status.UserPins;
-            }
-
         internal void UpdateStatus(IRotatorStatus status)
             {
             AzimuthEncoderPosition = status.Azimuth;
@@ -200,17 +183,6 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             }
 
         public int ShutterLimitOfTravel { get; private set; } = 46000;
-
-        private SensorState SetInferredShutterPosition(SensorState statusShutterSensor)
-            {
-            if (!Options.IgnoreHardwareShutterSensor)
-                return statusShutterSensor;
-
-            if (InferredShutterPosition == SensorState.Indeterminate)
-                return statusShutterSensor;
-
-            return InferredShutterPosition;
-            }
 
         internal void RequestHardwareStatus() => ControllerActions.RequestHardwareStatus();
 
@@ -312,6 +284,19 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             Log.Info().Message("Shutter link state {state}", state).Write();
             ShutterLinkState = state;
             ShutterState.LinkStateReceived(state);
+            }
+
+        public void SetHomeSensorAzimuth(decimal azimuth)
+            {
+            Log.Info().Message("Set home sensor azimuth to {azimuth}", azimuth).Write();
+            ControllerActions.SetHomeSensorAzimuth(azimuth);
+            TransitionToState(new RequestStatusState(this));
+            }
+
+        public void SavePersistentSettings()
+            {
+            Log.Info("Saving persistent settings").Write();
+            ControllerActions.SavePersistentSettings();
             }
         }
     }
