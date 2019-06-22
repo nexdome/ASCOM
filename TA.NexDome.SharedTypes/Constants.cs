@@ -6,6 +6,7 @@
     /// </summary>
     public class Constants
         {
+
         #region NexDome Responses
         public const string RotatorStatusReply = ":SER,";
         public const string ShutterStatusReply =":SES,";
@@ -19,6 +20,9 @@
         public const string CmdHardStopRotator = "SWR";
         public const string CmdOpenShutter = "OPS";
         public const string CmdCloseShutter = "CLS";
+        public const string CmdSaveShutterSettings = "@ZWS";
+        public const string CmdSaveRotatorSettings = "@ZWR";
+        public const string CmdSetHomeSensorAzimuthTemplate = "@HWR,{0:000}";
 
         /// <summary>
         ///     Format string used with <see cref="string.Format(string,object)" /> for building a "GoTo Azimuth" command.

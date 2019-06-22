@@ -12,7 +12,7 @@ namespace TA.NexDome.Server.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.1.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.2.0.0")]
     public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -73,27 +73,6 @@ namespace TA.NexDome.Server.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool PerformShutterRecovery {
-            get {
-                return ((bool)(this["PerformShutterRecovery"]));
-            }
-            set {
-                this["PerformShutterRecovery"] = value;
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("00:03:00")]
-        public global::System.TimeSpan KeepAliveTimerPeriod {
-            get {
-                return ((global::System.TimeSpan)(this["KeepAliveTimerPeriod"]));
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("60")]
         public decimal FullRotationTimeSeconds {
             get {
@@ -116,33 +95,9 @@ namespace TA.NexDome.Server.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool IgnoreHardwareShutterSensor {
-            get {
-                return ((bool)(this["IgnoreHardwareShutterSensor"]));
-            }
-            set {
-                this["IgnoreHardwareShutterSensor"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public int CurrentDrawDetectionThreshold {
-            get {
-                return ((int)(this["CurrentDrawDetectionThreshold"]));
-            }
-            set {
-                this["CurrentDrawDetectionThreshold"] = value;
-            }
-        }
-        
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("00:00:05")]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:00:02")]
         public global::System.TimeSpan ShutterTickTimeout {
             get {
                 return ((global::System.TimeSpan)(this["ShutterTickTimeout"]));
@@ -209,6 +164,27 @@ namespace TA.NexDome.Server.Properties {
         public global::System.IO.Ports.Handshake SerialHandshake {
             get {
                 return ((global::System.IO.Ports.Handshake)(this["SerialHandshake"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal HomeSensorAzimuth {
+            get {
+                return ((decimal)(this["HomeSensorAzimuth"]));
+            }
+            set {
+                this["HomeSensorAzimuth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:00:02")]
+        public global::System.TimeSpan RotatorTickTimeout {
+            get {
+                return ((global::System.TimeSpan)(this["RotatorTickTimeout"]));
             }
         }
     }

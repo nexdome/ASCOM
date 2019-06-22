@@ -83,35 +83,14 @@ namespace TA.NexDome.DeviceInterface
             stateMachine.Initialize(new TA.NexDome.DeviceInterface.StateMachine.Rotator.RequestStatusState(stateMachine));
             stateMachine.Initialize(new TA.NexDome.DeviceInterface.StateMachine.Shutter.OfflineState(stateMachine));
             stateMachine.WaitForReady(TimeSpan.FromSeconds(5));
-            if (performOnConnectActions && configuration.PerformShutterRecovery) PerformShutterRecovery();
+            if (performOnConnectActions )
+                PerformActionsOnConnect();
             }
 
-        /// <summary>
-        ///     Tries to establish a known shutter condition at startup.
-        ///     Assumes that a valid status packet has already been received.
-        /// </summary>
-        /// <exception cref="TimeoutException">
-        ///     Thrown if shutter recovery does not complete within the
-        ///     allotted time.
-        /// </exception>
-        private void PerformShutterRecovery()
+        void PerformActionsOnConnect()
             {
-            Log.Debug()
-                .Message("Shutter recovery heuristic.")
-                .Property(nameof(ShutterLimitSwitches), ShutterLimitSwitches)
-                .Write();
-            if (ShutterLimitSwitches == SensorState.Indeterminate)
-                {
-                Log.Info()
-                    .Message("Shutter position is indeterminate, attempting to close the shutter.")
-                    .Write();
-                stateMachine.CloseShutter();
-                stateMachine.WaitForReady(configuration.MaximumFullRotationTime +
-                                          configuration.MaximumShutterCloseTime);
-                }
-            Log.Debug("Shutter recovery heuristic finished");
+            stateMachine.SetHomeSensorAzimuth(configuration.HomeSensorAzimuth);
             }
-
 
         /// <summary>
         /// Uses a variety of pattern matches over the input character stream (defined in 
@@ -314,6 +293,7 @@ namespace TA.NexDome.DeviceInterface
         public void Close()
             {
             UnsubscribeControllerEvents();
+            stateMachine.SavePersistentSettings();
             channel.Close();
             }
 

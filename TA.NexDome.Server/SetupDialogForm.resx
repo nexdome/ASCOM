@@ -131,21 +131,6 @@ and experimentation (no serial port or dome hardware
 required). Otherwise, select the COM port where your
 Digital Domeworks hardware is connected.</value>
   </data>
-  <data name="ShutterOpenCloseTimeSeconds.ToolTip" xml:space="preserve">
-    <value>Determines the maximum time that the
-ASCOM driver will wait for certain synchronous
-operations to complete. Set this to slightly more
-than the worst case time (in seconds)
-for the shutter to fully open or close.
-</value>
-  </data>
-  <data name="FullRotationTimeSeconds.ToolTip" xml:space="preserve">
-    <value>Determines the maximum time that the
-ASCOM driver will wait for certain synchronous
-operations to complete. Set this to slightly more
-than the worst case time (in seconds)
-for a full 360° rotation of your dome.</value>
-  </data>
   <metadata name="ConnectionErrorProvider.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>

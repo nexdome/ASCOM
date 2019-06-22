@@ -66,6 +66,20 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             SendCommand(Constants.RequestShutterStatus);
             }
 
+        /// <inheritdoc />
+        public void SetHomeSensorAzimuth(decimal azimuth)
+            {
+            var command = string.Format(Constants.CmdSetHomeSensorAzimuthTemplate, (int)azimuth);
+            SendCommand(command);
+            }
+
+        /// <inheritdoc />
+        public void SavePersistentSettings()
+            {
+            SendCommand(Constants.CmdSaveShutterSettings);
+            SendCommand(Constants.CmdSaveRotatorSettings);
+            }
+
         private void SendCommand(string command)
             {
             channel.Send(EnsureCommandEncapsulation(command));

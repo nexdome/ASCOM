@@ -3,8 +3,9 @@
 
 using TA.NexDome.SharedTypes;
 
-namespace TA.NexDome.DeviceInterface.StateMachine.Rotator {
-    class ReadyState : RotatorStateBase
+namespace TA.NexDome.DeviceInterface.StateMachine.Rotator
+    {
+    internal class ReadyState : RotatorStateBase
         {
         public ReadyState(ControllerStateMachine machine) : base(machine) { }
 
@@ -34,8 +35,16 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Rotator {
         public override void RotateToAzimuthDegrees(double azimuth)
             {
             base.RotateToAzimuthDegrees(azimuth);
-            Machine.ControllerActions.RotateToAzimuth((int) azimuth);
+            Machine.ControllerActions.RotateToAzimuth((int)azimuth);
             Machine.TransitionToState(new RotatingState(Machine));
             }
-    }
+
+        /// <inheritdoc />
+        public override void RotateToHomePosition()
+            {
+            base.RotateToHomePosition();
+            Machine.ControllerActions.RotateToHomePosition();
+            Machine.TransitionToState(new RotatingState(Machine));
+            }
+        }
     }

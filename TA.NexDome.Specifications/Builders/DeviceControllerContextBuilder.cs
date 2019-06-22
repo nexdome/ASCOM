@@ -41,13 +41,11 @@ namespace TA.NexDome.Specifications.Builders
         string connectionString = "Fake";
         readonly DeviceControllerOptions controllerOptions = new DeviceControllerOptions
             {
-            KeepAliveTimerInterval = TimeSpan.FromMinutes(3),
             MaximumFullRotationTime = TimeSpan.FromMinutes(1),
             MaximumShutterCloseTime = TimeSpan.FromMinutes(1),
-            PerformShutterRecovery = true,
-            CurrentDrawDetectionThreshold = 10,
-            IgnoreHardwareShutterSensor = false,
-            ShutterTickTimeout = TimeSpan.FromSeconds(5)
+            ShutterTickTimeout = TimeSpan.FromSeconds(5),
+            RotatorTickTimeout = TimeSpan.FromSeconds(5),
+            HomeSensorAzimuth = 10.0m
             };
         PropertyChangedEventHandler propertyChangedAction;
         List<Tuple<string, Action>> propertyChangeObservers = new List<Tuple<string, Action>>();

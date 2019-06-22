@@ -49,6 +49,9 @@ namespace TA.NexDome.Server
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.DomeParametersGroup = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.HomeAzimuthUpDown = new System.Windows.Forms.NumericUpDown();
             toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.ShutterOpenCloseTimeSeconds)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FullRotationTimeSeconds)).BeginInit();
@@ -58,6 +61,8 @@ namespace TA.NexDome.Server
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.DomeParametersGroup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.HomeAzimuthUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // toolTip1
@@ -91,7 +96,7 @@ namespace TA.NexDome.Server
             this.ShutterOpenCloseTimeSeconds.Size = new System.Drawing.Size(80, 20);
             this.ShutterOpenCloseTimeSeconds.TabIndex = 1;
             this.ShutterOpenCloseTimeSeconds.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            toolTip1.SetToolTip(this.ShutterOpenCloseTimeSeconds, resources.GetString("ShutterOpenCloseTimeSeconds.ToolTip"));
+            toolTip1.SetToolTip(this.ShutterOpenCloseTimeSeconds, "THe maximum time allowed for the shutter to fully open or close.");
             this.ShutterOpenCloseTimeSeconds.Value = global::TA.NexDome.Server.Properties.Settings.Default.ShutterOpenCloseTimeSeconds;
             // 
             // FullRotationTimeSeconds
@@ -107,39 +112,39 @@ namespace TA.NexDome.Server
             this.FullRotationTimeSeconds.Size = new System.Drawing.Size(80, 20);
             this.FullRotationTimeSeconds.TabIndex = 1;
             this.FullRotationTimeSeconds.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            toolTip1.SetToolTip(this.FullRotationTimeSeconds, resources.GetString("FullRotationTimeSeconds.ToolTip"));
+            toolTip1.SetToolTip(this.FullRotationTimeSeconds, "The maximum time that the dome should be allowed to rotate without stopping.");
             this.FullRotationTimeSeconds.Value = global::TA.NexDome.Server.Properties.Settings.Default.FullRotationTimeSeconds;
             // 
             // PresetHD6
             // 
             this.PresetHD6.Location = new System.Drawing.Point(61, 71);
             this.PresetHD6.Name = "PresetHD6";
-            this.PresetHD6.Size = new System.Drawing.Size(51, 23);
+            this.PresetHD6.Size = new System.Drawing.Size(66, 23);
             this.PresetHD6.TabIndex = 2;
-            this.PresetHD6.Text = "HD-6";
-            toolTip1.SetToolTip(this.PresetHD6, "Load default timeouts for a 6ft dome");
+            this.PresetHD6.Text = "2m Dome";
+            toolTip1.SetToolTip(this.PresetHD6, "Load default timeouts for a 2m/6ft dome");
             this.PresetHD6.UseVisualStyleBackColor = true;
             this.PresetHD6.Click += new System.EventHandler(this.PresetHD6_Click);
             // 
             // PresetHD10
             // 
-            this.PresetHD10.Location = new System.Drawing.Point(118, 71);
+            this.PresetHD10.Location = new System.Drawing.Point(133, 71);
             this.PresetHD10.Name = "PresetHD10";
-            this.PresetHD10.Size = new System.Drawing.Size(51, 23);
+            this.PresetHD10.Size = new System.Drawing.Size(66, 23);
             this.PresetHD10.TabIndex = 2;
-            this.PresetHD10.Text = "HD-10";
-            toolTip1.SetToolTip(this.PresetHD10, "Load default timeouts for a 10ft dome");
+            this.PresetHD10.Text = "3m Dome";
+            toolTip1.SetToolTip(this.PresetHD10, "Load default timeouts for a 3m/10ft dome");
             this.PresetHD10.UseVisualStyleBackColor = true;
             this.PresetHD10.Click += new System.EventHandler(this.PresetHD10_Click);
             // 
             // PresetHD15
             // 
-            this.PresetHD15.Location = new System.Drawing.Point(175, 71);
+            this.PresetHD15.Location = new System.Drawing.Point(205, 71);
             this.PresetHD15.Name = "PresetHD15";
-            this.PresetHD15.Size = new System.Drawing.Size(51, 23);
+            this.PresetHD15.Size = new System.Drawing.Size(66, 23);
             this.PresetHD15.TabIndex = 2;
-            this.PresetHD15.Text = "HD-15";
-            toolTip1.SetToolTip(this.PresetHD15, "Load default timeouts for a 15ft dome");
+            this.PresetHD15.Text = "5m Dome";
+            toolTip1.SetToolTip(this.PresetHD15, "Load default timeouts for a 5m/15ft dome");
             this.PresetHD15.UseVisualStyleBackColor = true;
             this.PresetHD15.Click += new System.EventHandler(this.PresetHD15_Click);
             // 
@@ -178,6 +183,7 @@ namespace TA.NexDome.Server
             this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picASCOM.TabIndex = 3;
             this.picASCOM.TabStop = false;
+            toolTip1.SetToolTip(this.picASCOM, "Click to visit the ASCOM Standards web site");
             this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
             this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
             // 
@@ -220,10 +226,11 @@ namespace TA.NexDome.Server
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(12, 265);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(369, 111);
+            this.groupBox1.Size = new System.Drawing.Size(370, 111);
             this.groupBox1.TabIndex = 11;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Timeouts";
+            this.groupBox1.Text = "Safety Timeouts";
+            toolTip1.SetToolTip(this.groupBox1, "Dome safety timeouts");
             // 
             // label3
             // 
@@ -262,6 +269,7 @@ namespace TA.NexDome.Server
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 12;
             this.pictureBox1.TabStop = false;
+            toolTip1.SetToolTip(this.pictureBox1, "Visit the Tigra Astronomy web site");
             // 
             // pictureBox2
             // 
@@ -273,6 +281,42 @@ namespace TA.NexDome.Server
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pictureBox2.TabIndex = 13;
             this.pictureBox2.TabStop = false;
+            toolTip1.SetToolTip(this.pictureBox2, "Click to visit the NexDome web site");
+            // 
+            // DomeParametersGroup
+            // 
+            this.DomeParametersGroup.Controls.Add(this.label4);
+            this.DomeParametersGroup.Controls.Add(this.HomeAzimuthUpDown);
+            this.DomeParametersGroup.Location = new System.Drawing.Point(12, 382);
+            this.DomeParametersGroup.Name = "DomeParametersGroup";
+            this.DomeParametersGroup.Size = new System.Drawing.Size(370, 50);
+            this.DomeParametersGroup.TabIndex = 14;
+            this.DomeParametersGroup.TabStop = false;
+            this.DomeParametersGroup.Text = "Dome Parameters";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(7, 20);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(111, 13);
+            this.label4.TabIndex = 18;
+            this.label4.Text = "Home Sensor Aximuth";
+            // 
+            // HomeAzimuthUpDown
+            // 
+            this.HomeAzimuthUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::TA.NexDome.Server.Properties.Settings.Default, "HomeSensorAzimuth", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.HomeAzimuthUpDown.Location = new System.Drawing.Point(124, 18);
+            this.HomeAzimuthUpDown.Maximum = new decimal(new int[] {
+            359,
+            0,
+            0,
+            0});
+            this.HomeAzimuthUpDown.Name = "HomeAzimuthUpDown";
+            this.HomeAzimuthUpDown.Size = new System.Drawing.Size(53, 20);
+            this.HomeAzimuthUpDown.TabIndex = 17;
+            toolTip1.SetToolTip(this.HomeAzimuthUpDown, "The position of the Home Sensor, measured in degrees clockwise from true north");
+            this.HomeAzimuthUpDown.Value = global::TA.NexDome.Server.Properties.Settings.Default.HomeSensorAzimuth;
             // 
             // SetupDialogForm
             // 
@@ -280,7 +324,8 @@ namespace TA.NexDome.Server
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cmdCancel;
-            this.ClientSize = new System.Drawing.Size(493, 388);
+            this.ClientSize = new System.Drawing.Size(493, 449);
+            this.Controls.Add(this.DomeParametersGroup);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.groupBox1);
@@ -310,6 +355,9 @@ namespace TA.NexDome.Server
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            this.DomeParametersGroup.ResumeLayout(false);
+            this.DomeParametersGroup.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.HomeAzimuthUpDown)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -334,5 +382,8 @@ namespace TA.NexDome.Server
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.GroupBox DomeParametersGroup;
+        private System.Windows.Forms.NumericUpDown HomeAzimuthUpDown;
+        private System.Windows.Forms.Label label4;
         }
 }
