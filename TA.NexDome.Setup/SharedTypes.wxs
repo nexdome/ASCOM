@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <DirectoryRef Id="INSTALLDIRECTORY" />
+    <ComponentGroup Id="cgSharedTypes">
+      <Component Id="cmpSharedTypes" Directory="INSTALLDIRECTORY" Guid="*" Win64="no">
+        <File Id="filSharedTypesAssembly"
+              Source="$(var.SharedTypes.TargetPath)" 
+              Vital="yes"
+              KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

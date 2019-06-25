@@ -63,6 +63,7 @@
     <Compile Include="ShutterDirection.cs" />
     <Compile Include="ShutterDisposition.cs" />
     <Compile Include="ShutterLinkState.cs" />
+    <Compile Include="UnsupportedFirmwareVersionException.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="GitVersionTask">

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>
+	  <ComponentGroup Id="cgCommunicationsLayer" Directory="INSTALLDIRECTORY">
+	    <ComponentGroupRef Id="cgNLog" />
+      <ComponentGroupRef Id="cgPostSharp"/>
+	    <ComponentGroupRef Id="cgReactiveAscom" />
+	    <ComponentGroupRef Id="cgPostSharpAspects" />
+	    <ComponentGroupRef Id="cgSharedTypes" />
+	    <Component Id="cmpCommunicationsLayer" Guid="*" Win64="no">
+	      <File Id="filCommunicationsLayerAssembly"
+	            Source="$(var.DeviceInterface.TargetPath)"
+	            KeyPath="yes"
+	            Vital="yes"
+	            Assembly=".net"
+	            AssemblyApplication="filCommunicationsLayerAssembly" />
+	    </Component>
+	  </ComponentGroup>
+	  <DirectoryRef Id="INSTALLDIRECTORY"/>
+	</Fragment>
+</Wix>

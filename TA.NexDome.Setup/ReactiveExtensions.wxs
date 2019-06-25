@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <DirectoryRef Id="INSTALLDIRECTORY"/>
+    <ComponentGroup Id="cgReactiveExtensions" Directory="INSTALLDIRECTORY" >
+      <Component Id="cmpSystemReactive" Guid="*" Win64="no" >
+        <File Id="filSystemReactiveCore"  Source="$(var.AscomServer.TargetDir)System.Reactive.dll"              Vital="yes" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

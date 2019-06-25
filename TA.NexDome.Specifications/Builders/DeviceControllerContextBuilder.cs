@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Text;
 using TA.Ascom.ReactiveCommunications;
 using TA.NexDome.DeviceInterface;
@@ -66,7 +67,8 @@ namespace TA.NexDome.Specifications.Builders
             controllerStateMachine.ShutterLimitSwitches = initialShutterState;
 
             // Build the device controller
-            var controller = new DeviceController(channel, statusFactory, controllerStateMachine, controllerOptions);
+            var fakeTransactionProcessor = new FakeTransactionProcessor(Enumerable.Empty<string>());
+            var controller = new DeviceController(channel, statusFactory, controllerStateMachine, controllerOptions, fakeTransactionProcessor);
 
             // Assemble the device controller test context
             var context = new DeviceControllerContext

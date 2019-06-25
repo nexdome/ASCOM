@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using TA.Ascom.ReactiveCommunications;
 using TA.NexDome.DeviceInterface.StateMachine;
 using TA.NexDome.SharedTypes;
@@ -19,18 +20,24 @@ namespace TA.NexDome.DeviceInterface
         {
         [NotNull] private readonly ICommunicationChannel channel;
         private readonly DeviceControllerOptions configuration;
+        private readonly ITransactionProcessor processor;
         [NotNull] private readonly List<IDisposable> disposableSubscriptions = new List<IDisposable>();
         [NotNull] private readonly ControllerStateMachine stateMachine;
         [NotNull] private readonly ControllerStatusFactory statusFactory;
         private bool disposed = false;
+        private SemanticVersion rotatorFirmwareVersion;
+        private SemanticVersion shutterFirmwareVersion;
+        private static SemanticVersion MinimumRequiredRotatorVersion = new SemanticVersion(1,1,0);
+        private static SemanticVersion MinimumRequiredShutterVersion = new SemanticVersion(1,1,0);
 
         public DeviceController(ICommunicationChannel channel, ControllerStatusFactory factory,
-            ControllerStateMachine machine, DeviceControllerOptions configuration)
+            ControllerStateMachine machine, DeviceControllerOptions configuration, ITransactionProcessor processor)
             {
             this.channel = channel;
             statusFactory = factory;
             stateMachine = machine;
             this.configuration = configuration;
+            this.processor = processor;
             }
 
         public Octet UserPins => stateMachine.UserPins;
@@ -89,7 +96,28 @@ namespace TA.NexDome.DeviceInterface
 
         void PerformActionsOnConnect()
             {
+            EnsureMinimumRequiredFirmwareVersion();
             stateMachine.SetHomeSensorAzimuth(configuration.HomeSensorAzimuth);
+            }
+
+        private void EnsureMinimumRequiredFirmwareVersion()
+            {
+            var rotatorVersionTransaction = new SemVerTransaction(Constants.CmdGetRotatorVersion);
+            processor.CommitTransaction(rotatorVersionTransaction);
+            rotatorVersionTransaction.WaitForCompletionOrTimeout();
+            rotatorFirmwareVersion = rotatorVersionTransaction.SemanticVersion;
+            if (rotatorFirmwareVersion < MinimumRequiredRotatorVersion)
+                {
+                Log.Error($"Unsupported rotator firmware version {rotatorFirmwareVersion}; will throw.");
+                MessageBox.Show(
+                    "Your rotator firmware is too old to work with this driver.\nPlease contact NexDome for an upgrade.\n\n"
+                    + $"Your version: {rotatorFirmwareVersion}\n"
+                    + $"Minimum required version: {MinimumRequiredRotatorVersion}\n\n"
+                    + "The connection will now close.", "Firmware Version Incompatible", MessageBoxButtons.OK,
+                    MessageBoxIcon.Stop);
+                Close();
+                throw new UnsupportedFirmwareVersionException(MinimumRequiredRotatorVersion, rotatorFirmwareVersion);
+                }
             }
 
         /// <summary>

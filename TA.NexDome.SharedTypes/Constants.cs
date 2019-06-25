@@ -23,6 +23,8 @@
         public const string CmdSaveShutterSettings = "@ZWS";
         public const string CmdSaveRotatorSettings = "@ZWR";
         public const string CmdSetHomeSensorAzimuthTemplate = "@HWR,{0:000}";
+        public const string CmdGetRotatorVersion = "@FRR";
+        public const string CmdGetShutterVersion = "@FRS";
 
         /// <summary>
         ///     Format string used with <see cref="string.Format(string,object)" /> for building a "GoTo Azimuth" command.
