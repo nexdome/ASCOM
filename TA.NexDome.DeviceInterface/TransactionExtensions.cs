@@ -4,10 +4,13 @@
 // 
 // File: TransactionExtensions.cs  Last modified: 2018-03-02@00:55 by Tim Long
 
+using System;
 using System.Diagnostics.Contracts;
+using System.Text;
 using JetBrains.Annotations;
 using NLog;
 using TA.Ascom.ReactiveCommunications;
+using TA.NexDome.SharedTypes;
 
 namespace TA.NexDome.DeviceInterface
     {
@@ -37,5 +40,17 @@ namespace TA.NexDome.DeviceInterface
             if (transaction.Failed)
                 transaction.RaiseException(log);
             }
+
+        public static string EnsureEncapsulation(this string command)
+            {
+            var builder = new StringBuilder();
+            if (!command.StartsWith(Constants.CommandPrefix))
+                builder.Append(Constants.CommandPrefix);
+            builder.Append(command);
+            if (!command.EndsWith(Environment.NewLine))
+                builder.AppendLine();
+            return builder.ToString();
+            }
+
         }
     }

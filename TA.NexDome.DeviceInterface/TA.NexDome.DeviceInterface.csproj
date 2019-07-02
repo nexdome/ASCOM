@@ -43,10 +43,12 @@
   <ItemGroup>
     <Compile Include="CommunicationsStackBuilder.cs" />
     <Compile Include="DeviceController.cs" />
+    <Compile Include="EmptyResponseTransaction.cs" />
     <Compile Include="ITransactionProcessorFactory.cs" />
     <Compile Include="ObservableExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReactiveTransactionProcessorFactory.cs" />
+    <Compile Include="SemVerTransaction.cs" />
     <Compile Include="StateMachine\ControllerStateMachine.cs" />
     <Compile Include="StateMachine\IControllerActions.cs" />
     <Compile Include="StateMachine\IRotatorState.cs" />

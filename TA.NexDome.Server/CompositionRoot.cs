@@ -13,8 +13,8 @@ using NLog.Fluent;
 using TA.Ascom.ReactiveCommunications;
 using TA.NexDome.DeviceInterface;
 using TA.NexDome.DeviceInterface.StateMachine;
-using TA.NexDome.Server.Properties;
 using TA.NexDome.SharedTypes;
+using static TA.NexDome.Server.Properties.Settings;
 
 namespace TA.NexDome.Server
     {
@@ -68,12 +68,24 @@ namespace TA.NexDome.Server
             Bind<IClock>().To<SystemDateTimeUtcClock>().InSingletonScope();
             Bind<IControllerActions>().To<RxControllerActions>().InSessionScope();
             Bind<DeviceControllerOptions>().ToMethod(BuildDeviceOptions).InSessionScope();
+            Bind<ReactiveTransactionProcessor>().ToSelf().InSessionScope();
+            Bind<TransactionObserver>().ToSelf().InSessionScope();
+            Bind<ITransactionProcessor>().ToMethod(BuildTransactionProcessor).InSessionScope();
+            }
+
+        private ITransactionProcessor BuildTransactionProcessor(IContext arg)
+            {
+            var observer = Kernel.Get<TransactionObserver>();
+            var processor = Kernel.Get<ReactiveTransactionProcessor>();
+            processor.SubscribeTransactionObserver(observer);
+            return processor;
+
             }
 
         private ICommunicationChannel BuildCommunicationsChannel(IContext context)
             {
             var channelFactory = Kernel.Get<ChannelFactory>();
-            var channel = channelFactory.FromConnectionString(Settings.Default.ConnectionString);
+            var channel = channelFactory.FromConnectionString(Default.ConnectionString);
             return channel;
             }
 
@@ -81,11 +93,17 @@ namespace TA.NexDome.Server
             {
             var options = new DeviceControllerOptions
                 {
-                HomeSensorAzimuth = Settings.Default.HomeSensorAzimuth,
-                MaximumShutterCloseTime = TimeSpan.FromSeconds((double) Settings.Default.ShutterOpenCloseTimeSeconds),
-                MaximumFullRotationTime = TimeSpan.FromSeconds((double) Settings.Default.FullRotationTimeSeconds),
-                ShutterTickTimeout = Settings.Default.ShutterTickTimeout,
-                RotatorTickTimeout = Settings.Default.RotatorTickTimeout
+                HomeAzimuth = Default.HomeSensorAzimuth,
+                MaximumShutterCloseTime = TimeSpan.FromSeconds((double) Default.ShutterOpenCloseTimeSeconds),
+                MaximumFullRotationTime = TimeSpan.FromSeconds((double) Default.FullRotationTimeSeconds),
+                ShutterTickTimeout = Default.ShutterTickTimeout,
+                RotatorTickTimeout = Default.RotatorTickTimeout,
+                RotatorMaximumSpeed = Default.RotatorMaximumSpeed,
+                RotatorRampTime = TimeSpan.FromMilliseconds(Default.RotatorRampTimeMilliseconds),
+                ShutterMaximumSpeed = Default.ShutterMaximumSpeed,
+                ShutterRampTime=TimeSpan.FromMilliseconds(Default.ShutterAccelerationRampTimeMilliseconds),
+                ParkAzimuth = Default.ParkAzimuth,
+                WaitForShutterOnConnect = Default.OnConnectWaitForShutterOnline
                 };
             return options;
             }

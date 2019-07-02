@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Text;
 using TA.Ascom.ReactiveCommunications;
 using TA.NexDome.DeviceInterface;
@@ -45,7 +46,7 @@ namespace TA.NexDome.Specifications.Builders
             MaximumShutterCloseTime = TimeSpan.FromMinutes(1),
             ShutterTickTimeout = TimeSpan.FromSeconds(5),
             RotatorTickTimeout = TimeSpan.FromSeconds(5),
-            HomeSensorAzimuth = 10.0m
+            HomeAzimuth = 10.0m
             };
         PropertyChangedEventHandler propertyChangedAction;
         List<Tuple<string, Action>> propertyChangeObservers = new List<Tuple<string, Action>>();
@@ -66,7 +67,8 @@ namespace TA.NexDome.Specifications.Builders
             controllerStateMachine.ShutterLimitSwitches = initialShutterState;
 
             // Build the device controller
-            var controller = new DeviceController(channel, statusFactory, controllerStateMachine, controllerOptions);
+            var fakeTransactionProcessor = new FakeTransactionProcessor(Enumerable.Empty<string>());
+            var controller = new DeviceController(channel, statusFactory, controllerStateMachine, controllerOptions, fakeTransactionProcessor);
 
             // Assemble the device controller test context
             var context = new DeviceControllerContext

@@ -14,6 +14,7 @@
         #endregion
 
         #region NexDome Command Codes
+        public const string CommandPrefix = "@";
         public const string RequestRotatorStatus = "@SRR";
         public const string RequestShutterStatus = "@SRS";
         public const string CmdHardStopShutter = "SWS";
@@ -23,6 +24,11 @@
         public const string CmdSaveShutterSettings = "@ZWS";
         public const string CmdSaveRotatorSettings = "@ZWR";
         public const string CmdSetHomeSensorAzimuthTemplate = "@HWR,{0:000}";
+        public const string CmdGetRotatorVersion = "@FRR";
+        public const string CmdGetShutterVersion = "@FRS";
+        public const string CmdSetMotorSpeedTemplate="@VW{0},{1:0000}";
+        public const string CmdSetRampTimeTemplate="@AW{0},{1:0000}";
+
 
         /// <summary>
         ///     Format string used with <see cref="string.Format(string,object)" /> for building a "GoTo Azimuth" command.

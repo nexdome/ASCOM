@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TA.NexDome.FirmwareUpdater": {
+      "commandName": "Project",
+      "commandLineArgs": "--PortName COM10 --HexFile \"C:\\Users\\Tim\\source\\repos\\TA.NexDome\\TA.NexDome.Rotator\\Debug\\TA.NexDome.Rotator.hex\""
+    }
+  }
+}

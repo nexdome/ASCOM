@@ -28,6 +28,8 @@ namespace TA.NexDome.AscomDome
 
         private void ReleaseUnmanagedResources()
             {
+            if (disposed) return;
+            SharedResources.ConnectionManager.GoOffline(clientId);
             SharedResources.ConnectionManager.UnregisterClient(clientId);
             }
 
@@ -70,10 +72,10 @@ namespace TA.NexDome.AscomDome
         public void OpenShutter() => controller.OpenShutter();
 
         /// <inheritdoc />
-        public void Park() { }
+        public async void Park() => controller.Park();
 
         /// <inheritdoc />
-        public void SetPark() { }
+        public void SetPark() => SharedResources.SetParkPosition((decimal) controller.AzimuthDegrees);
 
         /// <inheritdoc />
         public void SlewToAltitude(double Altitude) { }
@@ -127,7 +129,7 @@ namespace TA.NexDome.AscomDome
         public bool AtHome => controller.AtHome;
 
         /// <inheritdoc />
-        public bool AtPark => controller.AtHome;
+        public bool AtPark => controller.AtPark;
 
         /// <inheritdoc />
         public double Azimuth => controller.AzimuthDegrees;
@@ -145,7 +147,7 @@ namespace TA.NexDome.AscomDome
         public bool CanSetAzimuth => true;
 
         /// <inheritdoc />
-        public bool CanSetPark { get; }
+        public bool CanSetPark => true;
 
         /// <inheritdoc />
         public bool CanSetShutter => true;

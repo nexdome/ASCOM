@@ -50,5 +50,32 @@
     <Setting Name="RotatorTickTimeout" Type="System.TimeSpan" Scope="Application">
       <Value Profile="(Default)">00:00:02</Value>
     </Setting>
+    <Setting Name="ParkAzimuth" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="RotatorMaximumSpeed" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">600</Value>
+    </Setting>
+    <Setting Name="RotatorRampTimeMilliseconds" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1500</Value>
+    </Setting>
+    <Setting Name="ShutterMaximumSpeed" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">600</Value>
+    </Setting>
+    <Setting Name="ShutterAccelerationRampTimeMilliseconds" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1500</Value>
+    </Setting>
+    <Setting Name="TigraLogoWebDestination" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://tigra-astronomy.com</Value>
+    </Setting>
+    <Setting Name="AscomLogoWebDestination" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://ascom-standards.org</Value>
+    </Setting>
+    <Setting Name="NexDomeWebDestination" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://nexdome.com</Value>
+    </Setting>
+    <Setting Name="OnConnectWaitForShutterOnline" Type="System.TimeSpan" Scope="Application">
+      <Value Profile="(Default)">00:00:30</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
