@@ -12,6 +12,7 @@
       <ComponentGroupRef Id="cgReactiveExtensions" />
       <ComponentGroupRef Id="cgReactiveAscom" />
       <ComponentGroupRef Id="cgSharedTypes" />
+      <ComponentGroupRef Id="cgJetBrains" />
       <Component Id="cmpAscomLocalServer" Guid="*" Win64="no">
         <File Id="filLocalServerAssembly"
               Source="$(var.AscomServer.TargetPath)"

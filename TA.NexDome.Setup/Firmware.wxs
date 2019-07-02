@@ -12,6 +12,9 @@
             <Component Id="cmpXbeeResetFirmware" Guid="{6BBF7D13-714A-4A56-A5A0-B8525A96CBA8}">
                 <File Id="filXbeeResetFirmware" KeyPath="yes" Source="$(var.SolutionDir)Firmware\XBeeFactoryReset.hex" />
             </Component>
+            <Component Id="cmpFirmwareReadMe" Guid="{99D697FD-EF8A-4B25-975C-BE92AAD5C739}">
+                <File Id="filFirmwareReadMe" KeyPath="yes" Source="$(var.SolutionDir)Firmware\ReadMe.pdf" />
+            </Component>
         </ComponentGroup>
   </Fragment>
 </Wix>

@@ -6,7 +6,9 @@
 
 using System;
 using System.Windows.Forms;
+using Ninject;
 using NLog;
+using TA.NexDome.SharedTypes;
 
 namespace TA.NexDome.Server
     {
@@ -31,6 +33,12 @@ namespace TA.NexDome.Server
         /// <value>The connection manager.</value>
         public static ClientConnectionManager ConnectionManager { get; }
 
+        public static void SetParkPosition(decimal azimuth)
+            {
+            Properties.Settings.Default.ParkAzimuth = azimuth;
+            var currentConfig = CompositionRoot.Kernel.Get<DeviceControllerOptions>();
+            currentConfig.ParkAzimuth = azimuth;
+            }
 
         public static void DoSetupDialog(Guid clientId)
             {

@@ -187,5 +187,101 @@ namespace TA.NexDome.Server.Properties {
                 return ((global::System.TimeSpan)(this["RotatorTickTimeout"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal ParkAzimuth {
+            get {
+                return ((decimal)(this["ParkAzimuth"]));
+            }
+            set {
+                this["ParkAzimuth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("600")]
+        public int RotatorMaximumSpeed {
+            get {
+                return ((int)(this["RotatorMaximumSpeed"]));
+            }
+            set {
+                this["RotatorMaximumSpeed"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1500")]
+        public int RotatorRampTimeMilliseconds {
+            get {
+                return ((int)(this["RotatorRampTimeMilliseconds"]));
+            }
+            set {
+                this["RotatorRampTimeMilliseconds"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("600")]
+        public int ShutterMaximumSpeed {
+            get {
+                return ((int)(this["ShutterMaximumSpeed"]));
+            }
+            set {
+                this["ShutterMaximumSpeed"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1500")]
+        public int ShutterAccelerationRampTimeMilliseconds {
+            get {
+                return ((int)(this["ShutterAccelerationRampTimeMilliseconds"]));
+            }
+            set {
+                this["ShutterAccelerationRampTimeMilliseconds"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://tigra-astronomy.com")]
+        public string TigraLogoWebDestination {
+            get {
+                return ((string)(this["TigraLogoWebDestination"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://ascom-standards.org")]
+        public string AscomLogoWebDestination {
+            get {
+                return ((string)(this["AscomLogoWebDestination"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://nexdome.com")]
+        public string NexDomeWebDestination {
+            get {
+                return ((string)(this["NexDomeWebDestination"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:00:30")]
+        public global::System.TimeSpan OnConnectWaitForShutterOnline {
+            get {
+                return ((global::System.TimeSpan)(this["OnConnectWaitForShutterOnline"]));
+            }
+        }
     }
 }

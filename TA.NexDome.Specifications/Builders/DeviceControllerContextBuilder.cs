@@ -46,7 +46,7 @@ namespace TA.NexDome.Specifications.Builders
             MaximumShutterCloseTime = TimeSpan.FromMinutes(1),
             ShutterTickTimeout = TimeSpan.FromSeconds(5),
             RotatorTickTimeout = TimeSpan.FromSeconds(5),
-            HomeSensorAzimuth = 10.0m
+            HomeAzimuth = 10.0m
             };
         PropertyChangedEventHandler propertyChangedAction;
         List<Tuple<string, Action>> propertyChangeObservers = new List<Tuple<string, Action>>();

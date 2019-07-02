@@ -27,8 +27,8 @@ namespace TA.NexDome.DeviceInterface
         private bool disposed = false;
         private SemanticVersion rotatorFirmwareVersion;
         private SemanticVersion shutterFirmwareVersion;
-        private static SemanticVersion MinimumRequiredRotatorVersion = new SemanticVersion(1,1,0);
-        private static SemanticVersion MinimumRequiredShutterVersion = new SemanticVersion(1,1,0);
+        private static SemanticVersion MinimumRequiredRotatorVersion = new SemanticVersion(2,9,9);
+        private static SemanticVersion MinimumRequiredShutterVersion = new SemanticVersion(2,9,9);
 
         public DeviceController(ICommunicationChannel channel, ControllerStatusFactory factory,
             ControllerStateMachine machine, DeviceControllerOptions configuration, ITransactionProcessor processor)
@@ -79,6 +79,8 @@ namespace TA.NexDome.DeviceInterface
 
         public ShutterLinkState ShutterLinkState => stateMachine.ShutterLinkState;
 
+        public bool AtPark { get; private set; } = false;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void RotateToHomePosition() => stateMachine.RotateToHomePosition();
@@ -89,26 +91,50 @@ namespace TA.NexDome.DeviceInterface
             channel.Open();
             stateMachine.Initialize(new TA.NexDome.DeviceInterface.StateMachine.Rotator.RequestStatusState(stateMachine));
             stateMachine.Initialize(new TA.NexDome.DeviceInterface.StateMachine.Shutter.OfflineState(stateMachine));
-            stateMachine.WaitForReady(TimeSpan.FromSeconds(5));
+            stateMachine.WaitForReady(configuration.WaitForShutterOnConnect);
+
             if (performOnConnectActions )
                 PerformActionsOnConnect();
             }
 
         void PerformActionsOnConnect()
             {
-            EnsureMinimumRequiredFirmwareVersion();
-            stateMachine.SetHomeSensorAzimuth(configuration.HomeSensorAzimuth);
+            try
+                {
+                EnsureMinimumRequiredFirmwareVersion();
+                }
+            catch (UnsupportedFirmwareVersionException ex)
+                {
+                Environment.FailFast("Unsupported firmware detected", ex);
+                }
+
+            stateMachine.SetHomeSensorAzimuth(configuration.HomeAzimuth);
+            TransactEmptyReponse(string.Format(Constants.CmdSetMotorSpeedTemplate, 'R', configuration.RotatorMaximumSpeed));
+            TransactEmptyReponse(string.Format(Constants.CmdSetRampTimeTemplate, 'R', configuration.RotatorRampTime.TotalMilliseconds));
+            //ToDo - Shutter doesn't come online immediately. How do we wait for it?
+            //TransactEmptyReponse(string.Format(Constants.CmdSetMotorSpeedTemplate, 'S', configuration.ShutterMaximumSpeed));
+            //TransactEmptyReponse(string.Format(Constants.CmdSetRampTimeTemplate, 'S', configuration.ShutterRampTime.TotalMilliseconds));
+            }
+
+        private void TransactEmptyReponse(string command)
+            {
+            var transaction = new EmptyResponseTransaction(command);
+            processor.CommitTransaction(transaction);
+            transaction.WaitForCompletionOrTimeout();
             }
 
         private void EnsureMinimumRequiredFirmwareVersion()
             {
-            var rotatorVersionTransaction = new SemVerTransaction(Constants.CmdGetRotatorVersion);
-            processor.CommitTransaction(rotatorVersionTransaction);
-            rotatorVersionTransaction.WaitForCompletionOrTimeout();
-            rotatorFirmwareVersion = rotatorVersionTransaction.SemanticVersion;
+            var versionTransaction = new SemVerTransaction(Constants.CmdGetRotatorVersion);
+            processor.CommitTransaction(versionTransaction);
+            versionTransaction.WaitForCompletionOrTimeout();
+            versionTransaction.ThrowIfFailed();
+            rotatorFirmwareVersion = versionTransaction.SemanticVersion;
             if (rotatorFirmwareVersion < MinimumRequiredRotatorVersion)
                 {
-                Log.Error($"Unsupported rotator firmware version {rotatorFirmwareVersion}; will throw.");
+                Log.Error()
+                    .Message("Unsupported rotator firmware version {version}; will throw.", rotatorFirmwareVersion)
+                    .Write();
                 MessageBox.Show(
                     "Your rotator firmware is too old to work with this driver.\nPlease contact NexDome for an upgrade.\n\n"
                     + $"Your version: {rotatorFirmwareVersion}\n"
@@ -118,6 +144,30 @@ namespace TA.NexDome.DeviceInterface
                 Close();
                 throw new UnsupportedFirmwareVersionException(MinimumRequiredRotatorVersion, rotatorFirmwareVersion);
                 }
+            //versionTransaction = new SemVerTransaction(Constants.CmdGetShutterVersion);
+            //processor.CommitTransaction(versionTransaction);
+            //versionTransaction.WaitForCompletionOrTimeout();
+            //versionTransaction.ThrowIfFailed();
+            //shutterFirmwareVersion = versionTransaction.SemanticVersion;
+            //if (rotatorFirmwareVersion < MinimumRequiredRotatorVersion)
+            //    {
+            //    Log.Error()
+            //        .Message("Unsupported shutter firmware version {version}; will throw.", shutterFirmwareVersion)
+            //        .Write();
+            //    MessageBox.Show(
+            //        "Your rotator firmware is too old to work with this driver.\nPlease contact NexDome for an upgrade.\n\n"
+            //        + $"Your version: {rotatorFirmwareVersion}\n"
+            //        + $"Minimum required version: {MinimumRequiredRotatorVersion}\n\n"
+            //        + "The connection will now close.", "Firmware Version Incompatible", MessageBoxButtons.OK,
+            //        MessageBoxIcon.Stop);
+            //    Close();
+            //    throw new UnsupportedFirmwareVersionException(MinimumRequiredRotatorVersion, rotatorFirmwareVersion);
+            //    }
+            Log.Info().Message("Rotator firmware version {version}", rotatorFirmwareVersion).Write();
+            //Log.Info().Message("Shutter firmware version {version}", shutterFirmwareVersion).Write();
+            //if (rotatorFirmwareVersion != shutterFirmwareVersion)
+            //    Log.Warn()
+            //        .Message("Rotator/Shutter firmware version mismatch - this is not a recommended configuration");
             }
 
         /// <summary>
@@ -267,13 +317,19 @@ namespace TA.NexDome.DeviceInterface
             var azimuthEncoderTicks = channel.ObservableReceivedCharacters.AzimuthEncoderTicks();
             var azimuthEncoderSubscription = azimuthEncoderTicks
                 .Subscribe(
-                    stateMachine.AzimuthEncoderTickReceived,
+                    OnNextAzimuthEncoderTick,
                     ex => throw new InvalidOperationException(
                         "Encoder tick sequence produced an unexpected error (see ineer exception)", ex),
                     () => throw new InvalidOperationException(
                         "Encoder tick sequence completed unexpectedly, this is probably a bug")
                 );
             disposableSubscriptions.Add(azimuthEncoderSubscription);
+            }
+
+        private void OnNextAzimuthEncoderTick(int position)
+            {
+            AtPark = false; 
+            stateMachine.AzimuthEncoderTickReceived(position);
             }
 
         private void SubscribeShutterPositionTicks()
@@ -292,6 +348,7 @@ namespace TA.NexDome.DeviceInterface
             {
             try
                 {
+                AtPark = false;
                 stateMachine.ShutterEncoderTickReceived(position);
                 }
             catch (Exception ex)
@@ -383,21 +440,23 @@ namespace TA.NexDome.DeviceInterface
         ///     Parks the dome by closing the shutter.
         ///     Blocks until completed or an error occurs.
         /// </summary>
-        public void Park()
+        public async Task Park()
             {
-            TimeSpan timeout;
-            if (ShutterLimitSwitches != SensorState.Closed)
+            await Task.Run(() =>
                 {
-                stateMachine.CloseShutter();
-                timeout = configuration.MaximumFullRotationTime + configuration.MaximumShutterCloseTime;
-                }
-            else
-                {
-                stateMachine.RotateToHomePosition();
-                timeout = configuration.MaximumFullRotationTime;
-                }
-            // Potentially throws TimeoutException - let this propagate to the client application.
-            stateMachine.WaitForReady(timeout);
+                try
+                    {
+                    stateMachine.RotateToAzimuthDegrees((double)configuration.ParkAzimuth);
+                    stateMachine.WaitForReady(configuration.MaximumFullRotationTime); 
+                    stateMachine.CloseShutter();
+                    stateMachine.WaitForReady(configuration.MaximumShutterCloseTime);
+                    AtPark = true;
+                    }
+                catch (Exception e)
+                    {
+                    Log.Error().Exception(e).Write();
+                    }
+                });
             }
 
         private void ReleaseUnmanagedResources()

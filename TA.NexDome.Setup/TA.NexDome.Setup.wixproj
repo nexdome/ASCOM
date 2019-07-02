@@ -41,6 +41,8 @@
     <Compile Include="FeatureTree.wxs" />
     <Compile Include="Firmware.wxs" />
     <Compile Include="FirmwareUploader.wxs" />
+    <Compile Include="JetBrains.wxs" />
+    <Compile Include="NetFxPrerequisite.wxs" />
     <Compile Include="Ninject.wxs" />
     <Compile Include="NLog.wxs" />
     <Compile Include="PostSharp.wxs" />
@@ -49,6 +51,7 @@
     <Compile Include="ReactiveASCOM.wxs" />
     <Compile Include="ReactiveExtensions.wxs" />
     <Compile Include="SharedTypes.wxs" />
+    <Compile Include="System.wxs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config.wxi" />

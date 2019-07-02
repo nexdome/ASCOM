@@ -4,6 +4,7 @@
 using System;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using TA.Ascom.ReactiveCommunications;
 using TA.Ascom.ReactiveCommunications.Diagnostics;
@@ -17,7 +18,7 @@ namespace TA.NexDome.DeviceInterface
         private static readonly Regex versionResponseExpression = new Regex(VersionResponsePattern,
             RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture |
             RegexOptions.Singleline);
-        public SemVerTransaction(string command) : base(command) { }
+        public SemVerTransaction(string command) : base(command.EnsureEncapsulation()) { }
 
         /// <inheritdoc />
         public override void ObserveResponse(IObservable<char> source)

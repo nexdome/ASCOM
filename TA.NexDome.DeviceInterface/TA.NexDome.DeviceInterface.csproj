@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="CommunicationsStackBuilder.cs" />
     <Compile Include="DeviceController.cs" />
+    <Compile Include="EmptyResponseTransaction.cs" />
     <Compile Include="ITransactionProcessorFactory.cs" />
     <Compile Include="ObservableExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

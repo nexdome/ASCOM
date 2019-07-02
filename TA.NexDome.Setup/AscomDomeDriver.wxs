@@ -17,6 +17,7 @@
       <ComponentGroupRef Id="cgPostSharpAspects" />
       <ComponentGroupRef Id="cgAscomServer" />
       <ComponentGroupRef Id="cgSharedTypes" />
+      <ComponentGroupRef Id="cgJetBrains" />
       <Component Id="cmpAscomDomeDriver"
                  Directory="INSTALLDIRECTORY"
                  Guid="*"

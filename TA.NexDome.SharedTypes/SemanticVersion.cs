@@ -138,9 +138,12 @@ namespace TA.NexDome.SharedTypes
             return builder.ToString();
         }
 
-        public static bool IsValid(string candidate) => SemanticVersionRegex.IsMatch(candidate);
+        public static bool IsValid(string candidate)
+            {
+            return SemanticVersionRegex.IsMatch(candidate);
+            }
 
-        #region Equality members
+    #region Equality members
 
         public bool Equals(SemanticVersion other)
         {

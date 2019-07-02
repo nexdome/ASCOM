@@ -7,6 +7,8 @@
 	    <ComponentGroupRef Id="cgReactiveAscom" />
 	    <ComponentGroupRef Id="cgPostSharpAspects" />
 	    <ComponentGroupRef Id="cgSharedTypes" />
+      <ComponentGroupRef Id="cgJetBrains" />
+      <ComponentGroupRef Id="cgSystem" />
 	    <Component Id="cmpCommunicationsLayer" Guid="*" Win64="no">
 	      <File Id="filCommunicationsLayerAssembly"
 	            Source="$(var.DeviceInterface.TargetPath)"

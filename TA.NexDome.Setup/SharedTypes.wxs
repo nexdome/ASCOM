@@ -4,6 +4,7 @@
   <Fragment>
     <DirectoryRef Id="INSTALLDIRECTORY" />
     <ComponentGroup Id="cgSharedTypes">
+      <ComponentGroupRef Id="cgJetBrains" />
       <Component Id="cmpSharedTypes" Directory="INSTALLDIRECTORY" Guid="*" Win64="no">
         <File Id="filSharedTypesAssembly"
               Source="$(var.SharedTypes.TargetPath)" 
