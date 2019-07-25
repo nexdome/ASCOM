@@ -60,6 +60,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.StopCommand = new System.Windows.Forms.Button();
             this.statusAnnunciatorPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -164,7 +165,7 @@
             this.AzimuthMotorAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.AzimuthMotorAnnunciator.Cadence = ASCOM.Controls.CadencePattern.BlinkAlarm;
             this.AzimuthMotorAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
-            this.AzimuthMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.AzimuthMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.AzimuthMotorAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.AzimuthMotorAnnunciator.Location = new System.Drawing.Point(95, 0);
             this.AzimuthMotorAnnunciator.Mute = false;
@@ -316,7 +317,7 @@
             this.ShutterMotorAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.ShutterMotorAnnunciator.Cadence = ASCOM.Controls.CadencePattern.BlinkAlarm;
             this.ShutterMotorAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
-            this.ShutterMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.ShutterMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.ShutterMotorAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.ShutterMotorAnnunciator.Location = new System.Drawing.Point(95, 17);
             this.ShutterMotorAnnunciator.Mute = false;
@@ -405,7 +406,7 @@
             // 
             // SetupCommand
             // 
-            this.SetupCommand.Location = new System.Drawing.Point(12, 70);
+            this.SetupCommand.Location = new System.Drawing.Point(12, 99);
             this.SetupCommand.Name = "SetupCommand";
             this.SetupCommand.Size = new System.Drawing.Size(75, 23);
             this.SetupCommand.TabIndex = 8;
@@ -495,6 +496,15 @@
             this.label6.TabIndex = 18;
             this.label6.Text = "15V";
             // 
+            // StopCommand
+            // 
+            this.StopCommand.Location = new System.Drawing.Point(12, 70);
+            this.StopCommand.Name = "StopCommand";
+            this.StopCommand.Size = new System.Drawing.Size(75, 23);
+            this.StopCommand.TabIndex = 19;
+            this.StopCommand.Text = "Stop";
+            this.StopCommand.UseVisualStyleBackColor = true;
+            // 
             // ServerStatusDisplay
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -502,6 +512,7 @@
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(532, 129);
+            this.Controls.Add(this.StopCommand);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -567,6 +578,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button StopCommand;
         }
 }
 
