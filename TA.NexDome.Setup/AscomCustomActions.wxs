@@ -10,6 +10,13 @@
   -->
 
   <Fragment>
+    <!-- truth table for installer varables (install vs uninstall vs repair vs upgrade) https://stackoverflow.com/a/17608049/1721136 -->
+    <SetProperty Id="_INSTALL"   After="FindRelatedProducts" Value="1"><![CDATA[Installed="" AND PREVIOUSVERSIONSINSTALLED=""]]></SetProperty>
+    <SetProperty Id="_UNINSTALL" After="FindRelatedProducts" Value="1"><![CDATA[PREVIOUSVERSIONSINSTALLED="" AND REMOVE="ALL"]]></SetProperty>
+    <SetProperty Id="_CHANGE"    After="FindRelatedProducts" Value="1"><![CDATA[Installed<>"" AND REINSTALL="" AND PREVIOUSVERSIONSINSTALLED<>"" AND REMOVE=""]]></SetProperty>
+    <SetProperty Id="_REPAIR"    After="FindRelatedProducts" Value="1"><![CDATA[REINSTALL<>""]]></SetProperty>
+    <SetProperty Id="_UPGRADE"   After="FindRelatedProducts" Value="1"><![CDATA[PREVIOUSVERSIONSINSTALLED<>"" ]]></SetProperty>
+
     <Binary Id="AscomCustomActions"
             SourceFile="..\packages\TA.Ascom.WixCustomActions.0.1.0-Beta15\lib\net40\TA.Ascom.WixCustomActions.CA.dll" />
     <CustomAction Id="caPrepareAscomDeviceProfiles"
@@ -29,8 +36,8 @@
                   Return="ignore" />
     <InstallExecuteSequence>
       <Custom Action="caPrepareAscomDeviceProfiles" Before="InstallInitialize" />
-      <Custom Action="caUnregisterDrivers" After="RemoveFiles">Installed OR MaintenanceMode="Modify" OR UPGRADINGPRODUCTCODE</Custom>
-      <Custom Action="caRegisterDrivers" Before="InstallFiles">NOT REMOVE OR Installed</Custom>
+      <Custom Action="caUnregisterDrivers" After="RemoveFiles">_UNINSTALL OR _UPGRADE OR _REPAIR OR _CHANGE</Custom>
+      <Custom Action="caRegisterDrivers" Before="InstallFiles">_INSTALL OR _UPGRADE OR _REPAIR OR _CHANGE</Custom>
     </InstallExecuteSequence>
     
     <CustomTable Id="AscomDeviceProfiles" >
