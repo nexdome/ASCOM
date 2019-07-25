@@ -101,8 +101,23 @@ namespace TA.NexDome.Server
             clickCommands = new List<ClickCommand>
                 {
                 OpenButton.AttachCommand(ExecuteOpenShutter, CanMoveShutterOrDome),
-                CloseButton.AttachCommand(ExecuteCloseShutter, CanMoveShutterOrDome)
+                CloseButton.AttachCommand(ExecuteCloseShutter, CanMoveShutterOrDome),
+                StopCommand.AttachCommand(ExecuteStop,CanStop)
                 };
+            }
+
+        private bool CanStop()
+            {
+            var maybeController = SharedResources.ConnectionManager.MaybeControllerInstance;
+            if (!maybeController.Any()) return false;
+            var controller = maybeController.Single();
+            return controller.IsMoving;
+            }
+
+        private void ExecuteStop()
+            {
+            if (SharedResources.ConnectionManager.MaybeControllerInstance.Any())
+                SharedResources.ConnectionManager.MaybeControllerInstance.Single().RequestEmergencyStop();
             }
 
         private void DetachCommands()
