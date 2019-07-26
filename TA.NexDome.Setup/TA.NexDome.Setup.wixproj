@@ -117,12 +117,12 @@
     <CreateProperty Value="$(TargetDir)$(TargetFileName)">
       <Output TaskParameter="Value" PropertyName="TargetPath" />
     </CreateProperty>
-    <Exec Command="dotnet publish ..\TA.NexDome.FirmwareUpdater\TA.NexDome.FirmwareUpdater.csproj -c $(Configuration) -r win10-x86" />
+    <Exec Command="dotnet publish ..\TA.NexDome.FirmwareUpdater\TA.NexDome.FirmwareUpdater.csproj -c $(Configuration) -r win-x86 --self-contained" />
     <PropertyGroup>
-      <LinkerBaseInputPaths>..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp2.1\win10-x86\publish</LinkerBaseInputPaths>
-      <DefineConstants>BasePath=..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp2.1\win10-x86\publish</DefineConstants>
+      <LinkerBaseInputPaths>..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp2.1\win-x86\publish</LinkerBaseInputPaths>
+      <DefineConstants>BasePath=..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp2.1\win-x86\publish</DefineConstants>
     </PropertyGroup>
-    <HeatDirectory OutputFile="FirmwareUploader.wxs" DirectoryRefId="dirFirmwareUploader" ComponentGroupName="cgFirmwareUploader" SuppressCom="true" Directory="..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp2.1\win10-x86\publish" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" AutoGenerateGuids="false" GenerateGuidsNow="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.BasePath" />
+    <HeatDirectory OutputFile="FirmwareUploader.wxs" DirectoryRefId="dirFirmwareUploader" ComponentGroupName="cgFirmwareUploader" SuppressCom="true" Directory="..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp2.1\win-x86\publish" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" AutoGenerateGuids="false" GenerateGuidsNow="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.BasePath" />
   </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

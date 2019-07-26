@@ -77,5 +77,14 @@
     <Setting Name="OnConnectWaitForShutterOnline" Type="System.TimeSpan" Scope="Application">
       <Value Profile="(Default)">00:00:30</Value>
     </Setting>
+    <Setting Name="FirmwareImageDirectory" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\NexDome-Firmware</Value>
+    </Setting>
+    <Setting Name="FirmwareUploaderExecutable" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">TA.NexDome.FirmwareUpdater.exe</Value>
+    </Setting>
+    <Setting Name="FirmwareUploadVerboseOutput" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

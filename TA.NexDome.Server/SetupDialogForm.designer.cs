@@ -50,6 +50,7 @@ namespace TA.NexDome.Server
             this.RotatorRampTimeTrackBar = new System.Windows.Forms.TrackBar();
             this.ShutterAccelerationRampTimeTrackBar = new System.Windows.Forms.TrackBar();
             this.ShutterMaximumSpeedTrackBar = new System.Windows.Forms.TrackBar();
+            this.communicationSettingsControl1 = new TA.NexDome.Server.CommunicationSettingsControl();
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.AboutBox = new System.Windows.Forms.Button();
@@ -74,8 +75,8 @@ namespace TA.NexDome.Server
             this.label17 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
-            this.communicationSettingsControl1 = new TA.NexDome.Server.CommunicationSettingsControl();
             this.settingsWarningLabel = new System.Windows.Forms.Label();
+            this.FirmwareUpdateCommand = new System.Windows.Forms.Button();
             toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.ShutterOpenCloseTimeSeconds)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FullRotationTimeSeconds)).BeginInit();
@@ -374,13 +375,23 @@ namespace TA.NexDome.Server
             this.ShutterMaximumSpeedTrackBar.Value = global::TA.NexDome.Server.Properties.Settings.Default.ShutterMaximumSpeed;
             this.ShutterMaximumSpeedTrackBar.Scroll += new System.EventHandler(this.ShutterMaximumSpeedTrackBar_Scroll);
             // 
+            // communicationSettingsControl1
+            // 
+            this.communicationSettingsControl1.AutoSize = true;
+            this.communicationSettingsControl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.communicationSettingsControl1.Location = new System.Drawing.Point(6, 19);
+            this.communicationSettingsControl1.Name = "communicationSettingsControl1";
+            this.communicationSettingsControl1.Size = new System.Drawing.Size(354, 36);
+            this.communicationSettingsControl1.TabIndex = 7;
+            toolTip1.SetToolTip(this.communicationSettingsControl1, resources.GetString("communicationSettingsControl1.ToolTip"));
+            // 
             // cmdOK
             // 
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdOK.Location = new System.Drawing.Point(412, 308);
+            this.cmdOK.Location = new System.Drawing.Point(388, 382);
             this.cmdOK.Name = "cmdOK";
-            this.cmdOK.Size = new System.Drawing.Size(59, 24);
+            this.cmdOK.Size = new System.Drawing.Size(83, 24);
             this.cmdOK.TabIndex = 0;
             this.cmdOK.Text = "OK";
             this.cmdOK.UseVisualStyleBackColor = true;
@@ -390,9 +401,9 @@ namespace TA.NexDome.Server
             // 
             this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(412, 338);
+            this.cmdCancel.Location = new System.Drawing.Point(388, 412);
             this.cmdCancel.Name = "cmdCancel";
-            this.cmdCancel.Size = new System.Drawing.Size(59, 25);
+            this.cmdCancel.Size = new System.Drawing.Size(83, 25);
             this.cmdCancel.TabIndex = 1;
             this.cmdCancel.Text = "Cancel";
             this.cmdCancel.UseVisualStyleBackColor = true;
@@ -401,9 +412,9 @@ namespace TA.NexDome.Server
             // AboutBox
             // 
             this.AboutBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.AboutBox.Location = new System.Drawing.Point(412, 236);
+            this.AboutBox.Location = new System.Drawing.Point(388, 217);
             this.AboutBox.Name = "AboutBox";
-            this.AboutBox.Size = new System.Drawing.Size(59, 23);
+            this.AboutBox.Size = new System.Drawing.Size(83, 23);
             this.AboutBox.TabIndex = 8;
             this.AboutBox.Text = "About...";
             this.AboutBox.UseVisualStyleBackColor = true;
@@ -624,16 +635,6 @@ namespace TA.NexDome.Server
             this.label19.Text = "Rotator Maximum Speed (steps/sec)";
             this.label19.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // communicationSettingsControl1
-            // 
-            this.communicationSettingsControl1.AutoSize = true;
-            this.communicationSettingsControl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.communicationSettingsControl1.Location = new System.Drawing.Point(6, 19);
-            this.communicationSettingsControl1.Name = "communicationSettingsControl1";
-            this.communicationSettingsControl1.Size = new System.Drawing.Size(354, 36);
-            this.communicationSettingsControl1.TabIndex = 7;
-            toolTip1.SetToolTip(this.communicationSettingsControl1, resources.GetString("communicationSettingsControl1.ToolTip"));
-            // 
             // settingsWarningLabel
             // 
             this.settingsWarningLabel.AutoSize = true;
@@ -645,6 +646,16 @@ namespace TA.NexDome.Server
             this.settingsWarningLabel.TabIndex = 16;
             this.settingsWarningLabel.Text = "Settings take effect after all clients disconnect";
             // 
+            // FirmwareUpdateCommand
+            // 
+            this.FirmwareUpdateCommand.Location = new System.Drawing.Point(388, 265);
+            this.FirmwareUpdateCommand.Name = "FirmwareUpdateCommand";
+            this.FirmwareUpdateCommand.Size = new System.Drawing.Size(83, 68);
+            this.FirmwareUpdateCommand.TabIndex = 17;
+            this.FirmwareUpdateCommand.Text = "Update Firmware";
+            this.FirmwareUpdateCommand.UseVisualStyleBackColor = true;
+            this.FirmwareUpdateCommand.Click += new System.EventHandler(this.FirmwareUpdateCommand_Click);
+            // 
             // SetupDialogForm
             // 
             this.AcceptButton = this.cmdOK;
@@ -652,6 +663,7 @@ namespace TA.NexDome.Server
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cmdCancel;
             this.ClientSize = new System.Drawing.Size(483, 734);
+            this.Controls.Add(this.FirmwareUpdateCommand);
             this.Controls.Add(this.settingsWarningLabel);
             this.Controls.Add(this.ShutterParametersGroup);
             this.Controls.Add(this.RotatorParametersGroup);
@@ -746,5 +758,6 @@ namespace TA.NexDome.Server
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.TrackBar ShutterMaximumSpeedTrackBar;
         private System.Windows.Forms.Label settingsWarningLabel;
+        private System.Windows.Forms.Button FirmwareUpdateCommand;
         }
 }

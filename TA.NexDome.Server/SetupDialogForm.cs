@@ -7,7 +7,9 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Reactive.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 using NLog.Fluent;
 
@@ -16,6 +18,8 @@ namespace TA.NexDome.Server
     [ComVisible(false)] // Form not registered for COM!
     public partial class SetupDialogForm : Form
         {
+        private ClickCommand updateClickCommand;
+
         public SetupDialogForm() => InitializeComponent();
 
         private void cmdOK_Click(object sender, EventArgs e) // OK button event handler
@@ -57,6 +61,13 @@ namespace TA.NexDome.Server
 
         private void SetupDialogForm_Load(object sender, EventArgs e)
             {
+            var observableClientStatus = Observable.FromEventPattern<EventArgs>(
+                handler => SharedResources.ConnectionManager.ClientStatusChanged += handler,
+                handler => SharedResources.ConnectionManager.ClientStatusChanged -= handler
+            );
+            updateClickCommand = FirmwareUpdateCommand.AttachCommand(ExecuteFirmwareUpdate, CanUpdateFirmware);
+            observableClientStatus.ObserveOn(SynchronizationContext.Current)
+                .Subscribe(item => updateClickCommand.CanExecuteChanged());
             int onlineClients = SharedResources.ConnectionManager.OnlineClientCount;
             bool enableDisconnectedControls = onlineClients == 0;
             if (onlineClients == 0)
@@ -77,6 +88,22 @@ namespace TA.NexDome.Server
             ShutterMaximumSpeedCurrentValue.Text = ShutterMaximumSpeedTrackBar.Value.ToString();
             ShutterRampTimeCurrentValue.Text = ShutterAccelerationRampTimeTrackBar.Value.ToString();
             SetControlAppearance();
+            }
+
+        private void ConnectionManager_ClientStatusChanged(object sender, EventArgs e)
+            {
+            updateClickCommand.CanExecuteChanged();
+            }
+
+        private void ExecuteFirmwareUpdate()
+            {
+            var updateForm = new FirmwareUpdate();
+            updateForm.ShowDialog();
+            }
+
+        private bool CanUpdateFirmware()
+            {
+            return SharedResources.ConnectionManager.OnlineClientCount == 0;
             }
 
         private void AboutBox_Click(object sender, EventArgs e)
@@ -144,5 +171,9 @@ namespace TA.NexDome.Server
         private void ShutterMaximumSpeedTrackBar_Scroll(object sender, EventArgs e) => ShutterMaximumSpeedCurrentValue.Text = ShutterMaximumSpeedTrackBar.Value.ToString();
 
         private void ShutterAccelerationRampTimeTrackBar_Scroll(object sender, EventArgs e) => ShutterRampTimeCurrentValue.Text = ShutterAccelerationRampTimeTrackBar.Value.ToString();
+
+        private void FirmwareUpdateCommand_Click(object sender, EventArgs e)
+            {
+            }
         }
     }

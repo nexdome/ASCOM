@@ -139,7 +139,9 @@ namespace TA.NexDome.DeviceInterface
                     "Your rotator firmware is too old to work with this driver.\nPlease contact NexDome for an upgrade.\n\n"
                     + $"Your version: {rotatorFirmwareVersion}\n"
                     + $"Minimum required version: {MinimumRequiredRotatorVersion}\n\n"
-                    + "The connection will now close.", "Firmware Version Incompatible", MessageBoxButtons.OK,
+                    + "The connection will now close.\n\n"
+                    + "See the Seup Dialog for firmware update options.", 
+                    "Firmware Version Incompatible", MessageBoxButtons.OK,
                     MessageBoxIcon.Stop);
                 Close();
                 throw new UnsupportedFirmwareVersionException(MinimumRequiredRotatorVersion, rotatorFirmwareVersion);

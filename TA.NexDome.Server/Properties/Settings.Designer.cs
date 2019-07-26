@@ -283,5 +283,32 @@ namespace TA.NexDome.Server.Properties {
                 return ((global::System.TimeSpan)(this["OnConnectWaitForShutterOnline"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\NexDome-Firmware")]
+        public string FirmwareImageDirectory {
+            get {
+                return ((string)(this["FirmwareImageDirectory"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("TA.NexDome.FirmwareUpdater.exe")]
+        public string FirmwareUploaderExecutable {
+            get {
+                return ((string)(this["FirmwareUploaderExecutable"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool FirmwareUploadVerboseOutput {
+            get {
+                return ((bool)(this["FirmwareUploadVerboseOutput"]));
+            }
+        }
     }
 }

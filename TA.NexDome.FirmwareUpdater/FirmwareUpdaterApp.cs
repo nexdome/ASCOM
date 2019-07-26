@@ -48,10 +48,11 @@ namespace TA.NexDome.FirmwareUpdater
         if (errorMessages.Any())
             Environment.Exit(-1);
 
-        await PerformUpload(parsedOptions);
+        var exitCode = await PerformUpload(parsedOptions);
+        Environment.Exit(exitCode);
         }
 
-    async Task PerformUpload(FirmwareUploaderOptions options)
+    async Task<int> PerformUpload(FirmwareUploaderOptions options)
         {
         Console.WriteLine($"COM port: {options.PortName}");
         Console.WriteLine($"File: {options.HexFile}");
@@ -67,12 +68,23 @@ namespace TA.NexDome.FirmwareUpdater
         var exitCode = await InvokeAvrDude(bootloaderPort, options.HexFile, options.Verbose);
         Console.WriteLine($"Programmer returned with exit code {exitCode}");
         var disposition = exitCode == 0 ? "SUCCESSFUL" : "FAILED";
-        Console.WriteLine();
-        Console.WriteLine($"*******************************************************");
-        Console.WriteLine($"*                                                      ");
-        Console.WriteLine($"*   Firmware update {disposition}");
-        Console.WriteLine($"*                                                      ");
-        Console.WriteLine($"*******************************************************");
+        if (exitCode == 0)
+            {
+            Console.WriteLine($"*******************************************************");
+            Console.WriteLine($"*                                                      ");
+            Console.WriteLine($"*   Firmware update SUCCESSFUL                         ");
+            Console.WriteLine($"*                                                      ");
+            Console.WriteLine($"*******************************************************");
+            }
+        else
+            {
+            Console.Error.WriteLine($"*******************************************************");
+            Console.Error.WriteLine($"*                                                      ");
+            Console.Error.WriteLine($"*   Firmware update FAILED with code {exitCode}");
+            Console.Error.WriteLine($"*                                                      ");
+            Console.Error.WriteLine($"*******************************************************");
+            }
+        return exitCode;
         }
 
     private async Task<int> InvokeAvrDude(string bootloaderPort, string hexFile, bool showAvrDudeOutput = false)
@@ -89,7 +101,7 @@ namespace TA.NexDome.FirmwareUpdater
         TextWriter outputWriter = showAvrDudeOutput ? Console.Out : TextWriter.Null;
         TextWriter errorWriter = showAvrDudeOutput ? Console.Error : TextWriter.Null;
         var exitCode = await AsyncProcess.StartProcess(avrDudeExecutable, avrDudeOptions, avrDudeDirectory, 20000,
-            outputWriter, errorWriter);
+            outputWriter, outputWriter);
         return exitCode;
         }
 
