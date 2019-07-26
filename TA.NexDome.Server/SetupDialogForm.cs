@@ -144,5 +144,11 @@ namespace TA.NexDome.Server
         private void ShutterMaximumSpeedTrackBar_Scroll(object sender, EventArgs e) => ShutterMaximumSpeedCurrentValue.Text = ShutterMaximumSpeedTrackBar.Value.ToString();
 
         private void ShutterAccelerationRampTimeTrackBar_Scroll(object sender, EventArgs e) => ShutterRampTimeCurrentValue.Text = ShutterAccelerationRampTimeTrackBar.Value.ToString();
+
+        private void FirmwareUpdateCommand_Click(object sender, EventArgs e)
+            {
+            var updateForm = new FirmwareUpdate();
+            updateForm.ShowDialog();
+            }
         }
     }
