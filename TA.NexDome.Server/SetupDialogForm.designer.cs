@@ -389,9 +389,9 @@ namespace TA.NexDome.Server
             // 
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdOK.Location = new System.Drawing.Point(412, 308);
+            this.cmdOK.Location = new System.Drawing.Point(388, 382);
             this.cmdOK.Name = "cmdOK";
-            this.cmdOK.Size = new System.Drawing.Size(59, 24);
+            this.cmdOK.Size = new System.Drawing.Size(83, 24);
             this.cmdOK.TabIndex = 0;
             this.cmdOK.Text = "OK";
             this.cmdOK.UseVisualStyleBackColor = true;
@@ -401,9 +401,9 @@ namespace TA.NexDome.Server
             // 
             this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(412, 338);
+            this.cmdCancel.Location = new System.Drawing.Point(388, 412);
             this.cmdCancel.Name = "cmdCancel";
-            this.cmdCancel.Size = new System.Drawing.Size(59, 25);
+            this.cmdCancel.Size = new System.Drawing.Size(83, 25);
             this.cmdCancel.TabIndex = 1;
             this.cmdCancel.Text = "Cancel";
             this.cmdCancel.UseVisualStyleBackColor = true;
@@ -412,9 +412,9 @@ namespace TA.NexDome.Server
             // AboutBox
             // 
             this.AboutBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.AboutBox.Location = new System.Drawing.Point(412, 236);
+            this.AboutBox.Location = new System.Drawing.Point(388, 217);
             this.AboutBox.Name = "AboutBox";
-            this.AboutBox.Size = new System.Drawing.Size(59, 23);
+            this.AboutBox.Size = new System.Drawing.Size(83, 23);
             this.AboutBox.TabIndex = 8;
             this.AboutBox.Text = "About...";
             this.AboutBox.UseVisualStyleBackColor = true;
@@ -648,11 +648,11 @@ namespace TA.NexDome.Server
             // 
             // FirmwareUpdateCommand
             // 
-            this.FirmwareUpdateCommand.Location = new System.Drawing.Point(402, 392);
+            this.FirmwareUpdateCommand.Location = new System.Drawing.Point(388, 265);
             this.FirmwareUpdateCommand.Name = "FirmwareUpdateCommand";
-            this.FirmwareUpdateCommand.Size = new System.Drawing.Size(75, 23);
+            this.FirmwareUpdateCommand.Size = new System.Drawing.Size(83, 68);
             this.FirmwareUpdateCommand.TabIndex = 17;
-            this.FirmwareUpdateCommand.Text = "Update";
+            this.FirmwareUpdateCommand.Text = "Update Firmware";
             this.FirmwareUpdateCommand.UseVisualStyleBackColor = true;
             this.FirmwareUpdateCommand.Click += new System.EventHandler(this.FirmwareUpdateCommand_Click);
             // 
