@@ -25,6 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration", "Configurat
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
+		GitVersion.yml = GitVersion.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.NexDome.Server", "TA.NexDome.Server\TA.NexDome.Server.csproj", "{FF0B89E7-3601-4B5F-B0DA-17C329D2EE2D}"

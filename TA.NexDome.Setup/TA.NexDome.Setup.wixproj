@@ -37,6 +37,7 @@
     <Compile Include="AscomDomeDriver.wxs" />
     <Compile Include="AscomLocalServer.wxs" />
     <Compile Include="CommunicationsLayer.wxs" />
+    <Compile Include="ConsoleControl.wxs" />
     <Compile Include="Directories.wxs" />
     <Compile Include="FeatureTree.wxs" />
     <Compile Include="Firmware.wxs" />
@@ -117,7 +118,7 @@
     <CreateProperty Value="$(TargetDir)$(TargetFileName)">
       <Output TaskParameter="Value" PropertyName="TargetPath" />
     </CreateProperty>
-    <Exec Command="dotnet publish ..\TA.NexDome.FirmwareUpdater\TA.NexDome.FirmwareUpdater.csproj -c $(Configuration) -r win-x86 --self-contained" />
+    <Exec Command="dotnet publish ..\TA.NexDome.FirmwareUpdater\TA.NexDome.FirmwareUpdater.csproj -c $(Configuration) -r win-x86 --framework netcoreapp2.1 --self-contained" />
     <PropertyGroup>
       <LinkerBaseInputPaths>..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp2.1\win-x86\publish</LinkerBaseInputPaths>
       <DefineConstants>BasePath=..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp2.1\win-x86\publish</DefineConstants>
