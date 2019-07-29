@@ -67,9 +67,9 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             }
 
         /// <inheritdoc />
-        public void SetHomeSensorAzimuth(decimal azimuth)
+        public void SetHomeSensorPosition(int stepsFromTrueNorth)
             {
-            var command = string.Format(Constants.CmdSetHomeSensorAzimuthTemplate, (int)azimuth);
+            var command = string.Format(Constants.CmdSetHomeSensorAzimuthTemplate, stepsFromTrueNorth);
             SendCommand(command);
             }
 
