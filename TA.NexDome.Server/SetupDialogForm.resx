@@ -123,6 +123,14 @@
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>203, 17</value>
   </metadata>
+  <data name="ParkAzimuth.ToolTip" xml:space="preserve">
+    <value>Park Azimuth is the azimuth (in degrees)
+measured clockwise fromTrue North, where
+the shutter charging contacts align with the
+battery charger. Issuing the Park command
+rotates to the park azimuth then closes
+the shutter. </value>
+  </data>
   <data name="communicationSettingsControl1.ToolTip" xml:space="preserve">
     <value>Set the communications parameters for your installation.
 If the "Use Simulator" box is checked, then the driver uses
