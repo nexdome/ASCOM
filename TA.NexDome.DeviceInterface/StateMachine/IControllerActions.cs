@@ -48,6 +48,13 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         /// </summary>
         void RequestShutterStatus();
 
+        /// <summary>
+        /// Sets the home sensor azimuth.
+        /// </summary>
+        /// <param name="azimuth">The azimuth in decimal degrees.</param>
+        /// <remarks>
+        ///     Note that the azimuth must be converted to steps prior to sending to the hardware.
+        /// </remarks>
         void SetHomeSensorAzimuth(decimal azimuth);
 
         void SavePersistentSettings();

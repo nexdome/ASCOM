@@ -289,7 +289,9 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         public void SetHomeSensorAzimuth(decimal azimuth)
             {
             Log.Info().Message("Set home sensor azimuth to {azimuth}", azimuth).Write();
-            ControllerActions.SetHomeSensorAzimuth(azimuth);
+            var ticksPerDegree = (decimal)DomeCircumference / 360.0m;
+            var homeStepPosition = azimuth * ticksPerDegree;
+            ControllerActions.SetHomeSensorAzimuth(homeStepPosition);
             TransitionToState(new RequestStatusState(this));
             }
 
