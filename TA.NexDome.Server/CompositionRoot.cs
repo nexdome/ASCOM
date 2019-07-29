@@ -7,6 +7,7 @@
 using System;
 using Ninject;
 using Ninject.Activation;
+using Ninject.Infrastructure.Disposal;
 using Ninject.Modules;
 using Ninject.Syntax;
 using NLog.Fluent;
@@ -33,7 +34,7 @@ namespace TA.NexDome.Server
             {
             var scope = new ScopeObject();
             Log.Info()
-                .Message($"Beginning session scope id={scope.ScopeId}")
+                .Message("Beginning session scope {scope}", scope)
                 .Write();
             CurrentScope = scope;
             }
@@ -42,9 +43,18 @@ namespace TA.NexDome.Server
             {
             return binding.InScope(ctx => CurrentScope);
             }
+
+        public static void EndSessionScope()
+            {
+            Log.Info()
+                .Message("Ending session scope {scope}", CurrentScope)
+                .Write();
+            CurrentScope?.Dispose();
+            CurrentScope = null;
+            }
         }
 
-    internal class ScopeObject
+    internal class ScopeObject : INotifyWhenDisposed
         {
         private static int scopeId;
 
@@ -54,6 +64,28 @@ namespace TA.NexDome.Server
             }
 
         public int ScopeId => scopeId;
+
+        /// <inheritdoc />
+        public virtual void Dispose()
+            {
+            try
+                {
+                Disposed?.Invoke(this, EventArgs.Empty);
+                }
+            finally
+                {
+                IsDisposed = true;
+                }
+            }
+
+        /// <inheritdoc />
+        public bool IsDisposed { get; private set; }
+
+        /// <inheritdoc />
+        public event EventHandler Disposed;
+
+        /// <inheritdoc />
+        public override string ToString() => $"{nameof(ScopeId)}: {ScopeId}";
         }
 
     internal class CoreModule : NinjectModule

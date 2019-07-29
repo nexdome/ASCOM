@@ -55,8 +55,15 @@ namespace TA.NexDome.AscomDome
         public void Dispose()
             {
             if (disposed) return;
-            ReleaseUnmanagedResources();
-            GC.SuppressFinalize(this);
+            try
+                {
+                ReleaseUnmanagedResources();
+                GC.SuppressFinalize(this);
+                }
+            finally
+                {
+                disposed = true;
+                }
             }
 
         /// <inheritdoc />

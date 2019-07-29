@@ -142,8 +142,9 @@ namespace TA.NexDome.Server
         private void DestroyControllerInstance()
             {
             if (controllerInstance.Any())
-                controllerInstance.Single().Close();
+                controllerInstance.Single().Dispose();
             controllerInstance = Maybe<DeviceController>.Empty;
+            CompositionRoot.EndSessionScope();
             }
 
         [Writer]

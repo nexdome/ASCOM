@@ -54,7 +54,7 @@ namespace TA.NexDome.DeviceInterface
         public bool IsMoving => stateMachine.IsMoving;
 
         [IgnoreAutoChangeNotification]
-        public bool IsConnected => channel.IsOpen;
+        public bool IsConnected => channel?.IsOpen ?? false;
 
         public bool AzimuthMotorActive => stateMachine.AzimuthMotorActive;
 
@@ -380,8 +380,11 @@ namespace TA.NexDome.DeviceInterface
         public void Close()
             {
             UnsubscribeControllerEvents();
-            stateMachine.SavePersistentSettings();
-            channel.Close();
+            if (IsConnected)
+                {
+                stateMachine.SavePersistentSettings();
+                channel.Close();
+                }
             }
 
         private void UnsubscribeControllerEvents()
@@ -468,6 +471,7 @@ namespace TA.NexDome.DeviceInterface
         private void Dispose(bool disposing)
             {
             if (disposed) return;
+            Close();
             ReleaseUnmanagedResources();
             if (disposing)
                 {
