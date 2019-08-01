@@ -300,8 +300,7 @@ namespace TA.NexDome.Server
             this.ParkAzimuth.Name = "ParkAzimuth";
             this.ParkAzimuth.Size = new System.Drawing.Size(53, 20);
             this.ParkAzimuth.TabIndex = 19;
-            toolTip1.SetToolTip(this.ParkAzimuth, "Home Azimuth is defined as the distance\r\n(in degrees) starting from True North, t" +
-        "hat\r\nthe dome must be rotated clockwise to\r\nreach the home sensor.");
+            toolTip1.SetToolTip(this.ParkAzimuth, resources.GetString("ParkAzimuth.ToolTip"));
             this.ParkAzimuth.Value = global::TA.NexDome.Server.Properties.Settings.Default.ParkAzimuth;
             this.ParkAzimuth.ValueChanged += new System.EventHandler(this.NumericUpDown1_ValueChanged);
             // 
@@ -381,7 +380,7 @@ namespace TA.NexDome.Server
             this.communicationSettingsControl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.communicationSettingsControl1.Location = new System.Drawing.Point(6, 19);
             this.communicationSettingsControl1.Name = "communicationSettingsControl1";
-            this.communicationSettingsControl1.Size = new System.Drawing.Size(354, 36);
+            this.communicationSettingsControl1.Size = new System.Drawing.Size(360, 36);
             this.communicationSettingsControl1.TabIndex = 7;
             toolTip1.SetToolTip(this.communicationSettingsControl1, resources.GetString("communicationSettingsControl1.ToolTip"));
             // 

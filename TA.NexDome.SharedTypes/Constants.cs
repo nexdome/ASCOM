@@ -23,7 +23,7 @@
         public const string CmdCloseShutter = "CLS";
         public const string CmdSaveShutterSettings = "@ZWS";
         public const string CmdSaveRotatorSettings = "@ZWR";
-        public const string CmdSetHomeSensorAzimuthTemplate = "@HWR,{0:000}";
+        public const string CmdSetHomeSensorAzimuthTemplate = "@HWR,{0:D}";
         public const string CmdGetRotatorVersion = "@FRR";
         public const string CmdGetShutterVersion = "@FRS";
         public const string CmdSetMotorSpeedTemplate="@VW{0},{1:0000}";

@@ -48,7 +48,18 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         /// </summary>
         void RequestShutterStatus();
 
-        void SetHomeSensorAzimuth(decimal azimuth);
+        /// <summary>
+        /// Sets the home sensor position in steps clockwise from true north.
+        /// </summary>
+        /// <param name="stepsFromTrueNorth">The azimuth in decimal degrees.</param>
+        /// <remarks>
+        ///     The home sensor position is defined as the number of steps clockwise, starting from true north,
+        ///     that the dome must be rotated to activate the home sensor. The reason it is defined this way is that
+        ///     the value is dependent on both the structure orientation (which determines the sensor position with
+        ///     respect to true north) and the placement of the magnet around the dome (which determines the shutter
+        ///     position with respect to the sensor). This definition encapsulates both variables in a single value.
+        /// </remarks>
+        void SetHomeSensorPosition(int stepsFromTrueNorth);
 
         void SavePersistentSettings();
         }
