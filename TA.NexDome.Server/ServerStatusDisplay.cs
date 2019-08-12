@@ -50,7 +50,7 @@ namespace TA.NexDome.Server
                 AzimuthMotorAnnunciator, ClockwiseAnnunciator, CounterClockwiseAnnunciator,
                 ShutterMotorAnnunciator, ShutterOpeningAnnunciator, ShutterClosingAnnunciator,
                 ShutterDispositionAnnunciator, ShutterLinkStateAnnunciator, 
-                UserPin1Annunciator, UserPin2Annunciator, UserPin3Annunciator, UserPin4Annunciator,
+                RainAnnunciator,
                 AtHomeAnnunciator, batteryVoltsAnnunciator
                 };
             annunciators.ForEach(p => p.Mute = false);
@@ -59,6 +59,7 @@ namespace TA.NexDome.Server
             ShutterMotorAnnunciator.Cadence = CadencePattern.BlinkAlarm;
             ShutterDispositionAnnunciator.Cadence = CadencePattern.Wink;
             AtHomeAnnunciator.Cadence = CadencePattern.Wink;
+            RainAnnunciator.Cadence = CadencePattern.BlinkFast;
             annunciators.ForEach(p => p.Mute = true);
             }
 
@@ -227,11 +228,6 @@ namespace TA.NexDome.Server
                     .Subscribe(home => AtHomeAnnunciator.Mute = !home)
             );
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.UserPins)
-                    .ObserveOn(SynchronizationContext.Current)
-                    .Subscribe(SetUserPins)
-            );
-            disposableSubscriptions.Add(
                 controller.GetPropertyChangedEvents()
                     .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(p => clickCommands.ForEach(q => q.CanExecuteChanged()))
@@ -241,14 +237,16 @@ namespace TA.NexDome.Server
                     .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(SetBatteryVolts)
             );
+            disposableSubscriptions.Add(
+                controller.GetObservableValueFor(p => p.IsRaining)
+                    .ObserveOn(SynchronizationContext.Current)
+                    .Subscribe(SetRainAlarm)
+            );
             }
 
-        private void SetUserPins(Octet pinState)
+        private void SetRainAlarm(bool isRaining)
             {
-            UserPin1Annunciator.Mute = !pinState[0];
-            UserPin2Annunciator.Mute = !pinState[1];
-            UserPin3Annunciator.Mute = !pinState[2];
-            UserPin4Annunciator.Mute = !pinState[3];
+            RainAnnunciator.Mute = !isRaining;
             }
 
         private void SetShutterLimitSwitches(SensorState position)

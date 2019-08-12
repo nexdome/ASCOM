@@ -26,7 +26,7 @@ namespace TA.NexDome.DeviceInterface
         [NotNull] private readonly ControllerStatusFactory statusFactory;
         private bool disposed = false;
         private SemanticVersion rotatorFirmwareVersion;
-        private SemanticVersion shutterFirmwareVersion;
+        //private SemanticVersion shutterFirmwareVersion;
         private static SemanticVersion MinimumRequiredRotatorVersion = new SemanticVersion(2,9,9);
         private static SemanticVersion MinimumRequiredShutterVersion = new SemanticVersion(2,9,9);
 
@@ -80,6 +80,8 @@ namespace TA.NexDome.DeviceInterface
         public ShutterLinkState ShutterLinkState => stateMachine.ShutterLinkState;
 
         public bool AtPark { get; private set; } = false;
+
+        public bool IsRaining { get; private set; } = false;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -191,6 +193,7 @@ namespace TA.NexDome.DeviceInterface
             SubscribeStatusUpdates();
             SubscribeLinkStateUpdates();
             SubscribeShutterVolts();
+            SubscribeRainSensorUpdates();
             }
 
         private void SubscribeLinkStateUpdates()
@@ -311,6 +314,13 @@ namespace TA.NexDome.DeviceInterface
             {
             var observableBatteryVolts = channel.ObservableReceivedCharacters.BatteryVoltageUpdates();
             var subscription = observableBatteryVolts.Subscribe(value => ShutterBatteryVolts = value);
+            disposableSubscriptions.Add(subscription);
+            }
+
+        private void SubscribeRainSensorUpdates()
+            {
+            var observableRain = channel.ObservableReceivedCharacters.RainSensorUpdates();
+            var subscription = observableRain.Subscribe(value => IsRaining=value);
             disposableSubscriptions.Add(subscription);
             }
 

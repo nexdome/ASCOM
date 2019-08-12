@@ -89,18 +89,26 @@ namespace TA.NexDome.Server
             return query;
             }
 
-        private IEnumerable<ComPortDescriptor> EnumerateComPorts()
+        private IEnumerable<ComPortDescriptor> EnumerateComPorts(bool showAll = false)
             {
-            ManagementBaseObject thing;
             var wmi = new ManagementObjectSearcher(@"root\CIMV2", "SELECT * FROM Win32_SerialPort");
             var candidatePorts = wmi.Get();
-            var query = from item in candidatePorts.Cast<ManagementBaseObject>()
+            if (showAll)
+                {
+                var allPorts = from item in candidatePorts.Cast<ManagementBaseObject>()
+                            let portName = item["DeviceId"].ToString()
+                            let caption = item["Caption"].ToString()
+                            orderby portName
+                            select new ComPortDescriptor { PortName = portName, Caption = caption };
+                return allPorts;
+                }
+            var arduinoPorts = from item in candidatePorts.Cast<ManagementBaseObject>()
                         let portName = item["DeviceId"].ToString()
                         let caption = item["Caption"].ToString()
                         where caption.Contains("Arduino")
                         orderby portName
                         select new ComPortDescriptor {PortName = portName, Caption = caption};
-            return query;
+            return arduinoPorts;
             }
 
         private class ComPortDescriptor
@@ -125,11 +133,20 @@ namespace TA.NexDome.Server
             FirmwareImageName.DataSource = firmwareImages;
             FirmwareImageName.ValueMember = "FullyQualifiedPath";
             FirmwareImageName.DisplayMember = "DisplayName";
-            comPortDescriptors = EnumerateComPorts().ToList();
+            PopulateComPortsComboBox();
+            Cursor.Current = originalCursor;
+            }
+
+        private void PopulateComPortsComboBox(bool showAll = false)
+            {
+            ComPortName.BeginUpdate();
+            comPortDescriptors.Clear();
+            comPortDescriptors = EnumerateComPorts(showAll).ToList();
             ComPortName.DataSource = comPortDescriptors;
             ComPortName.DisplayMember = "Caption";
             ComPortName.ValueMember = "PortName";
-            Cursor.Current = originalCursor;
+            ComPortName.EndUpdate();
+            ComPortName.Invalidate();
             }
 
         private void FirmwareImageName_SelectedIndexChanged(object sender, EventArgs e)
@@ -142,6 +159,11 @@ namespace TA.NexDome.Server
             {
             ClearErrors();
             updateClickCommand.CanExecuteChanged();
+            }
+
+        private void ShowAllComPorts_CheckedChanged(object sender, EventArgs e)
+            {
+            PopulateComPortsComboBox(ShowAllComPorts.Checked);
             }
         }
     }

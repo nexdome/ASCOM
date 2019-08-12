@@ -81,6 +81,22 @@ namespace TA.NexDome.DeviceInterface
             return linkStateValues.Trace("Link State");
             }
 
+        public static IObservable<bool> RainSensorUpdates(this IObservable<char> source)
+            {
+            const string rainSensorPattern = @"^:(?<State>(rainstopped|rain))#$";
+            var rainSensorRegex = new Regex(rainSensorPattern,
+                RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.CultureInvariant |
+                RegexOptions.IgnoreCase);
+            var buffers = source.DelimitedMessageStrings();
+            var rainSensorValues = from buffer in buffers
+                                   let message = new string(buffer.ToArray())
+                                   let patternMatch = rainSensorRegex.Match(message.ToLower())
+                                   where patternMatch.Success
+                                   let isRaining = patternMatch.Groups["State"].Value == "rain"
+                                   select isRaining;
+            return rainSensorValues.Trace("Rain");
+            }
+
 
         public static IObservable<IRotatorStatus> RotatorStatusUpdates(this IObservable<char> source, ControllerStatusFactory factory)
             {

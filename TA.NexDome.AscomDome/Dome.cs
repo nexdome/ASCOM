@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using TA.NexDome.DeviceInterface;
 using TA.NexDome.Server;
 using TA.NexDome.SharedTypes;
+using NotImplementedException = ASCOM.NotImplementedException;
 
 namespace TA.NexDome.AscomDome
     {
@@ -79,13 +80,13 @@ namespace TA.NexDome.AscomDome
         public void OpenShutter() => controller.OpenShutter();
 
         /// <inheritdoc />
-        public async void Park() => controller.Park();
+        public async void Park() => await controller.Park();
 
         /// <inheritdoc />
         public void SetPark() => SharedResources.SetParkPosition((decimal) controller.AzimuthDegrees);
 
         /// <inheritdoc />
-        public void SlewToAltitude(double Altitude) { }
+        public void SlewToAltitude(double altitude) => throw new NotImplementedException();
 
         /// <inheritdoc />
         public void SlewToAzimuth(double Azimuth) => controller.SlewToAzimuth(Azimuth);

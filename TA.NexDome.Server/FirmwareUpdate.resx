@@ -117,6 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <metadata name="BalloonHelp.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>176, 17</value>
+  </metadata>
+  <metadata name="BalloonHelp.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>176, 17</value>
+  </metadata>
+  <data name="FirmwareImageName.ToolTip" xml:space="preserve">
+    <value>Select a firmware image to upload.
+
+Firmware images for normal operation:
+*.Rotator.hex is Rotator firmware
+*.Shutter.Hex is Shutter firmware
+
+Diagnostic utilities:
+XBeeFactoryReset.hex resets the XBee module to factory defaults
+ClearEeprom.hex clears firmware saved settings and tests the EEPROM memory</value>
+  </data>
+  <data name="ShowAllComPorts.ToolTip" xml:space="preserve">
+    <value>When enabled, shows all available COM Ports.
+When disabled, only shows ports that are known
+to have an Arduino connected.
+Default: disabled
+NOTE: it is your responsibility to ensure that you are
+uploading firmware to the correct port.</value>
+  </data>
   <metadata name="UpdateProcessError.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
