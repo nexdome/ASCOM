@@ -159,7 +159,7 @@
             this.AzimuthMotorAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.AzimuthMotorAnnunciator.Cadence = ASCOM.Controls.CadencePattern.BlinkAlarm;
             this.AzimuthMotorAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
-            this.AzimuthMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.AzimuthMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.AzimuthMotorAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.AzimuthMotorAnnunciator.Location = new System.Drawing.Point(95, 0);
             this.AzimuthMotorAnnunciator.Mute = false;
@@ -268,7 +268,7 @@
             this.ShutterMotorAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.ShutterMotorAnnunciator.Cadence = ASCOM.Controls.CadencePattern.BlinkAlarm;
             this.ShutterMotorAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
-            this.ShutterMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.ShutterMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.ShutterMotorAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.ShutterMotorAnnunciator.Location = new System.Drawing.Point(95, 17);
             this.ShutterMotorAnnunciator.Mute = false;
@@ -315,7 +315,7 @@
             this.ShutterDispositionAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.ShutterDispositionAnnunciator.Cadence = ASCOM.Controls.CadencePattern.Wink;
             this.ShutterDispositionAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
-            this.ShutterDispositionAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.ShutterDispositionAnnunciator.ForeColor = System.Drawing.Color.LightGoldenrodYellow;
             this.ShutterDispositionAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.ShutterDispositionAnnunciator.Location = new System.Drawing.Point(209, 17);
             this.ShutterDispositionAnnunciator.Mute = false;
@@ -330,14 +330,14 @@
             this.ShutterLinkStateAnnunciator.AutoSize = true;
             this.ShutterLinkStateAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.ShutterLinkStateAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
-            this.ShutterLinkStateAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.ShutterLinkStateAnnunciator.ForeColor = System.Drawing.Color.DarkSeaGreen;
             this.ShutterLinkStateAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.ShutterLinkStateAnnunciator.Location = new System.Drawing.Point(255, 17);
             this.ShutterLinkStateAnnunciator.Mute = false;
             this.ShutterLinkStateAnnunciator.Name = "ShutterLinkStateAnnunciator";
-            this.ShutterLinkStateAnnunciator.Size = new System.Drawing.Size(56, 17);
+            this.ShutterLinkStateAnnunciator.Size = new System.Drawing.Size(64, 17);
             this.ShutterLinkStateAnnunciator.TabIndex = 13;
-            this.ShutterLinkStateAnnunciator.Text = "Closed";
+            this.ShutterLinkStateAnnunciator.Text = "Offline";
             // 
             // batteryVoltsAnnunciator
             // 
@@ -347,7 +347,7 @@
             this.batteryVoltsAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
             this.batteryVoltsAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.batteryVoltsAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
-            this.batteryVoltsAnnunciator.Location = new System.Drawing.Point(317, 17);
+            this.batteryVoltsAnnunciator.Location = new System.Drawing.Point(325, 17);
             this.batteryVoltsAnnunciator.Mute = false;
             this.batteryVoltsAnnunciator.Name = "batteryVoltsAnnunciator";
             this.batteryVoltsAnnunciator.Size = new System.Drawing.Size(64, 17);

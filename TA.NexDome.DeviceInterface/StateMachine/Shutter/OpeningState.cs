@@ -50,5 +50,17 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter {
             Machine.ControllerActions.PerformEmergencyStop();
             Machine.TransitionToState(new RequestStatusState(Machine));
             }
+
+        /// <summary>
+        /// It's possible for the shutter to reverse direction while opening, especially if
+        /// the rain sensor becomes active.
+        /// </summary>
+        /// <param name="direction">The direction.</param>
+        public override void ShutterDirectionReceived(ShutterDirection direction)
+            {
+            base.ShutterDirectionReceived(direction);
+            if (direction== ShutterDirection.Closing)
+                Machine.TransitionToState(new ClosingState(Machine));
+            }
         }
     }
