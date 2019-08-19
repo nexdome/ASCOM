@@ -1,7 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)"
-              GeneratedClassNamespace="TA.NexDome.Server.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TA.NexDome.Server.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="CommPortName" Type="System.String" Scope="User">
@@ -87,6 +85,12 @@
     </Setting>
     <Setting Name="FirmwareUploadVerboseOutput" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ShutterIsInstalled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="OnlineHelpWebDestination" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://bitbucket.org/tigra-astronomy/nexdome-ascom-driver/wiki/Home</Value>
     </Setting>
   </Settings>
 </SettingsFile>

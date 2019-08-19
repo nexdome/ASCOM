@@ -5,15 +5,21 @@ namespace TA.NexDome.AscomDome
     {
     using System;
     using System.Collections;
+    using System.Diagnostics.Contracts;
+    using System.Reflection;
+    using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
-
+    using System.Text;
     using ASCOM;
     using ASCOM.DeviceInterface;
-
+    using JetBrains.Annotations;
+    using Machine.Specifications.Runner.Impl;
+    using NLog.Fluent;
+    using static SharedTypes.LogHelper;
     using TA.NexDome.DeviceInterface;
     using TA.NexDome.Server;
     using TA.NexDome.SharedTypes;
-
+    using InvalidOperationException = ASCOM.InvalidOperationException;
     using NotImplementedException = ASCOM.NotImplementedException;
 
     [ProgId(SharedResources.DomeDriverId)]
@@ -35,6 +41,8 @@ namespace TA.NexDome.AscomDome
             clientId = SharedResources.ConnectionManager.RegisterClient(SharedResources.DomeDriverId);
             }
 
+        private bool IsShutterAvailable => controller?.IsShutterOperational ?? false;
+
         /// <inheritdoc />
         public void SetupDialog() => SharedResources.DoSetupDialog(clientId);
 
@@ -42,13 +50,16 @@ namespace TA.NexDome.AscomDome
         public string Action(string ActionName, string ActionParameters) => null;
 
         /// <inheritdoc />
-        public void CommandBlind(string Command, bool Raw = false) { }
+        public void CommandBlind(string Command, bool Raw = false) => throw MethodNotImplemented();
+
+        private Exception MethodNotImplemented([CallerMemberName] string method = "") =>
+            LogAndBuild<MethodNotImplementedException>("Method {method} is not implemented", method);
 
         /// <inheritdoc />
-        public bool CommandBool(string Command, bool Raw = false) => false;
+        public bool CommandBool(string Command, bool Raw = false) => throw MethodNotImplemented();
 
         /// <inheritdoc />
-        public string CommandString(string Command, bool Raw = false) => null;
+        public string CommandString(string Command, bool Raw = false) => throw MethodNotImplemented();
 
         /// <inheritdoc />
         public void Dispose()
@@ -69,28 +80,57 @@ namespace TA.NexDome.AscomDome
         public void AbortSlew() => controller.RequestEmergencyStop();
 
         /// <inheritdoc />
-        public void CloseShutter() => controller.CloseShutter();
+        public void CloseShutter()
+            {
+            if (!IsShutterAvailable)
+                LogAndThrow<InvalidOperationException>(
+                    "Attempt to close the shutter while the shutter is not available");
+            controller?.CloseShutter();
+            }
 
         /// <inheritdoc />
-        public void FindHome() => controller.RotateToHomePosition();
+        public void FindHome() => controller?.RotateToHomePosition();
 
         /// <inheritdoc />
-        public void OpenShutter() => controller.OpenShutter();
+        public void OpenShutter()
+            {
+            if (!IsShutterAvailable)
+                LogAndThrow<InvalidOperationException>("Attempt to open the shutter while the shutter not available");
+            controller?.OpenShutter();
+            }
 
         /// <inheritdoc />
-        public async void Park() => await controller.Park();
+        public async void Park()
+            {
+            if (!Connected) 
+                LogAndThrow<NotConnectedException>("The driver must be connected in order to park");
+
+            // It is important to catch any and all exceptions because we are using async void
+            // and any unhandled exception would crash the process.
+            try
+                {
+                await controller.Park().ContinueOnAnyThread();
+                }
+            // ReSharper disable once CatchAllClause
+            catch (Exception e)
+                {
+                Log.Error().Exception(e)
+                    .Message("Error during asynchronous park: {message}", e.Message)
+                    .Write();
+                }
+            }
 
         /// <inheritdoc />
         public void SetPark() => SharedResources.SetParkPosition((decimal)controller.AzimuthDegrees);
 
         /// <inheritdoc />
-        public void SlewToAltitude(double altitude) => throw new NotImplementedException();
+        public void SlewToAltitude(double altitude) => throw MethodNotImplemented();
 
         /// <inheritdoc />
-        public void SlewToAzimuth(double Azimuth) => controller.SlewToAzimuth(Azimuth);
+        public void SlewToAzimuth(double Azimuth) => controller?.SlewToAzimuth(Azimuth);
 
         /// <inheritdoc />
-        public void SyncToAzimuth(double Azimuth) { }
+        public void SyncToAzimuth(double Azimuth) => throw MethodNotImplemented();
 
         /// <inheritdoc />
         public bool Connected
@@ -108,31 +148,41 @@ namespace TA.NexDome.AscomDome
             }
 
         /// <inheritdoc />
-        public string Description { get; }
+        public string Description => "NexDome Control System";
 
         /// <inheritdoc />
-        public string DriverInfo { get; }
+        public string DriverInfo
+            {
+            get
+                {
+                var builder = new StringBuilder();
+                builder.AppendLine(Description);
+                builder.AppendLine("Professionally produced for NexDome by Tigra Astronomy");
+                builder.AppendLine($"Build {GitVersionExtensions.GitInformationalVersion}");
+                return builder.ToString();
+                }
+            }
 
         /// <inheritdoc />
-        public string DriverVersion { get; }
+        public string DriverVersion => $"{GitVersionExtensions.GitMajorVersion}.{GitVersionExtensions.GitMinorVersion}";
 
         /// <inheritdoc />
-        public short InterfaceVersion { get; }
+        public short InterfaceVersion => 2;
 
         /// <inheritdoc />
-        public string Name { get; }
+        public string Name => SharedResources.DomeDriverName;
 
         /// <inheritdoc />
-        public ArrayList SupportedActions { get; }
+        public ArrayList SupportedActions => new ArrayList();
 
         /// <inheritdoc />
-        public double Altitude { get; }
+        public double Altitude => controller?.ShutterPercentOpen * 90.0 ?? 0.0;
 
         /// <inheritdoc />
-        public bool AtHome => controller.AtHome;
+        public bool AtHome => controller?.AtHome ?? false;
 
         /// <inheritdoc />
-        public bool AtPark => controller.AtPark;
+        public bool AtPark => controller?.AtPark ?? false;
 
         /// <inheritdoc />
         public double Azimuth => controller.AzimuthDegrees;
@@ -153,7 +203,7 @@ namespace TA.NexDome.AscomDome
         public bool CanSetPark => true;
 
         /// <inheritdoc />
-        public bool CanSetShutter => true;
+        public bool CanSetShutter => IsShutterAvailable;
 
         /// <inheritdoc />
         public bool CanSlave => false;
@@ -166,7 +216,7 @@ namespace TA.NexDome.AscomDome
             {
             get
                 {
-                switch (controller.ShutterDisposition)
+                switch (controller?.ShutterDisposition ?? ShutterDisposition.Offline)
                     {
                         case ShutterDisposition.Offline:
                             return ShutterState.shutterError;
@@ -185,10 +235,19 @@ namespace TA.NexDome.AscomDome
             }
 
         /// <inheritdoc />
-        public bool Slaved { get; set; }
+        public bool Slaved
+            {
+            get => false;
+            set
+                {
+                throw new PropertyNotImplementedException(
+                    "Slaving is not supported in this driver. Use POTH or ASCOM Dome Control Panel.",
+                    true);
+                }
+            }
 
         /// <inheritdoc />
-        public bool Slewing => controller.IsMoving;
+        public bool Slewing => controller?.IsMoving ?? false;
 
         private void ReleaseUnmanagedResources()
             {

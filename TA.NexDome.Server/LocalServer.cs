@@ -21,6 +21,7 @@ namespace TA.NexDome.Server
     using Microsoft.Win32;
 
     using NLog;
+    using TA.NexDome.SharedTypes;
 
     public static class Server
         {
@@ -161,13 +162,13 @@ namespace TA.NexDome.Server
             // var assembly = Assembly.GetExecutingAssembly();
             // var assemblyName = assembly.GetName().Name;
             // var git = assembly.GetType(assemblyName + ".GitVersionInformation");
-            Log.Info("Git Commit ID: {fullCommit}", GitVersionInformation.Sha);
-            Log.Info("Git Short ID: {shortCommit}", GitVersionInformation.ShortSha);
-            Log.Info("Commit Date: {commitDate}", GitVersionInformation.CommitDate);
-            Log.Info("Semantic version: {semVer}", GitVersionInformation.SemVer);
-            Log.Info("Full Semantic version: {fullSemVer}", GitVersionInformation.FullSemVer);
-            Log.Info("Build metadata: {buildMetadata}", GitVersionInformation.FullBuildMetaData);
-            Log.Info("Informational Version: {informationalVersion}", GitVersionInformation.InformationalVersion);
+            Log.Info("Git Commit ID: {fullCommit}", GitVersionExtensions.GitCommitSha);
+            Log.Info("Git Short ID: {shortCommit}", GitVersionExtensions.GitCommitShortSha);
+            Log.Info("Commit Date: {commitDate}", GitVersionExtensions.GitCommitDate);
+            Log.Info("Semantic version: {semVer}", GitVersionExtensions.GitSemVer);
+            Log.Info("Full Semantic version: {fullSemVer}", GitVersionExtensions.GitFullSemVer);
+            Log.Info("Build metadata: {buildMetadata}", GitVersionExtensions.GitBuildMetadata);
+            Log.Info("Informational Version: {informationalVersion}", GitVersionExtensions.GitInformationalVersion);
             }
 
         #endregion

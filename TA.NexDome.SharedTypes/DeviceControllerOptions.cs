@@ -30,6 +30,8 @@ namespace TA.NexDome.SharedTypes
 
         public TimeSpan ShutterRampTime { get; set; }
 
-        public TimeSpan WaitForShutterOnConnect { get; set; }
+        public TimeSpan TimeToWaitForShutterOnConnect { get; set; }
+
+        public bool ShutterIsInstalled { get; set; }
         }
     }

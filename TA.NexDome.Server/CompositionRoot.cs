@@ -131,7 +131,8 @@ namespace TA.NexDome.Server
                               ShutterRampTime =
                                   TimeSpan.FromMilliseconds(Default.ShutterAccelerationRampTimeMilliseconds),
                               ParkAzimuth = Default.ParkAzimuth,
-                              WaitForShutterOnConnect = Default.OnConnectWaitForShutterOnline
+                              TimeToWaitForShutterOnConnect = Default.OnConnectWaitForShutterOnline,
+                              ShutterIsInstalled = Default.ShutterIsInstalled
                               };
             return options;
             }

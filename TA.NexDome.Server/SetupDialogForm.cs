@@ -158,5 +158,10 @@ namespace TA.NexDome.Server
             ShutterRampTimeCurrentValue.Text = ShutterAccelerationRampTimeTrackBar.Value.ToString();
 
         private void FirmwareUpdateCommand_Click(object sender, EventArgs e) { }
+
+        private void OnlineHelp_Click(object sender, EventArgs e)
+            {
+
+            }
         }
     }

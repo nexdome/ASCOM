@@ -81,6 +81,8 @@ namespace TA.NexDome.DeviceInterface
         [IgnoreAutoChangeNotification]
         public bool IsConnected => channel?.IsOpen ?? false;
 
+        public bool IsShutterOperational => IsConnected && stateMachine.ShutterLinkState == ShutterLinkState.Online;
+
         public bool AzimuthMotorActive => stateMachine.AzimuthMotorActive;
 
         public RotationDirection AzimuthDirection => stateMachine.AzimuthDirection;
@@ -125,7 +127,7 @@ namespace TA.NexDome.DeviceInterface
             channel.Open();
             stateMachine.Initialize(new RequestStatusState(stateMachine));
             stateMachine.Initialize(new OfflineState(stateMachine));
-            stateMachine.WaitForReady(configuration.WaitForShutterOnConnect);
+            stateMachine.WaitForReady(configuration.TimeToWaitForShutterOnConnect);
 
             if (performOnConnectActions)
                 PerformActionsOnConnect();
@@ -490,22 +492,33 @@ namespace TA.NexDome.DeviceInterface
         /// </summary>
         public async Task Park()
             {
-            await Task.Run(
-                () =>
+            await Task.Run(ParkAsync).ContinueOnCurrentThread();
+            }
+
+        private void ParkAsync()
+            {
+            try
+                {
+                Log.Info().Message("Rotating to park position for park").Write();
+                stateMachine.RotateToAzimuthDegrees((double)configuration.ParkAzimuth);
+                stateMachine.WaitForReady(configuration.MaximumFullRotationTime);
+                if (IsShutterOperational)
                     {
-                    try
-                        {
-                        stateMachine.RotateToAzimuthDegrees((double)configuration.ParkAzimuth);
-                        stateMachine.WaitForReady(configuration.MaximumFullRotationTime);
-                        stateMachine.CloseShutter();
-                        stateMachine.WaitForReady(configuration.MaximumShutterCloseTime);
-                        AtPark = true;
-                        }
-                    catch (Exception e)
-                        {
-                        Log.Error().Exception(e).Write();
-                        }
-                    });
+                    Log.Info().Message("Closing shutter for park").Write();
+                    stateMachine.CloseShutter();
+                    stateMachine.WaitForReady(configuration.MaximumShutterCloseTime);
+                    }
+                else
+                    {
+                    Log.Warn().Message("Shutter is not operational, not closing shutter").Write();
+                    }
+                AtPark = true;
+                }
+            // ReSharper disable once CatchAllClause
+            catch (Exception e)
+                {
+                Log.Error().Message("Exception while parking").Exception(e).Write();
+                }
             }
 
         private void ReleaseUnmanagedResources() { }

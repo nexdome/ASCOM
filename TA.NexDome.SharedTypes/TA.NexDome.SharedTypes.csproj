@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="JetBrains.Annotations, Version=2019.1.1.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\.nuget\packages\jetbrains.annotations\2019.1.1\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,15 +47,18 @@
   <ItemGroup>
     <Compile Include="AsciiExtensions.cs" />
     <Compile Include="AsciiSymbols.cs" />
+    <Compile Include="AsyncExtensions.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="ControllerStatusFactory.cs" />
     <Compile Include="DeviceControllerOptions.cs" />
     <Compile Include="DisplayEquivalentAttribute.cs" />
     <Compile Include="EnumExtensions.cs" />
+    <Compile Include="GitVersionExtensions.cs" />
     <Compile Include="IClock.cs" />
     <Compile Include="IHardwareStatus.cs" />
     <Compile Include="IRotatorStatus.cs" />
     <Compile Include="IShutterStatus.cs" />
+    <Compile Include="LogHelper.cs" />
     <Compile Include="MathExtensions.cs" />
     <Compile Include="Maybe.cs" />
     <Compile Include="NotifyPropertyChangeReactiveExtensions.cs" />

@@ -4,6 +4,7 @@
 namespace TA.NexDome.DeviceInterface.StateMachine
     {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
     using System.Threading;
@@ -224,12 +225,20 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         /// </exception>
         public void WaitForReady(TimeSpan timeout)
             {
-            bool signalled = WaitHandle.WaitAll(new WaitHandle[] { RotatorInReadyState, ShutterInReadyState }, timeout);
+            Log.Info()
+                .Message("Waiting for state machines to be ready, Shutter Installed={shutter}", Options.ShutterIsInstalled)
+                .Write();
+            var waitHandles = new List<WaitHandle> { RotatorInReadyState };
+            if (Options.ShutterIsInstalled)
+                waitHandles.Add(ShutterInReadyState);
+            bool signalled = WaitHandle.WaitAll(waitHandles.ToArray(), timeout);
+
             if (!signalled)
                 {
-                string message = $"State machine did not enter the ready state within the allotted time of {timeout}";
-                Log.Error().Message(message).Write();
-                throw new TimeoutException(message);
+                Log.Error()
+                    .Message("State machine did not enter the ready state within the allotted time of {timeout}", timeout)
+                    .Write();
+                throw new TimeoutException($"State machine did not enter the ready state within the allotted time of {timeout}");
                 }
             }
 
