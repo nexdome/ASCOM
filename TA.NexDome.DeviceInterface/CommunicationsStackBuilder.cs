@@ -1,16 +1,14 @@
-﻿// This file is part of the TA.DigitalDomeworks project
-// 
-// Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
-// 
-// File: CommunicationsStackBuilder.cs  Last modified: 2018-03-02@00:33 by Tim Long
-
-using System;
-using TA.Ascom.ReactiveCommunications;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.DeviceInterface
     {
+    using System;
+
+    using TA.Ascom.ReactiveCommunications;
+
     /// <summary>
-    ///     Factory methods for building the Reactive communicatiosn stack
+    ///     Factory methods for building the Reactive communication stack
     /// </summary>
     internal static class CommunicationsStackBuilder
         {
@@ -19,9 +17,11 @@ namespace TA.NexDome.DeviceInterface
             if (endpoint is SerialDeviceEndpoint)
                 return new SerialCommunicationChannel(endpoint);
             throw new NotSupportedException($"There is no supported channel type for the endpoint: {endpoint}")
-                {
-                Data = {["endpoint"] = endpoint}
-                };
+                      {
+                      Data = {
+                                ["endpoint"] = endpoint 
+                             }
+                      };
             }
 
         public static TransactionObserver BuildTransactionObserver(ICommunicationChannel channel)

@@ -1,10 +1,15 @@
-﻿using TA.NexDome.SharedTypes;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
-namespace TA.NexDome.DeviceInterface.StateMachine.Shutter {
-    class OpenState : ShutterStateBase {
+namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
+    {
+    using TA.NexDome.SharedTypes;
+
+    internal class OpenState : ShutterStateBase
+        {
         /// <inheritdoc />
-        public OpenState(ControllerStateMachine machine) : base(machine)
-            { }
+        public OpenState(ControllerStateMachine machine)
+            : base(machine) { }
 
         /// <inheritdoc />
         public override void OnEnter()
@@ -35,7 +40,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter {
         public override void EncoderTickReceived(int encoderPosition)
             {
             base.EncoderTickReceived(encoderPosition);
-            var oldPosition = Machine.ShutterStepPosition;
+            int oldPosition = Machine.ShutterStepPosition;
             Machine.ShutterStepPosition = encoderPosition;
             if (encoderPosition < oldPosition)
                 Machine.TransitionToState(new ClosingState(Machine));
@@ -58,7 +63,5 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter {
             Machine.ControllerActions.CloseShutter();
             Machine.TransitionToState(new ClosingState(Machine));
             }
-
-
         }
     }

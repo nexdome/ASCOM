@@ -1,22 +1,30 @@
-﻿using System;
-using System.Diagnostics.Contracts;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using System.Text;
-using NLog.Fluent;
-using TA.Ascom.ReactiveCommunications;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.Specifications.Fakes
     {
+    using System;
+    using System.Diagnostics.Contracts;
+    using System.Reactive.Linq;
+    using System.Reactive.Subjects;
+    using System.Text;
+
+    using NLog.Fluent;
+
+    using TA.Ascom.ReactiveCommunications;
+
     /// <summary>
-    ///     A fake communication channel that logs any sent data in <see cref="SendLog" />
-    ///     and receives a fake pre-programmed response passed into the constructor.
-    ///     The class also keeps a count of how many times each method of <see cref="ICommunicationChannel" /> was called.
+    ///     A fake communication channel that logs any sent data in <see cref="SendLog" />and
+    ///     receives a fake pre-programmed response passed into the constructor. The class also
+    ///     keeps a count of how many times each method of <see cref="ICommunicationChannel" /> was
+    ///     called.
     /// </summary>
     public class FakeCommunicationChannel : ICommunicationChannel
         {
         readonly IObservable<char> receivedCharacters;
+
         readonly Subject<char> receiveChannelSubject = new Subject<char>();
+
         readonly StringBuilder sendLog;
 
         /// <summary>
@@ -73,10 +81,7 @@ namespace TA.NexDome.Specifications.Fakes
             {
             Log.Info().Message($"Send: {txData}").Property(nameof(txData), txData).Write();
             sendLog.Append(txData);
-            foreach (char c in Response)
-                {
-                receiveChannelSubject.OnNext(c);
-                }
+            foreach (char c in Response) receiveChannelSubject.OnNext(c);
             }
 
         public IObservable<char> ObservableReceivedCharacters => receiveChannelSubject.AsObservable();

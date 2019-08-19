@@ -1,9 +1,16 @@
-﻿using TA.NexDome.SharedTypes;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
-namespace TA.NexDome.DeviceInterface.StateMachine.Shutter {
-    class ClosedState : ShutterStateBase {
+namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
+    {
+    using TA.NexDome.SharedTypes;
+
+    internal class ClosedState : ShutterStateBase
+        {
         /// <inheritdoc />
-        public ClosedState(ControllerStateMachine machine) : base(machine) { }
+        public ClosedState(ControllerStateMachine machine)
+            : base(machine) { }
+
         /// <inheritdoc />
         public override void OnEnter()
             {
@@ -24,7 +31,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter {
         public override void ShutterDirectionReceived(ShutterDirection direction)
             {
             base.ShutterDirectionReceived(direction);
-            if (direction== ShutterDirection.Opening)
+            if (direction == ShutterDirection.Opening)
                 Machine.TransitionToState(new OpeningState(Machine));
             }
 

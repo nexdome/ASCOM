@@ -1,19 +1,18 @@
-﻿// This file is part of the TA.DigitalDomeworks project
-// 
-// Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
-// 
-// File: ServedComClassLocator.cs  Last modified: 2018-03-28@22:20 by Tim Long
-
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using ASCOM;
-using NLog;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.Server
     {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+
+    using ASCOM;
+
+    using NLog;
+
     internal class ServedComClassLocator : MarshalByRefObject
         {
         private readonly ILogger Log = LogManager.GetCurrentClassLogger();
@@ -25,7 +24,8 @@ namespace TA.NexDome.Server
             }
 
         /// <summary>
-        ///     Gets the list of the names of assemblies that contain ASCOM drivers to be served by the LocalServer.
+        ///     Gets the list of the names of assemblies that contain ASCOM drivers to be served by
+        ///     the LocalServer.
         /// </summary>
         /// <value>The discovered assembly full names.</value>
         public List<string> DiscoveredAssemblyNames { get; }
@@ -60,7 +60,7 @@ namespace TA.NexDome.Server
             Log.Info("Loading served COM classes");
 
             // put everything into one folder, the same as the server.
-            var assyPath = Assembly.GetExecutingAssembly().Location;
+            string assyPath = Assembly.GetExecutingAssembly().Location;
             assyPath = Path.GetDirectoryName(assyPath);
             Log.Debug($"Assembly load path is {assyPath}");
 
@@ -73,16 +73,16 @@ namespace TA.NexDome.Server
                 foreach (var fi in fileInfos)
                     {
                     Log.Trace($"Examining types in {fi.Name}");
-                    var aPath = fi.FullName;
+                    string aPath = fi.FullName;
                     try
                         {
                         Log.Trace($"Attempting reflection only load for {aPath}");
                         var so = Assembly.ReflectionOnlyLoad(Path.GetFileNameWithoutExtension(fi.Name));
-                        var soShortName = so.GetName().Name;
+                        string soShortName = so.GetName().Name;
                         var types = so.GetTypes();
                         Log.Trace($"Reflection found {types.Length} types in assembly {so.FullName}");
                         var servedClasses = from type in types.AsParallel()
-                                            let memberInfo = (MemberInfo) type
+                                            let memberInfo = (MemberInfo)type
                                             let safeAttributes = CustomAttributeData.GetCustomAttributes(memberInfo)
                                             where safeAttributes.Any(
                                                 p => p.AttributeType.Name == nameof(ServedClassNameAttribute))
@@ -98,13 +98,15 @@ namespace TA.NexDome.Server
                     catch (BadImageFormatException ex)
                         {
                         Log.Warn(ex, $"BadImageFormat: {fi.Name}.{fi.Extension} continuing");
+
                         // Probably an attempt to load a Win32 DLL (i.e. not a .net assembly)
                         // Just swallow the exception and continue to the next item.
                         }
                     catch (Exception ex)
                         {
                         Log.Error(ex, $"Unexpected error processing {fi.Name}: {ex.Message}");
-                        //return false;
+
+                        // return false;
                         }
                     }
                 }
@@ -113,7 +115,6 @@ namespace TA.NexDome.Server
                 AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= HandleReflectionOnlyAssemblyResolve;
                 }
             }
-
 
         /// <summary>
         ///     Handles the reflection only assembly resolve.

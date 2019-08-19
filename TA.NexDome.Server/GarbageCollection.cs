@@ -1,22 +1,22 @@
-// This file is part of the TA.DigitalDomeworks project
-// 
-// Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
-// 
-// File: GarbageCollection.cs  Last modified: 2018-03-28@22:19 by Tim Long
-
-using System;
-using System.Threading;
+// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.Server
     {
+    using System;
+    using System.Threading;
+
     /// <summary>
     ///     Summary description for GarbageCollection.
     /// </summary>
     internal class GarbageCollection
         {
         protected volatile bool m_bContinueThread;
+
         protected ManualResetEvent m_EventThreadEnded;
+
         protected bool m_GCWatchStopped;
+
         protected int m_iInterval;
 
         public GarbageCollection(int iInterval)
@@ -41,18 +41,12 @@ namespace TA.NexDome.Server
 
         protected bool ContinueThread()
             {
-            lock (this)
-                {
-                return m_bContinueThread;
-                }
+            lock (this) return m_bContinueThread;
             }
 
         public void StopThread()
             {
-            lock (this)
-                {
-                m_bContinueThread = false;
-                }
+            lock (this) m_bContinueThread = false;
             }
 
         public void WaitForThreadToStop()

@@ -1,12 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using TA.Ascom.ReactiveCommunications;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.Specifications.Fakes
     {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using TA.Ascom.ReactiveCommunications;
+
     class FakeTransactionProcessor : ITransactionProcessor
         {
         readonly IEnumerable<string> fakeResponses;
+
         readonly IEnumerator<string> responseEnumerator;
 
         public FakeTransactionProcessor(IEnumerable<string> fakeResponses)
@@ -20,7 +25,7 @@ namespace TA.NexDome.Specifications.Fakes
 
         public void CommitTransaction(DeviceTransaction transaction)
             {
-            var moreResponses = responseEnumerator.MoveNext();
+            bool moreResponses = responseEnumerator.MoveNext();
             if (moreResponses)
                 transaction.SimulateCompletionWithResponse(responseEnumerator.Current);
             else

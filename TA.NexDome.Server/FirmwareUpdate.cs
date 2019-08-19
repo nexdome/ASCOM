@@ -1,23 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.IO.Ports;
-using System.Linq;
-using System.Management;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using TA.NexDome.Server.Properties;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.Server
     {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Management;
+    using System.Text;
+    using System.Windows.Forms;
+
+    using ConsoleControlAPI;
+
+    using TA.NexDome.Server.Properties;
+
     public partial class FirmwareUpdate : Form
         {
         private readonly ClickCommand updateClickCommand;
+
         private IList<ComPortDescriptor> comPortDescriptors;
+
         private List<FirmwareImageDescriptor> firmwareImages;
 
         public FirmwareUpdate()
@@ -28,12 +31,12 @@ namespace TA.NexDome.Server
             ConsoleOutput.ProcessInterface.OnProcessError += ProcessInterface_OnProcessError;
             }
 
-        private void ProcessInterface_OnProcessError(object sender, ConsoleControlAPI.ProcessEventArgs args)
+        private void ProcessInterface_OnProcessError(object sender, ProcessEventArgs args)
             {
             updateClickCommand.CanExecuteChanged();
             }
 
-        private void ProcessInterface_OnProcessExit(object sender, ConsoleControlAPI.ProcessEventArgs args)
+        private void ProcessInterface_OnProcessExit(object sender, ProcessEventArgs args)
             {
             Cursor.Current = Cursors.Default;
             updateClickCommand.CanExecuteChanged();
@@ -43,22 +46,23 @@ namespace TA.NexDome.Server
             }
 
         /// <summary>
-        /// Executes the firmware update using the users selections, which are assumed to be valid at this point.
+        ///     Executes the firmware update using the users selections, which are assumed to be valid
+        ///     at this point.
         /// </summary>
         private void ExecuteUpdateFirmware()
             {
             Cursor.Current = Cursors.WaitCursor;
             ClearErrors();
             ConsoleOutput.ClearOutput();
-            var hexFile = FirmwareImageName.SelectedValue.ToString();
-            var comPort = ComPortName.SelectedValue.ToString();
-            var utilityDirectory = Path.Combine(Settings.Default.FirmwareImageDirectory, "Uploader");
-            var uploaderCommand = Path.Combine(utilityDirectory, Settings.Default.FirmwareUploaderExecutable);
+            string hexFile = FirmwareImageName.SelectedValue.ToString();
+            string comPort = ComPortName.SelectedValue.ToString();
+            string utilityDirectory = Path.Combine(Settings.Default.FirmwareImageDirectory, "Uploader");
+            string uploaderCommand = Path.Combine(utilityDirectory, Settings.Default.FirmwareUploaderExecutable);
             var argumentBuilder = new StringBuilder();
             argumentBuilder.Append($"--PortName {comPort} --HexFile {hexFile}");
             if (Settings.Default.FirmwareUploadVerboseOutput)
                 argumentBuilder.Append(" --Verbose");
-            var uploaderArguments = argumentBuilder.ToString();
+            string uploaderArguments = argumentBuilder.ToString();
             ConsoleOutput.StartProcess(uploaderCommand, uploaderArguments);
             updateClickCommand.CanExecuteChanged();
             }
@@ -69,7 +73,7 @@ namespace TA.NexDome.Server
             }
 
         /// <summary>
-        /// Determines whether a firmware update operation is currently valid.
+        ///     Determines whether a firmware update operation is currently valid.
         /// </summary>
         private bool CanUpdateFirmware()
             {
@@ -85,7 +89,7 @@ namespace TA.NexDome.Server
             var imageFiles = Directory.EnumerateFiles(baseDirectory, "*.hex");
             var query = from file in imageFiles
                         let shortName = Path.GetFileName(file)
-                        select new FirmwareImageDescriptor {FullyQualifiedPath = file, DisplayName = shortName};
+                        select new FirmwareImageDescriptor { FullyQualifiedPath = file, DisplayName = shortName };
             return query;
             }
 
@@ -96,39 +100,27 @@ namespace TA.NexDome.Server
             if (showAll)
                 {
                 var allPorts = from item in candidatePorts.Cast<ManagementBaseObject>()
-                            let portName = item["DeviceId"].ToString()
-                            let caption = item["Caption"].ToString()
-                            orderby portName
-                            select new ComPortDescriptor { PortName = portName, Caption = caption };
+                               let portName = item["DeviceId"].ToString()
+                               let caption = item["Caption"].ToString()
+                               orderby portName
+                               select new ComPortDescriptor { PortName = portName, Caption = caption };
                 return allPorts;
                 }
+
             var arduinoPorts = from item in candidatePorts.Cast<ManagementBaseObject>()
-                        let portName = item["DeviceId"].ToString()
-                        let caption = item["Caption"].ToString()
-                        where caption.Contains("Arduino")
-                        orderby portName
-                        select new ComPortDescriptor {PortName = portName, Caption = caption};
+                               let portName = item["DeviceId"].ToString()
+                               let caption = item["Caption"].ToString()
+                               where caption.Contains("Arduino")
+                               orderby portName
+                               select new ComPortDescriptor { PortName = portName, Caption = caption };
             return arduinoPorts;
-            }
-
-        private class ComPortDescriptor
-            {
-            public string PortName { get; set; }
-            public string Caption { get; set; }
-            }
-
-        private class FirmwareImageDescriptor
-            {
-            public string DisplayName { get; set; }
-
-            public string FullyQualifiedPath { get; set; }
             }
 
         private void FirmwareUpdate_Load(object sender, EventArgs e)
             {
             var originalCursor = Cursor.Current;
             Cursor.Current = Cursors.WaitCursor;
-            var firmwareImageDirectory = Settings.Default.FirmwareImageDirectory;
+            string firmwareImageDirectory = Settings.Default.FirmwareImageDirectory;
             firmwareImages = EnumerateFirmwareImages(firmwareImageDirectory).ToList();
             FirmwareImageName.DataSource = firmwareImages;
             FirmwareImageName.ValueMember = "FullyQualifiedPath";
@@ -164,6 +156,20 @@ namespace TA.NexDome.Server
         private void ShowAllComPorts_CheckedChanged(object sender, EventArgs e)
             {
             PopulateComPortsComboBox(ShowAllComPorts.Checked);
+            }
+
+        private class ComPortDescriptor
+            {
+            public string PortName { get; set; }
+
+            public string Caption { get; set; }
+            }
+
+        private class FirmwareImageDescriptor
+            {
+            public string DisplayName { get; set; }
+
+            public string FullyQualifiedPath { get; set; }
             }
         }
     }

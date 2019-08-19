@@ -1,15 +1,21 @@
-﻿using ASCOM;
-using ASCOM.DeviceInterface;
-using System;
-using System.Collections;
-using System.Runtime.InteropServices;
-using TA.NexDome.DeviceInterface;
-using TA.NexDome.Server;
-using TA.NexDome.SharedTypes;
-using NotImplementedException = ASCOM.NotImplementedException;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.AscomDome
     {
+    using System;
+    using System.Collections;
+    using System.Runtime.InteropServices;
+
+    using ASCOM;
+    using ASCOM.DeviceInterface;
+
+    using TA.NexDome.DeviceInterface;
+    using TA.NexDome.Server;
+    using TA.NexDome.SharedTypes;
+
+    using NotImplementedException = ASCOM.NotImplementedException;
+
     [ProgId(SharedResources.DomeDriverId)]
     [Guid("32f049d8-fac4-45df-84af-077f01d0d4e1")]
     [ComVisible(true)]
@@ -18,24 +24,16 @@ namespace TA.NexDome.AscomDome
     [ServedClassName(SharedResources.DomeDriverName)]
     public class Dome : ReferenceCountedObject, IDomeV2, IDisposable
         {
-        private bool disposed = false;
         private readonly Guid clientId;
+
         private DeviceController controller;
+
+        private bool disposed;
 
         public Dome()
             {
             clientId = SharedResources.ConnectionManager.RegisterClient(SharedResources.DomeDriverId);
             }
-
-        private void ReleaseUnmanagedResources()
-            {
-            if (disposed) return;
-            SharedResources.ConnectionManager.GoOffline(clientId);
-            SharedResources.ConnectionManager.UnregisterClient(clientId);
-            }
-
-        /// <inheritdoc />
-        ~Dome() => ReleaseUnmanagedResources();
 
         /// <inheritdoc />
         public void SetupDialog() => SharedResources.DoSetupDialog(clientId);
@@ -83,7 +81,7 @@ namespace TA.NexDome.AscomDome
         public async void Park() => await controller.Park();
 
         /// <inheritdoc />
-        public void SetPark() => SharedResources.SetParkPosition((decimal) controller.AzimuthDegrees);
+        public void SetPark() => SharedResources.SetParkPosition((decimal)controller.AzimuthDegrees);
 
         /// <inheritdoc />
         public void SlewToAltitude(double altitude) => throw new NotImplementedException();
@@ -100,14 +98,11 @@ namespace TA.NexDome.AscomDome
             get => controller?.IsConnected ?? false;
             set
                 {
-                if (value)
-                    {
-                    controller = SharedResources.ConnectionManager.GoOnline(clientId);
-                    }
+                if (value) controller = SharedResources.ConnectionManager.GoOnline(clientId);
                 else
                     {
                     SharedResources.ConnectionManager.GoOffline(clientId);
-                    controller = null; //[Sentinel]
+                    controller = null; // [Sentinel]
                     }
                 }
             }
@@ -194,5 +189,15 @@ namespace TA.NexDome.AscomDome
 
         /// <inheritdoc />
         public bool Slewing => controller.IsMoving;
+
+        private void ReleaseUnmanagedResources()
+            {
+            if (disposed) return;
+            SharedResources.ConnectionManager.GoOffline(clientId);
+            SharedResources.ConnectionManager.UnregisterClient(clientId);
+            }
+
+        /// <inheritdoc />
+        ~Dome() => ReleaseUnmanagedResources();
         }
     }

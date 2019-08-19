@@ -6,19 +6,15 @@
     <FeatureGroup Id="fgRoot">
       <Feature Id="featAscomDrivers" Title="ASCOM drivers" Level="1" Absent="disallow"
                Display="expand">
-        <Feature Id="featAscomServer" Title="ASCOM Multi-instance Server" Level="1" Absent="disallow" Display="expand">
-          <ComponentGroupRef Id="cgAscomServer"/>
-        </Feature>
-        <Feature Id="featAscomDomeDriver" Title="ASCOM Dome Driver" Level="1" Absent="allow" Display="expand">
-          <ComponentGroupRef Id="cgAscomDomeDriver"/>
-        </Feature>
+        <ComponentGroupRef Id="cgAscomServer" />
+        <ComponentGroupRef Id="cgAscomDomeDriver" />
       </Feature>
       <Feature Id="featFirmwareFeatures" Title="Firmware" Level="1" Absent="disallow" Display="expand">
         <Feature Id="featFirmware" Title="Precompiled firmware">
-          <ComponentGroupRef Id="cgFirmware"/>
+          <ComponentGroupRef Id="cgFirmware" />
         </Feature>
         <Feature Id="featFirmwareUploader" Title="Firmware upload utility">
-          <ComponentGroupRef Id="cgFirmwareUploader"/>
+          <ComponentGroupRef Id="cgFirmwareUploader" />
         </Feature>
       </Feature>
     </FeatureGroup>

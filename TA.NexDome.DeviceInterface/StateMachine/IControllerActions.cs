@@ -1,15 +1,13 @@
-﻿// This file is part of the TA.DigitalDomeworks project
-// 
-// Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
-// 
-// File: IControllerActions.cs  Last modified: 2018-03-28@00:57 by Tim Long
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.DeviceInterface.StateMachine
     {
     public interface IControllerActions
         {
         /// <summary>
-        ///     Requests that the controller send a status report on the current state of the hardware.
+        ///     Requests that the controller send a status report on the current state of the
+        ///     hardware.
         /// </summary>
         void RequestHardwareStatus();
 
@@ -49,7 +47,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         void RequestShutterStatus();
 
         /// <summary>
-        /// Sets the home sensor position in steps clockwise from true north.
+        ///     Sets the home sensor position in steps clockwise from true north.
         /// </summary>
         /// <param name="stepsFromTrueNorth">The azimuth in decimal degrees.</param>
         /// <remarks>

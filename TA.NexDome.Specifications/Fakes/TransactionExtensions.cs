@@ -1,20 +1,19 @@
-﻿// This file is part of the TA.DigitalDomeworks project
-// 
-// Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
-// 
-// File: TransactionExtensions.cs  Last modified: 2018-03-29@21:27 by Tim Long
-
-using System;
-using System.Reflection;
-using JetBrains.Annotations;
-using TA.Ascom.ReactiveCommunications;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.Specifications.Fakes
     {
+    using System;
+    using System.Reflection;
+
+    using JetBrains.Annotations;
+
+    using TA.Ascom.ReactiveCommunications;
+
     /// <summary>
     ///     Extension methods for manipulating non-public members of transaction classes.
     /// </summary>
-    internal static class TransactionExtensions
+    static class TransactionExtensions
         {
         /// <summary>
         ///     Sets the protected response property.
@@ -27,8 +26,13 @@ namespace TA.NexDome.Specifications.Fakes
             var maybeResponse = response == null ? Maybe<string>.Empty : new Maybe<string>(response);
             var transactionType = typeof(DeviceTransaction);
             var responseProperty = transactionType.GetProperty("Response");
-            responseProperty.SetValue(transaction, maybeResponse, BindingFlags.Instance | BindingFlags.NonPublic, null,
-                null, null);
+            responseProperty.SetValue(
+                transaction,
+                maybeResponse,
+                BindingFlags.Instance | BindingFlags.NonPublic,
+                null,
+                null,
+                null);
             }
 
         /// <summary>
@@ -40,14 +44,22 @@ namespace TA.NexDome.Specifications.Fakes
             {
             transaction.SetResponse(response);
             var transactionType = transaction.GetType();
-            var makeHotMethod = transactionType.GetMethod("MakeHot",
+            var makeHotMethod = transactionType.GetMethod("MakeHot", BindingFlags.Instance | BindingFlags.NonPublic);
+            makeHotMethod.Invoke(
+                transaction,
+                BindingFlags.NonPublic | BindingFlags.Instance,
+                Type.DefaultBinder,
+                new object[] { },
+                null);
+            var onCompletedMethod = transactionType.GetMethod(
+                "OnCompleted",
                 BindingFlags.Instance | BindingFlags.NonPublic);
-            makeHotMethod.Invoke(transaction, BindingFlags.NonPublic | BindingFlags.Instance, Type.DefaultBinder,
-                new object[] { }, null);
-            var onCompletedMethod = transactionType.GetMethod("OnCompleted",
-                BindingFlags.Instance | BindingFlags.NonPublic);
-            onCompletedMethod.Invoke(transaction, BindingFlags.NonPublic | BindingFlags.Instance, Type.DefaultBinder,
-                new object[] { }, null);
+            onCompletedMethod.Invoke(
+                transaction,
+                BindingFlags.NonPublic | BindingFlags.Instance,
+                Type.DefaultBinder,
+                new object[] { },
+                null);
             }
 
         /// <summary>
@@ -61,8 +73,12 @@ namespace TA.NexDome.Specifications.Fakes
             var exception = new TimeoutException(message ?? "Timeout");
             var type = transaction.GetType();
             var onErrorMethod = type.GetMethod("OnError", BindingFlags.Instance | BindingFlags.NonPublic);
-            onErrorMethod.Invoke(transaction, BindingFlags.NonPublic | BindingFlags.Instance, Type.DefaultBinder,
-                new object[] {exception}, null);
+            onErrorMethod.Invoke(
+                transaction,
+                BindingFlags.NonPublic | BindingFlags.Instance,
+                Type.DefaultBinder,
+                new object[] { exception },
+                null);
             }
         }
     }

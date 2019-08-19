@@ -1,26 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TA.Ascom.ReactiveCommunications;
-using TA.Ascom.ReactiveCommunications.Diagnostics;
-using TA.NexDome.SharedTypes;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.DeviceInterface
     {
+    using System;
+    using System.Reactive.Linq;
+    using System.Text;
 
-    class EmptyResponseTransaction : DeviceTransaction
+    using TA.Ascom.ReactiveCommunications;
+    using TA.Ascom.ReactiveCommunications.Diagnostics;
+
+    internal class EmptyResponseTransaction : DeviceTransaction
         {
-        private string expectedResponse;
+        private readonly string expectedResponse;
 
         /// <inheritdoc />
-        public EmptyResponseTransaction(string command) : base(command.EnsureEncapsulation())
+        public EmptyResponseTransaction(string command)
+            : base(command.EnsureEncapsulation())
             {
-            var rawCommand = Command.TrimStart('@').TrimEnd('\r', '\n');
-            var commaPosition = rawCommand.IndexOf(',');    // Comma separates the command verb from the arguments
-            var verb = (commaPosition > 0) ? rawCommand.Remove(commaPosition) : rawCommand;
+            string rawCommand = Command.TrimStart('@').TrimEnd('\r', '\n');
+            int commaPosition = rawCommand.IndexOf(','); // Comma separates the command verb from the arguments
+            string verb = commaPosition > 0 ? rawCommand.Remove(commaPosition) : rawCommand;
             var builder = new StringBuilder();
             expectedResponse = builder.Append(':').Append(verb).Append('#').ToString();
             }
@@ -29,9 +29,7 @@ namespace TA.NexDome.DeviceInterface
         public override void ObserveResponse(IObservable<char> source)
             {
             var validResponses = source.DelimitedMessageStrings().Where(r => r == expectedResponse);
-            validResponses.Trace("Ack")
-                .Take(1)
-                .Subscribe(OnNext, OnError, OnCompleted);
+            validResponses.Trace("Ack").Take(1).Subscribe(OnNext, OnError, OnCompleted);
             }
         }
     }
