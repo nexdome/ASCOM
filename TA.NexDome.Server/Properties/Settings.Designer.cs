@@ -302,12 +302,15 @@ namespace TA.NexDome.Server.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool FirmwareUploadVerboseOutput {
             get {
                 return ((bool)(this["FirmwareUploadVerboseOutput"]));
+            }
+            set {
+                this["FirmwareUploadVerboseOutput"] = value;
             }
         }
         

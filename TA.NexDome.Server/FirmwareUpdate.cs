@@ -8,6 +8,7 @@ namespace TA.NexDome.Server
     using System.IO;
     using System.Linq;
     using System.Management;
+    using System.Runtime.InteropServices;
     using System.Text;
     using System.Windows.Forms;
 
@@ -17,6 +18,14 @@ namespace TA.NexDome.Server
 
     public partial class FirmwareUpdate : Form
         {
+        #region Native methods for manipulating the console control
+        [DllImport("user32.dll")]
+        private static extern IntPtr SendMessage(IntPtr window, int message, int wparam, int lparam);
+
+        private const int SbBottom = 0x7;
+        private const int WmVscroll = 0x115;
+        #endregion
+
         private readonly ClickCommand updateClickCommand;
 
         private IList<ComPortDescriptor> comPortDescriptors;
@@ -132,7 +141,7 @@ namespace TA.NexDome.Server
         private void PopulateComPortsComboBox(bool showAll = false)
             {
             ComPortName.BeginUpdate();
-            comPortDescriptors.Clear();
+            comPortDescriptors?.Clear();
             comPortDescriptors = EnumerateComPorts(showAll).ToList();
             ComPortName.DataSource = comPortDescriptors;
             ComPortName.DisplayMember = "Caption";
@@ -170,6 +179,18 @@ namespace TA.NexDome.Server
             public string DisplayName { get; set; }
 
             public string FullyQualifiedPath { get; set; }
+            }
+
+        /// <summary>
+        /// Handles the OnConsoleOutput event of the ConsoleOutput control.
+        /// Sends a native Windows message that causes scroll-to-bottom
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="args">The <see cref="ConsoleControl.ConsoleEventArgs"/> instance containing the event data.</param>
+        private void ConsoleOutput_OnConsoleOutput(object sender, ConsoleControl.ConsoleEventArgs args)
+            {
+            var console = ConsoleOutput.InternalRichTextBox;
+            SendMessage(console.Handle, WmVscroll, SbBottom, 0x0);
             }
         }
     }
