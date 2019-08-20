@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+	<String Id="NetFx35NotInstalled">
+    You must enable .NET Framework 3.5 in order to use this product.
+    Please open Windows Settings and search for
+    "Turn Windows Features On or Off".
+    Re-run this installation once you've enabled .NET Framework 3.5
+  </String>
+</WixLocalization>

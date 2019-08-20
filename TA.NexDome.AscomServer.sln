@@ -43,6 +43,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Firmware", "Firmware", "{CD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TA.NexDome.FirmwareUpdater", "TA.NexDome.FirmwareUpdater\TA.NexDome.FirmwareUpdater.csproj", "{741967C5-9A92-4062-A777-F3118442974C}"
 EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "TA.NexDome.Bootstrapper", "TA.NexDome.Bootstrapper\TA.NexDome.Bootstrapper.wixproj", "{DFCD27F0-865D-4B10-8930-D18F79844AC4}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		TA.NexDome.SharedCode\TA.NexDome.SharedCode.projitems*{1224a06b-5a84-452f-af63-cf8ef7d6713e}*SharedItemsImports = 4
@@ -111,6 +113,12 @@ Global
 		{741967C5-9A92-4062-A777-F3118442974C}.Release|x64.Build.0 = Release|Any CPU
 		{741967C5-9A92-4062-A777-F3118442974C}.Release|x86.ActiveCfg = Release|Any CPU
 		{741967C5-9A92-4062-A777-F3118442974C}.Release|x86.Build.0 = Release|Any CPU
+		{DFCD27F0-865D-4B10-8930-D18F79844AC4}.Debug|x64.ActiveCfg = Debug|x86
+		{DFCD27F0-865D-4B10-8930-D18F79844AC4}.Debug|x86.ActiveCfg = Debug|x86
+		{DFCD27F0-865D-4B10-8930-D18F79844AC4}.Debug|x86.Build.0 = Debug|x86
+		{DFCD27F0-865D-4B10-8930-D18F79844AC4}.Release|x64.ActiveCfg = Release|x86
+		{DFCD27F0-865D-4B10-8930-D18F79844AC4}.Release|x86.ActiveCfg = Release|x86
+		{DFCD27F0-865D-4B10-8930-D18F79844AC4}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
