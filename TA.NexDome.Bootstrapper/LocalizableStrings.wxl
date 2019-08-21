@@ -7,4 +7,9 @@
     "Turn Windows Features On or Off".
     Re-run this installation once you've enabled .NET Framework 3.5
   </String>
+  <String Id="Ascom64NotInstalled">
+    This product requires ASCOM Platform 6.4 SP1 or later.
+    Please visit &lt;a href="http://ascom-standards.org"&gt;http://ascom-standards.org&lt;/a&gt; to download,
+    then re-run this installer once ASCOM is installed.
+  </String>
 </WixLocalization>

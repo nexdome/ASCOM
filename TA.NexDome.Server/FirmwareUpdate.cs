@@ -183,7 +183,7 @@ namespace TA.NexDome.Server
 
         /// <summary>
         /// Handles the OnConsoleOutput event of the ConsoleOutput control.
-        /// Sends a native Windows message that causes scroll-to-bottom
+        /// Uses the Win32 API to send a <c>WmVscroll</c> message to the console control
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="args">The <see cref="ConsoleControl.ConsoleEventArgs"/> instance containing the event data.</param>

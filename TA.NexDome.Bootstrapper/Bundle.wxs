@@ -12,27 +12,32 @@
         LicenseUrl="https://tigra.mit-license.org/"
         ShowVersion="yes"
         LogoSideFile="SidePanel.jpg"  
-        LogoFile="NexDome.png" />
+        LogoFile="NexDome64x64.png" />
     </BootstrapperApplicationRef>
 
     <!-- SidePanel.jpg courtesy of Tony Bennett -->
 
-    <!-- Launch condition: .NET 35 must be enabled -->
+    <!-- Launch condition: .NET 35 must be enabled 
     <util:RegistrySearchRef Id="NETFRAMEWORK35_SP_LEVEL"/>
     <bal:Condition Message="!(loc.NetFx35NotInstalled)" >
       NETFRAMEWORK35_SP_LEVEL OR WixBundleInstalled
-    </bal:Condition>
+    </bal:Condition> -->
 
+    <!-- Launch Condition - ASCOM Platform 6.4 or later must be installed -->
     <util:RegistrySearchRef Id="rsAscomPlatform"/>
+    <bal:Condition Message="!(loc.Ascom64NotInstalled)" >
+      <![CDATA[AscomPlatformInstalledVersion OR WixBundleInstalled]]>
+    </bal:Condition>
 
     <Chain>
       <!-- Install .Net Framework 4.7.2 if necessary -->
       <PackageGroupRef Id="NetFx472Redist"/>
       <RollbackBoundary Vital="yes" />
 
-      <!-- Install ASCOM Platform 6.4 if necessary -->
-      <PackageGroupRef Id="pgAscomPlatform" />
+      <!-- Install Arduino serial port drivers -->
+      <PackageGroupRef Id="pgArduinoSerialDrivers"/>
       <RollbackBoundary Vital="yes" />
+
 
       <!-- Install the NexDome Constrol System ASCOM server -->
       <PackageGroupRef Id="pgNexDomeAscomServer"/>

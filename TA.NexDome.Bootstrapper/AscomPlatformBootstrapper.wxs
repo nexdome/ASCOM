@@ -22,14 +22,14 @@
       Root="HKLM"
       Key="SOFTWARE\ASCOM\Platform"
       Value="Platform Version"/>
+    <WixVariable Id="AscomPlatformDetectCondition" Value="AscomPlatformInstalledVersion &gt;= AscomPlatformMinimumRequiredVersion" Overridable="yes" />
+    <WixVariable Id="AscomPlatformPackageDirectory" Value="ascom/" Overridable="yes" />
   </Fragment>
 
   <Fragment>
     <util:RegistrySearchRef Id="NETFRAMEWORK45"/>
     <util:RegistrySearchRef Id="rsAscomPlatform"/>
 
-    <WixVariable Id="AscomPlatformDetectCondition" Value="AscomPlatformInstalledVersion &gt;= AscomPlatformMinimumRequiredVersion" Overridable="yes" />
-    <WixVariable Id="AscomPlatformPackageDirectory" Value="ascom/" Overridable="yes" />
 
     <PackageGroup Id="pgAscomPlatform">
       <ExePackage

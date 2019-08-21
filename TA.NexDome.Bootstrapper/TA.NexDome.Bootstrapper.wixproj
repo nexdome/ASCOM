@@ -27,6 +27,7 @@
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ArduinoDriverInstallerPayload.wxs" />
     <Compile Include="AscomPlatformBootstrapper.wxs" />
     <Compile Include="Bundle.wxs" />
     <Compile Include="NexDomeAscomServer.wxs" />
@@ -47,12 +48,100 @@
     </WixExtension>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ComponentToPayload.xsl" />
     <Content Include="Config.wxi" />
-    <Content Include="NexDome.PNG" />
+    <Content Include="drivers\AdafruitCircuitPlayground.cat" />
+    <Content Include="drivers\AdafruitCircuitPlayground.inf" />
+    <Content Include="drivers\amd64\libusb0.dll" />
+    <Content Include="drivers\amd64\libusb0.sys" />
+    <Content Include="drivers\arduino-org.cat" />
+    <Content Include="drivers\arduino-org.inf" />
+    <Content Include="drivers\arduino.cat" />
+    <Content Include="drivers\arduino.inf" />
+    <Content Include="drivers\arduino_gemma.cat" />
+    <Content Include="drivers\arduino_gemma.inf" />
+    <Content Include="drivers\CP210x_6.7.4\slabvcp.cat" />
+    <Content Include="drivers\CP210x_6.7.4\slabvcp.inf" />
+    <Content Include="drivers\CP210x_6.7.4\x64\silabser.sys" />
+    <Content Include="drivers\CP210x_6.7.4\x64\WdfCoInstaller01009.dll" />
+    <Content Include="drivers\CP210x_6.7.4\x86\silabser.sys" />
+    <Content Include="drivers\CP210x_6.7.4\x86\WdfCoInstaller01009.dll" />
+    <Content Include="drivers\CP210x_6.7\ReleaseNotes.txt" />
+    <Content Include="drivers\CP210x_6.7\slabvcp.cat" />
+    <Content Include="drivers\CP210x_6.7\slabvcp.inf" />
+    <Content Include="drivers\CP210x_6.7\SLAB_License_Agreement_VCP_Windows.txt" />
+    <Content Include="drivers\CP210x_6.7\x64\silabenm.sys" />
+    <Content Include="drivers\CP210x_6.7\x64\silabser.sys" />
+    <Content Include="drivers\CP210x_6.7\x64\WdfCoInstaller01009.dll" />
+    <Content Include="drivers\CP210x_6.7\x86\silabenm.sys" />
+    <Content Include="drivers\CP210x_6.7\x86\silabser.sys" />
+    <Content Include="drivers\CP210x_6.7\x86\WdfCoInstaller01009.dll" />
+    <Content Include="drivers\dpinst-amd64.exe" />
+    <Content Include="drivers\dpinst-x86.exe" />
+    <Content Include="drivers\FTDI USB Drivers\amd64\ftbusui.dll" />
+    <Content Include="drivers\FTDI USB Drivers\amd64\ftcserco.dll" />
+    <Content Include="drivers\FTDI USB Drivers\amd64\ftd2xx.lib" />
+    <Content Include="drivers\FTDI USB Drivers\amd64\ftd2xx64.dll" />
+    <Content Include="drivers\FTDI USB Drivers\amd64\ftdibus.sys" />
+    <Content Include="drivers\FTDI USB Drivers\amd64\ftlang.dll" />
+    <Content Include="drivers\FTDI USB Drivers\amd64\ftser2k.sys" />
+    <Content Include="drivers\FTDI USB Drivers\amd64\ftserui2.dll" />
+    <Content Include="drivers\FTDI USB Drivers\ftd2xx.h" />
+    <Content Include="drivers\FTDI USB Drivers\ftdibus.cat" />
+    <Content Include="drivers\FTDI USB Drivers\ftdibus.inf" />
+    <Content Include="drivers\FTDI USB Drivers\ftdiport.cat" />
+    <Content Include="drivers\FTDI USB Drivers\ftdiport.inf" />
+    <Content Include="drivers\FTDI USB Drivers\i386\ftbusui.dll" />
+    <Content Include="drivers\FTDI USB Drivers\i386\ftcserco.dll" />
+    <Content Include="drivers\FTDI USB Drivers\i386\ftd2xx.dll" />
+    <Content Include="drivers\FTDI USB Drivers\i386\ftd2xx.lib" />
+    <Content Include="drivers\FTDI USB Drivers\i386\ftdibus.sys" />
+    <Content Include="drivers\FTDI USB Drivers\i386\ftlang.dll" />
+    <Content Include="drivers\FTDI USB Drivers\i386\ftser2k.sys" />
+    <Content Include="drivers\FTDI USB Drivers\i386\ftserui2.dll" />
+    <Content Include="drivers\FTDI USB Drivers\LogoVerificationReport.pdf" />
+    <Content Include="drivers\FTDI USB Drivers\Static\amd64\ftd2xx.lib" />
+    <Content Include="drivers\FTDI USB Drivers\Static\i386\ftd2xx.lib" />
+    <Content Include="drivers\genuino.cat" />
+    <Content Include="drivers\genuino.inf" />
+    <Content Include="drivers\ia64\libusb0.dll" />
+    <Content Include="drivers\ia64\libusb0.sys" />
+    <Content Include="drivers\license\libusb0\installer_license.txt" />
+    <Content Include="drivers\linino-boards_amd64.cat" />
+    <Content Include="drivers\linino-boards_x86.cat" />
+    <Content Include="drivers\linino.inf" />
+    <Content Include="drivers\Old_Arduino_Drivers.zip" />
+    <Content Include="drivers\README.txt" />
+    <Content Include="drivers\x86\libusb0.sys" />
+    <Content Include="drivers\x86\libusb0_x86.dll" />
+    <Content Include="HarvestArduinoDriverInstallerPayload.bat" />
+    <Content Include="NexDome64x64.pdn" />
+    <Content Include="NexDome64x64.png" />
     <Content Include="packages.config" />
+    <Content Include="SidePanel.jpg" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="LocalizableStrings.wxl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="drivers\" />
+    <Folder Include="drivers\amd64\" />
+    <Folder Include="drivers\CP210x_6.7.4\" />
+    <Folder Include="drivers\CP210x_6.7.4\x64\" />
+    <Folder Include="drivers\CP210x_6.7.4\x86\" />
+    <Folder Include="drivers\CP210x_6.7\" />
+    <Folder Include="drivers\CP210x_6.7\x64\" />
+    <Folder Include="drivers\CP210x_6.7\x86\" />
+    <Folder Include="drivers\FTDI USB Drivers\" />
+    <Folder Include="drivers\FTDI USB Drivers\amd64\" />
+    <Folder Include="drivers\FTDI USB Drivers\i386\" />
+    <Folder Include="drivers\FTDI USB Drivers\Static\" />
+    <Folder Include="drivers\FTDI USB Drivers\Static\amd64\" />
+    <Folder Include="drivers\FTDI USB Drivers\Static\i386\" />
+    <Folder Include="drivers\ia64\" />
+    <Folder Include="drivers\license\" />
+    <Folder Include="drivers\license\libusb0\" />
+    <Folder Include="drivers\x86\" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
@@ -68,12 +157,17 @@
     <Error Condition="!Exists('..\packages\WiX.3.11.1\build\wix.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\WiX.3.11.1\build\wix.props'))" />
   </Target>
   <Import Project="..\packages\GitVersionTask.5.0.1\build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.5.0.1\build\GitVersionTask.targets')" />
-  <!--
-	To modify your build process, add your task inside one of the targets below and uncomment it.
-	Other similar extension points exist, see Wix.targets.
-	<Target Name="BeforeBuild">
-	</Target>
-	<Target Name="AfterBuild">
-	</Target>
-	-->
+  <Target Name="BeforeBuild" AfterTargets="GetVersion">
+    <CreateProperty Value="$(OutputName).$(GitVersion_SemVer)">
+      <Output TaskParameter="Value" PropertyName="TargetName" />
+    </CreateProperty>
+    <CreateProperty Value="$(TargetName)$(TargetExt)">
+      <Output TaskParameter="Value" PropertyName="TargetFileName" />
+    </CreateProperty>
+    <CreateProperty Value="$(TargetDir)$(TargetFileName)">
+      <Output TaskParameter="Value" PropertyName="TargetPath" />
+    </CreateProperty>
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
 </Project>
