@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<Include>
+  <!-- User Configuration - you must ensure all these variables have correct values for your project -->
+  <?define InstallName = "NexDome Control System" ?>
+  <?define Manufacturer = "NexDome" ?>
+  <?define InstallDirectory = "$(var.InstallName)" ?>
+  <?define CopyrightNotice="Copyright © 2019 NexDome and Tigra Astronomy, all rights reserved" ?>
+  <!-- End of User Configuration - do not edit anything beyond this point -->
+
+  <!-- Define platform-specific names and locations -->
+  <?if $(var.Platform) = x64 ?>
+  <?define ProductName = "$(var.InstallName) (x64)" ?>
+  <?define Win64 = "yes" ?>
+  <?define PlatformProgramFilesFolder = "ProgramFiles64Folder" ?>
+  <?define PlatformCommonFilesFolder = "CommonFiles64Folder" ?>
+  <?else ?>
+  <?define ProductName = "$(var.InstallName) (x86)" ?>
+  <?define Win64 = "no" ?>
+  <?define PlatformProgramFilesFolder = "ProgramFilesFolder" ?>
+  <?define PlatformCommonFilesFolder = "CommonFilesFolder" ?>
+  <?endif ?>
+</Include>

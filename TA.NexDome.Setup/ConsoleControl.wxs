@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <DirectoryRef Id="INSTALLDIRECTORY" />
+    <ComponentGroup Id="cgConsoleControl">
+      <Component Id="cmpConsoleControl" Directory="INSTALLDIRECTORY" Guid="*" Win64="no">
+        <File Id="filConsoleControlDll" 
+              Source="$(var.AscomServer.TargetDir)ConsoleControl.dll" 
+              Vital="yes"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="cmpConsoleControlApi" Directory="INSTALLDIRECTORY" Guid="*" Win64="no">
+        <File Id="filConsoleControlApiDll" 
+              Source="$(var.AscomServer.TargetDir)ConsoleControlAPI.dll" 
+              Vital="yes"
+              KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

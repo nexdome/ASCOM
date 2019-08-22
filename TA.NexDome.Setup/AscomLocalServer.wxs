@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?include $(sys.CURRENTDIR)\Config.wxi?>
+  <Fragment>
+    <DirectoryRef Id="INSTALLDIRECTORY" />
+    <ComponentGroup Id="cgAscomServer" Directory="INSTALLDIRECTORY">
+      <ComponentGroupRef Id="cgNinject" />
+      <ComponentGroupRef Id="cgNLog" />
+      <ComponentGroupRef Id="cgPostSharp" />
+      <ComponentGroupRef Id="cgCommunicationsLayer" />
+      <ComponentGroupRef Id="cgReactiveExtensions" />
+      <ComponentGroupRef Id="cgReactiveAscom" />
+      <ComponentGroupRef Id="cgSharedTypes" />
+      <ComponentGroupRef Id="cgJetBrains" />
+      <ComponentGroupRef Id="cgConsoleControl" />
+      <Component Id="cmpAscomLocalServer" Guid="*" Win64="no">
+        <File Id="filLocalServerAssembly"
+              Source="$(var.AscomServer.TargetPath)"
+              KeyPath="yes"
+              Vital="yes"
+              Assembly=".net"
+              AssemblyApplication="filLocalServerAssembly" />
+      </Component>
+      <Component Id="cmpAscomLocalServerConfig" Guid="*" Win64="no">
+        <File Id="filLocalServerAssemblyConfig"
+              Source="$(var.AscomServer.TargetPath).config"
+              KeyPath="yes"
+              Vital="yes" />
+      </Component>
+      <Component Id="cmpLocalServerRegistry" Win64="no">
+        <!-- LocalServer32 COM Registration -->
+        <RegistryKey Root="HKLM" Key="Software\Classes\AppID">
+          <!-- HKLM\Software\Classes\AppId\{my-app-id} -->
+          <RegistryKey Key="$(var.AscomServerAppId)">
+            <RegistryValue Value="$(var.InstallName)" Type="string" />
+            <RegistryValue Name="AppID" Value="$(var.AscomServerAppId)" Type="string" />
+            <RegistryValue Name="AuthenticationLevel" Value="1" Type="integer" />
+            <RegistryValue Name="RunAs" Value="Interactive User" Type="string" />
+          </RegistryKey>
+          <!-- HKLM\Software\Classes\AppID\{exe-name} -->
+          <RegistryKey Key="$(var.AscomServer.TargetFileName)">
+            <RegistryValue Name="AppID" Value="$(var.AscomServerAppId)" Type="string" />
+          </RegistryKey>
+        </RegistryKey>
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>
+    <DirectoryRef Id="FIRMWAREUTILS" />
+    <ComponentGroup Id="cgFirmware" Directory="FIRMWAREUTILS">
+            <Component Id="cmpRotatorFirmware" Guid="{F5C76E87-7957-4E62-B2A8-EC7C5949BECD}">
+                <File Id="filRotatorFirmware" KeyPath="yes" Source="$(var.SolutionDir)Firmware\TA.NexDome.Rotator.hex" />
+            </Component>
+            <Component Id="cmpShutterFirmware" Guid="{730106BE-1652-4C03-A2C1-F0B57415105F}">
+                <File Id="filShutterFirmware" KeyPath="yes" Source="$(var.SolutionDir)Firmware\TA.NexDome.Shutter.hex" />
+            </Component>
+            <Component Id="cmpXbeeResetFirmware" Guid="{6BBF7D13-714A-4A56-A5A0-B8525A96CBA8}">
+                <File Id="filXbeeResetFirmware" KeyPath="yes" Source="$(var.SolutionDir)Firmware\XBeeFactoryReset.hex" />
+            </Component>
+            <Component Id="cmpFirmwareReadMe" Guid="{99D697FD-EF8A-4B25-975C-BE92AAD5C739}">
+                <File Id="filFirmwareReadMe" KeyPath="yes" Source="$(var.SolutionDir)Firmware\ReadMe.pdf" />
+            </Component>
+        </ComponentGroup>
+  </Fragment>
+</Wix>

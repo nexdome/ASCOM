@@ -1,0 +1,10 @@
+# Code style overrides for MSpec projects
+
+# C# files
+[*.cs]
+
+
+# Modifier preferences
+dotnet_style_require_accessibility_modifiers = never:suggestion
+dotnet_style_readonly_field = false:suggestion
+

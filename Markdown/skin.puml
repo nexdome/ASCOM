@@ -1,0 +1,16 @@
+skinparam state {
+    BackgroundColor<<Warning>> IndianRed
+    BackgroundColor<<Safe>> DarkSeaGreen
+    BackgroundColor<<Ready>> DarkSeaGreen
+    BackgroundColor PaleGoldenRod
+}
+skinparam class {
+    BackgroundColor<<Warning>> IndianRed
+    BackgroundColor<<Safe>> DarkSeaGreen
+    BackgroundColor<<Ready>> DarkSeaGreen
+    BackgroundColor PaleGoldenRod
+}
+
+skinparam handwritten false
+hide empty members
+hide empty description

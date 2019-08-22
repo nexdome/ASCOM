@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?include $(sys.CURRENTDIR)\Config.wxi?>
+	<Fragment>
+    <!-- 
+      Defines the top-level directories for the installation.
+      Note that some components (e.g. SQL CE) may create directories beneath these, but no component
+      should create directories outside of the structure set up here.
+    -->
+	  <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+	      <Directory Id="dirManufacturer" Name="$(var.Manufacturer)">
+          <Directory Id="INSTALLDIRECTORY" Name="$(var.InstallName)"/>
+        </Directory>
+	    </Directory>
+      <Directory Id="FIRMWAREUTILS">
+        <Directory Id="dirFirmwareUploader" Name="Uploader" />
+      </Directory>
+    </Directory>
+
+    <SetDirectory Id="FIRMWAREUTILS" Value="[WindowsVolume]NexDome-Firmware"/>
+	</Fragment>
+</Wix>

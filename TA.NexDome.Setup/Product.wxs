@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+  <?include $(sys.CURRENTDIR)\Config.wxi?>
+  <Product Id="*"
+           Name="$(var.InstallName)"
+           Language="1033" Version="$(var.ProductVersion)"
+           Manufacturer="$(var.Manufacturer)"
+           UpgradeCode="$(var.UpgradeCode)">
+    <Package InstallerVersion="400" Compressed="yes" InstallScope="perMachine" />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed."
+                  AllowSameVersionUpgrades="no" />
+    <MediaTemplate EmbedCab="yes" />
+    <FeatureGroupRef Id="fgRoot" />
+
+    <PropertyRef Id="WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED"/>
+    
+    <!-- Prerequisite: .NET Framework 4.6.2 -->
+    <Condition 
+      Message="This product requires .NET Framework 4.6.2 or later. Please install the .NET Framework then run this installer again.">
+      <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED]]>
+    </Condition>
+
+    <!-- Condition: Correct installer for the target operating system -->
+    <Condition Message="Please use the correct installer for your operating system - x86 for 32-bit, x64 for 64-bit.">
+      <?if $(var.Win64) = "yes" ?>
+      VersionNT64
+      <?else?>
+      NOT VersionNT64
+      <?endif?>
+    </Condition>
+    
+    <!-- Condition: Windows 7 or later -->
+    <Condition Message="This product requires Windows 7 or later">
+      <?if $(var.Win64) = "yes" ?>
+      <![CDATA[Installed OR (VersionNT64 >= 601)]]>
+      <?else?>
+      <![CDATA[Installed OR (VersionNT >= 601)]]>
+      <?endif?>
+    </Condition>
+  </Product>
+</Wix>

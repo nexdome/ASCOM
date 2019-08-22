@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F1CF8488-83A4-447D-A0A3-EA6A04D4AAE6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TA.NexDome.Specifications</RootNamespace>
+    <AssemblyName>TA.NexDome.Specifications</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>CS0169</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Builders\DeviceControllerContextBuilder.cs" />
+    <Compile Include="Builders\RotatorStatusBuilder.cs" />
+    <Compile Include="Builders\StateMachineBuilder.cs" />
+    <Compile Include="Contexts\DeviceControllerContext.cs" />
+    <Compile Include="Contexts\LogSetup.cs" />
+    <Compile Include="Contexts\StateMachineContext.cs" />
+    <Compile Include="Contexts\with_device_builder_context.cs" />
+    <Compile Include="Contexts\with_state_machine_context.cs" />
+    <Compile Include="DeviceInterface\Behaviours\an_open_shutter.cs" />
+    <Compile Include="DeviceInterface\Behaviours\a_closed_shutter.cs" />
+    <Compile Include="DeviceInterface\Behaviours\a_directionless_rotating_dome.cs" />
+    <Compile Include="DeviceInterface\Behaviours\a_dome_with_a_moving_shutter.cs" />
+    <Compile Include="DeviceInterface\Behaviours\a_moving_rotator.cs" />
+    <Compile Include="DeviceInterface\Behaviours\a_moving_shutter.cs" />
+    <Compile Include="DeviceInterface\Behaviours\a_rotating_dome.cs" />
+    <Compile Include="DeviceInterface\Behaviours\a_stopped_rotator.cs" />
+    <Compile Include="DeviceInterface\Behaviours\a_stopped_shutter.cs" />
+    <Compile Include="DeviceInterface\Behaviours\device_controller_behaviour.cs" />
+    <Compile Include="DeviceInterface\Behaviours\state_machine_behaviour.cs" />
+    <Compile Include="DeviceInterface\Behaviours\view_model_is_updated_from_rotator_status.cs" />
+    <Compile Include="DeviceInterface\ControllerStateMachineBehaviours.cs" />
+    <Compile Include="DeviceInterface\ControllerStatusSpecs.cs" />
+    <Compile Include="DeviceInterface\RotatorStateSpecs.cs" />
+    <Compile Include="DeviceInterface\ShutterStateSpecs.cs" />
+    <Compile Include="Fakes\FakeClock.cs" />
+    <Compile Include="Fakes\FakeCommunicationChannel.cs" />
+    <Compile Include="Fakes\FakeEndpoint.cs" />
+    <Compile Include="Fakes\FakeTransactionProcessor.cs" />
+    <Compile Include="Fakes\TestableDeviceTransaction.cs" />
+    <Compile Include="Fakes\TransactionExtensions.cs" />
+    <Compile Include="Helpers\ObservableTestExtensions.cs" />
+    <Compile Include="Helpers\TestData.cs" />
+    <Compile Include="MathExtensionSpecs.cs" />
+    <Compile Include="ObservableExtensions\ObservableExtensionSpecs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FakeItEasy">
+      <Version>5.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="GitVersionTask">
+      <Version>5.0.1</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Machine.Specifications">
+      <Version>1.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Machine.Specifications.Should">
+      <Version>1.0.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".editorconfig" />
+    <None Include="app.config" />
+    <None Include="nlog.dll.nlog" />
+    <None Include="TA.NexDome.Specifications.csproj.DotSettings" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TA.NexDome.DeviceInterface\TA.NexDome.DeviceInterface.csproj">
+      <Project>{c0e526b9-e19d-42b4-8aee-08a775d9e0b6}</Project>
+      <Name>TA.NexDome.DeviceInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TA.NexDome.SharedTypes\TA.NexDome.SharedTypes.csproj">
+      <Project>{1224a06b-5a84-452f-af63-cf8ef7d6713e}</Project>
+      <Name>TA.NexDome.SharedTypes</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TestData\" />
+  </ItemGroup>
+  <Import Project="..\TA.NexDome.SharedCode\TA.NexDome.SharedCode.projitems" Label="Shared" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

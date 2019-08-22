@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" 
+     xmlns:bal="http://schemas.microsoft.com/wix/BalExtension"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+  <!--
+        ASCOM Platform Installation State Properties
+   -->
+
+  <?define NetFx472MinRelease = 461808 ?>
+
+  <Fragment>
+    <Variable Name="AscomPlatformMinimumRequiredVersion" Type="version" Value="6.4.0.0"/>
+    <WixVariable Id="AscomPlatformWebDownloadLink" Overridable="yes" 
+                 Value="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/download/Build_2695/ASCOMPlatform64.exe" />
+              
+    <util:RegistrySearch
+      Id='rsAscomPlatform'
+      Variable="AscomPlatformInstalledVersion"
+      Result="value"
+      Root="HKLM"
+      Key="SOFTWARE\ASCOM\Platform"
+      Value="Platform Version"/>
+    <WixVariable Id="AscomPlatformDetectCondition" Value="AscomPlatformInstalledVersion &gt;= AscomPlatformMinimumRequiredVersion" Overridable="yes" />
+    <WixVariable Id="AscomPlatformPackageDirectory" Value="ascom/" Overridable="yes" />
+  </Fragment>
+
+  <Fragment>
+    <util:RegistrySearchRef Id="NETFRAMEWORK45"/>
+    <util:RegistrySearchRef Id="rsAscomPlatform"/>
+
+
+    <PackageGroup Id="pgAscomPlatform">
+      <ExePackage
+          PerMachine="yes"
+          DetectCondition="!(wix.AscomPlatformDetectCondition)"
+          Id="exeAscomPlatform"
+          Vital="yes"
+          Permanent="yes"
+          DownloadUrl="!(wix.AscomPlatformWebDownloadLink)"
+          LogPathVariable="AscomPlatformFullLog"
+          Compressed="no"
+          Name="!(wix.AscomPlatformPackageDirectory)ASCOMPlatform64.exe">
+        <RemotePayload Description="ASCOM Platform 6.4 SP1 Installation"
+                       Hash="9B27F55138A7F6B1D107A9763FB993DFE93A384F"
+                       ProductName="ASCOM Platform 6.4 SP1"
+                       Size="59032298" Version="6.4.1.2695" />
+      </ExePackage>
+    </PackageGroup>
+  </Fragment>
+</Wix>

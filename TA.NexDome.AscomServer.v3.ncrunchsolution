@@ -1,0 +1,20 @@
+﻿<SolutionConfiguration>
+  <Settings>
+    <AllowParallelTestExecution>True</AllowParallelTestExecution>
+    <MetricsExclusionList>
+      <Value>TA.NexDome.Specifications\TA.NexDome.Specifications.csproj</Value>
+    </MetricsExclusionList>
+    <SolutionConfigured>True</SolutionConfigured>
+  </Settings>
+  <EngineModes>
+    <EngineMode>
+      <Name>Run impacted Unit Tests, Integration Tests run Manually</Name>
+      <Settings>
+        <AllowParallelTestExecution>True</AllowParallelTestExecution>
+        <AutoPinNewTests>True</AutoPinNewTests>
+        <TestFilter>FullNameMatchesRegex '.*TestHarness'</TestFilter>
+        <TestsToExecuteAutomatically>FullNameDoesNotMatchRegex '.*TestHarness'</TestsToExecuteAutomatically>
+      </Settings>
+    </EngineMode>
+  </EngineModes>
+</SolutionConfiguration>
