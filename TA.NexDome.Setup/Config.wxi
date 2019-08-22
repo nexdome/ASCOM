@@ -12,7 +12,7 @@
   <?define DomeDriverTypeName = "$(var.DomeDriverProgId)" ?>
   <?define DriverDescription = "NexDome Control System" ?>
   <!-- UpgradeCode should be unique to each product and once set should never change -->
-  <?define UpgradeCode = "{a10f1a15-6985-424d-9b8c-ddad1afacd85}"?>
+  <?define UpgradeCode = "{b58d8ea3-1eae-4e02-8494-eb8b52e1d2be}"?>
   <!-- End of User Configuration - do not edit anything beyond this point -->
 
   <!-- Define platform-specific names and locations -->

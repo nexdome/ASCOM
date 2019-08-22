@@ -115,8 +115,13 @@
     <Content Include="drivers\x86\libusb0.sys" />
     <Content Include="drivers\x86\libusb0_x86.dll" />
     <Content Include="HarvestArduinoDriverInstallerPayload.bat" />
+<<<<<<< HEAD
     <Content Include="NexDome.ico" />
     <Content Include="NexDome.PNG" />
+=======
+    <Content Include="NexDome.bmp" />
+    <Content Include="NexDome.ico" />
+>>>>>>> 3.0.1
     <Content Include="NexDome64x64.pdn" />
     <Content Include="NexDome64x64.png" />
     <Content Include="packages.config" />
