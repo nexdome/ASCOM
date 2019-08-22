@@ -115,10 +115,8 @@ Global
 		{741967C5-9A92-4062-A777-F3118442974C}.Release|x86.Build.0 = Release|Any CPU
 		{DFCD27F0-865D-4B10-8930-D18F79844AC4}.Debug|x64.ActiveCfg = Debug|x86
 		{DFCD27F0-865D-4B10-8930-D18F79844AC4}.Debug|x86.ActiveCfg = Debug|x86
-		{DFCD27F0-865D-4B10-8930-D18F79844AC4}.Debug|x86.Build.0 = Debug|x86
 		{DFCD27F0-865D-4B10-8930-D18F79844AC4}.Release|x64.ActiveCfg = Release|x86
 		{DFCD27F0-865D-4B10-8930-D18F79844AC4}.Release|x86.ActiveCfg = Release|x86
-		{DFCD27F0-865D-4B10-8930-D18F79844AC4}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
