@@ -51,6 +51,7 @@ namespace TA.NexDome.Server
             this.ShutterAccelerationRampTimeTrackBar = new System.Windows.Forms.TrackBar();
             this.ShutterMaximumSpeedTrackBar = new System.Windows.Forms.TrackBar();
             this.communicationSettingsControl1 = new TA.NexDome.Server.CommunicationSettingsControl();
+            this.OnlineHelp = new System.Windows.Forms.Button();
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.AboutBox = new System.Windows.Forms.Button();
@@ -78,7 +79,6 @@ namespace TA.NexDome.Server
             this.label19 = new System.Windows.Forms.Label();
             this.settingsWarningLabel = new System.Windows.Forms.Label();
             this.FirmwareUpdateCommand = new System.Windows.Forms.Button();
-            this.OnlineHelp = new System.Windows.Forms.Button();
             toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.ShutterOpenCloseTimeSeconds)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FullRotationTimeSeconds)).BeginInit();
@@ -144,7 +144,7 @@ namespace TA.NexDome.Server
             this.PresetHD6.Name = "PresetHD6";
             this.PresetHD6.Size = new System.Drawing.Size(66, 23);
             this.PresetHD6.TabIndex = 2;
-            this.PresetHD6.Text = "2m Dome";
+            this.PresetHD6.Text = "Short";
             toolTip1.SetToolTip(this.PresetHD6, "Load default timeouts for a 2m/6ft dome");
             this.PresetHD6.UseVisualStyleBackColor = true;
             this.PresetHD6.Click += new System.EventHandler(this.PresetHD6_Click);
@@ -155,7 +155,7 @@ namespace TA.NexDome.Server
             this.PresetHD10.Name = "PresetHD10";
             this.PresetHD10.Size = new System.Drawing.Size(66, 23);
             this.PresetHD10.TabIndex = 2;
-            this.PresetHD10.Text = "3m Dome";
+            this.PresetHD10.Text = "Medium";
             toolTip1.SetToolTip(this.PresetHD10, "Load default timeouts for a 3m/10ft dome");
             this.PresetHD10.UseVisualStyleBackColor = true;
             this.PresetHD10.Click += new System.EventHandler(this.PresetHD10_Click);
@@ -166,7 +166,7 @@ namespace TA.NexDome.Server
             this.PresetHD15.Name = "PresetHD15";
             this.PresetHD15.Size = new System.Drawing.Size(66, 23);
             this.PresetHD15.TabIndex = 2;
-            this.PresetHD15.Text = "5m Dome";
+            this.PresetHD15.Text = "Long";
             toolTip1.SetToolTip(this.PresetHD15, "Load default timeouts for a 5m/15ft dome");
             this.PresetHD15.UseVisualStyleBackColor = true;
             this.PresetHD15.Click += new System.EventHandler(this.PresetHD15_Click);
@@ -382,9 +382,21 @@ namespace TA.NexDome.Server
             this.communicationSettingsControl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.communicationSettingsControl1.Location = new System.Drawing.Point(6, 19);
             this.communicationSettingsControl1.Name = "communicationSettingsControl1";
-            this.communicationSettingsControl1.Size = new System.Drawing.Size(360, 36);
+            this.communicationSettingsControl1.Size = new System.Drawing.Size(354, 36);
             this.communicationSettingsControl1.TabIndex = 7;
             toolTip1.SetToolTip(this.communicationSettingsControl1, "Set the communications parameters for your installation.");
+            // 
+            // OnlineHelp
+            // 
+            this.OnlineHelp.Location = new System.Drawing.Point(388, 351);
+            this.OnlineHelp.Name = "OnlineHelp";
+            this.OnlineHelp.Size = new System.Drawing.Size(83, 25);
+            this.OnlineHelp.TabIndex = 18;
+            this.OnlineHelp.Tag = global::TA.NexDome.Server.Properties.Settings.Default.OnlineHelpWebDestination;
+            this.OnlineHelp.Text = "Online Help";
+            toolTip1.SetToolTip(this.OnlineHelp, "Open a web browser and navigate to the online help pages.");
+            this.OnlineHelp.UseVisualStyleBackColor = true;
+            this.OnlineHelp.Click += new System.EventHandler(this.BrowseToWebPage);
             // 
             // cmdOK
             // 
@@ -669,17 +681,6 @@ namespace TA.NexDome.Server
             this.FirmwareUpdateCommand.Text = "Update Firmware";
             this.FirmwareUpdateCommand.UseVisualStyleBackColor = true;
             this.FirmwareUpdateCommand.Click += new System.EventHandler(this.FirmwareUpdateCommand_Click);
-            // 
-            // OnlineHelp
-            // 
-            this.OnlineHelp.Location = new System.Drawing.Point(388, 351);
-            this.OnlineHelp.Name = "OnlineHelp";
-            this.OnlineHelp.Size = new System.Drawing.Size(83, 25);
-            this.OnlineHelp.TabIndex = 18;
-            this.OnlineHelp.Text = "Online Help";
-            toolTip1.SetToolTip(this.OnlineHelp, "Open a web browser and navigate to the online help pages.");
-            this.OnlineHelp.UseVisualStyleBackColor = true;
-            this.OnlineHelp.Click += new System.EventHandler(this.BrowseToWebPage);
             // 
             // SetupDialogForm
             // 
