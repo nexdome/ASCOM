@@ -1,13 +1,17 @@
-﻿// Copyright © Tigra Astronomy, all rights reserved.
-using System;
-using TA.NexDome.SharedTypes;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.DeviceInterface.StateMachine.Rotator
     {
+    using System;
+
+    using TA.NexDome.SharedTypes;
+
     internal class RequestStatusState : RotatorStateBase
         {
         /// <inheritdoc />
-        public RequestStatusState(ControllerStateMachine machine) : base(machine) { }
+        public RequestStatusState(ControllerStateMachine machine)
+            : base(machine) { }
 
         public override void OnEnter()
             {

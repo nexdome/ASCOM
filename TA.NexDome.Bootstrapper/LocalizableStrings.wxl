@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+	<String Id="NetFx35NotInstalled">
+    You must enable .NET Framework 3.5 in order to use this product.
+    Please open Windows Settings and search for
+    "Turn Windows Features On or Off".
+    Re-run this installation once you've enabled .NET Framework 3.5
+  </String>
+  <String Id="Ascom64NotInstalled">
+    This product requires ASCOM Platform 6.4 SP1 or later.
+    Please visit &lt;a href="http://ascom-standards.org"&gt;http://ascom-standards.org&lt;/a&gt; to download,
+    then re-run this installer once ASCOM is installed.
+  </String>
+</WixLocalization>

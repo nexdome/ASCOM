@@ -1,24 +1,22 @@
-﻿// This file is part of the TA.DigitalDomeworks project
-// 
-// Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
-// 
-// File: DeviceControllerContextBuilder.cs  Last modified: 2018-09-16@14:01 by Tim Long
-
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using TA.Ascom.ReactiveCommunications;
-using TA.NexDome.DeviceInterface;
-using TA.NexDome.DeviceInterface.StateMachine;
-using TA.NexDome.SharedTypes;
-using TA.NexDome.Specifications.Contexts;
-using TA.NexDome.Specifications.Fakes;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.Specifications.Builders
     {
-    internal class DeviceControllerContextBuilder
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Text;
+
+    using TA.Ascom.ReactiveCommunications;
+    using TA.NexDome.DeviceInterface;
+    using TA.NexDome.DeviceInterface.StateMachine;
+    using TA.NexDome.SharedTypes;
+    using TA.NexDome.Specifications.Contexts;
+    using TA.NexDome.Specifications.Fakes;
+
+    class DeviceControllerContextBuilder
         {
         public DeviceControllerContextBuilder()
             {
@@ -26,30 +24,38 @@ namespace TA.NexDome.Specifications.Builders
             channelFactory.RegisterChannelType(
                 p => p.StartsWith("Fake", StringComparison.InvariantCultureIgnoreCase),
                 connection => new FakeEndpoint(),
-                endpoint => new FakeCommunicationChannel(fakeResponseBuilder.ToString())
-            );
-            //channelFactory.RegisterChannelType(
-            //    SimulatorEndpoint.IsConnectionStringValid,
-            //    SimulatorEndpoint.FromConnectionString,
-            //    endpoint => new SimulatorCommunicationsChannel(endpoint as SimulatorEndpoint)
-            //);
+                endpoint => new FakeCommunicationChannel(fakeResponseBuilder.ToString()));
+
+            // channelFactory.RegisterChannelType(
+            // SimulatorEndpoint.IsConnectionStringValid,
+            // SimulatorEndpoint.FromConnectionString,
+            // endpoint => new SimulatorCommunicationsChannel(endpoint as SimulatorEndpoint)
+            // );
             }
 
         bool channelShouldBeOpen;
+
         readonly StringBuilder fakeResponseBuilder = new StringBuilder();
+
         readonly IClock timeSource = new FakeClock(DateTime.MinValue.ToUniversalTime());
+
         readonly ChannelFactory channelFactory;
+
         string connectionString = "Fake";
+
         readonly DeviceControllerOptions controllerOptions = new DeviceControllerOptions
-            {
-            MaximumFullRotationTime = TimeSpan.FromMinutes(1),
-            MaximumShutterCloseTime = TimeSpan.FromMinutes(1),
-            ShutterTickTimeout = TimeSpan.FromSeconds(5),
-            RotatorTickTimeout = TimeSpan.FromSeconds(5),
-            HomeAzimuth = 10.0m
-            };
+                                                                 {
+                                                                 MaximumFullRotationTime = TimeSpan.FromMinutes(1),
+                                                                 MaximumShutterCloseTime = TimeSpan.FromMinutes(1),
+                                                                 ShutterTickTimeout = TimeSpan.FromSeconds(5),
+                                                                 RotatorTickTimeout = TimeSpan.FromSeconds(5),
+                                                                 HomeAzimuth = 10.0m
+                                                                 };
+
         PropertyChangedEventHandler propertyChangedAction;
+
         List<Tuple<string, Action>> propertyChangeObservers = new List<Tuple<string, Action>>();
+
         SensorState initialShutterState;
 
         public DeviceControllerContext Build()
@@ -68,16 +74,21 @@ namespace TA.NexDome.Specifications.Builders
 
             // Build the device controller
             var fakeTransactionProcessor = new FakeTransactionProcessor(Enumerable.Empty<string>());
-            var controller = new DeviceController(channel, statusFactory, controllerStateMachine, controllerOptions, fakeTransactionProcessor);
+            var controller = new DeviceController(
+                channel,
+                statusFactory,
+                controllerStateMachine,
+                controllerOptions,
+                fakeTransactionProcessor);
 
             // Assemble the device controller test context
             var context = new DeviceControllerContext
-                {
-                Channel = channel,
-                Controller = controller,
-                StateMachine = controllerStateMachine,
-                Actions = controllerActions
-                };
+                              {
+                              Channel = channel,
+                              Controller = controller,
+                              StateMachine = controllerStateMachine,
+                              Actions = controllerActions
+                              };
 
             // Wire up any Property Changed notifications
             if (propertyChangedAction != null) controller.PropertyChanged += propertyChangedAction;
@@ -93,9 +104,12 @@ namespace TA.NexDome.Specifications.Builders
             }
 
         /// <summary>
-        ///     Start with the state machine initialized and in the Ready state. Implies an open channel.
+        ///     Start with the state machine initialized and in the Ready state. Implies an open
+        ///     channel.
         /// </summary>
-        /// <param name="connectionString">The connection string to use when creating and opening the channel.</param>
+        /// <param name="connectionString">
+        ///     The connection string to use when creating and opening the channel.
+        /// </param>
         public DeviceControllerContextBuilder WithStateMachineInitializedAndReady(string connectionString)
             {
             return WithOpenConnection(connectionString);

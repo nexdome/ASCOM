@@ -1,16 +1,14 @@
-﻿// This file is part of the TA.DigitalDomeworks project
-// 
-// Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
-// 
-// File: FakeClock.cs  Last modified: 2018-03-28@18:42 by Tim Long
-
-using System;
-using System.Diagnostics.Contracts;
-using TA.NexDome.SharedTypes;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.Specifications.Fakes
     {
-    internal class FakeClock : IClock
+    using System;
+    using System.Diagnostics.Contracts;
+
+    using TA.NexDome.SharedTypes;
+
+    class FakeClock : IClock
         {
         DateTime currentTime;
 

@@ -1,12 +1,19 @@
-﻿using System;
-using TA.NexDome.SharedTypes;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
-namespace TA.NexDome.DeviceInterface.StateMachine.Shutter {
-    class ClosingState : ShutterStateBase {
+namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
+    {
+    using System;
+
+    using TA.NexDome.SharedTypes;
+
+    internal class ClosingState : ShutterStateBase
+        {
         private static readonly TimeSpan EncoderTickTimeout = TimeSpan.FromSeconds(2.5);
 
         /// <inheritdoc />
-        public ClosingState(ControllerStateMachine machine) : base(machine) { }
+        public ClosingState(ControllerStateMachine machine)
+            : base(machine) { }
 
         /// <inheritdoc />
         public override void OnEnter()

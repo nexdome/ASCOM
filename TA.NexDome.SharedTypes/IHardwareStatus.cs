@@ -1,13 +1,15 @@
-﻿using System;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.SharedTypes
-{
-    public interface IHardwareStatus
     {
+    using System;
+
+    public interface IHardwareStatus
+        {
         /// <summary>
-        ///     Indicates when the dome is in the Home Position.
-        ///     Note that the home position covers a small range of encoder ticks and is not
-        ///     a single discrete value.
+        ///     Indicates when the dome is in the Home Position. Note that the home position covers a
+        ///     small range of encoder ticks and is not a single discrete value.
         ///     <seealso cref="HomePosition" />
         /// </summary>
         /// <value>true if the dome is in the Home Position, false otherwise.</value>
@@ -174,5 +176,5 @@ namespace TA.NexDome.SharedTypes
         /// </remarks>
         /// <value>Unknown (angular degrees? Encoder ticks?)</value>
         int Offset { get; }
+        }
     }
-}

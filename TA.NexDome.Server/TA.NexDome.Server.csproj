@@ -38,6 +38,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -65,7 +66,12 @@
       <DependentUpon>CommunicationSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="CompositionRoot.cs" />
-    <Compile Include="GitVersionExtensions.cs" />
+    <Compile Include="FirmwareUpdate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FirmwareUpdate.Designer.cs">
+      <DependentUpon>FirmwareUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="ServerStatusDisplay.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +86,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CommunicationSettingsControl.resx">
       <DependentUpon>CommunicationSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FirmwareUpdate.resx">
+      <DependentUpon>FirmwareUpdate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ServerStatusDisplay.resx">
       <SubType>Designer</SubType>
@@ -128,6 +137,9 @@
   <ItemGroup>
     <PackageReference Include="ASCOM.Platform">
       <Version>6.4.2</Version>
+    </PackageReference>
+    <PackageReference Include="ConsoleControl">
+      <Version>1.2.1</Version>
     </PackageReference>
     <PackageReference Include="GitVersionTask">
       <Version>4.0.0</Version>

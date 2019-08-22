@@ -62,7 +62,6 @@
     <Compile Include="DeviceInterface\Behaviours\device_controller_behaviour.cs" />
     <Compile Include="DeviceInterface\Behaviours\state_machine_behaviour.cs" />
     <Compile Include="DeviceInterface\Behaviours\view_model_is_updated_from_rotator_status.cs" />
-    <Compile Include="DeviceInterface\ConnectionSpecs.cs" />
     <Compile Include="DeviceInterface\ControllerStateMachineBehaviours.cs" />
     <Compile Include="DeviceInterface\ControllerStatusSpecs.cs" />
     <Compile Include="DeviceInterface\RotatorStateSpecs.cs" />
@@ -84,7 +83,7 @@
       <Version>5.1.1</Version>
     </PackageReference>
     <PackageReference Include="GitVersionTask">
-      <Version>4.0.0</Version>
+      <Version>5.0.1</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -94,9 +93,6 @@
     <PackageReference Include="Machine.Specifications.Should">
       <Version>1.0.0</Version>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="TestData\StatusWithIndeterminateShutter.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -113,6 +109,9 @@
       <Project>{1224a06b-5a84-452f-af63-cf8ef7d6713e}</Project>
       <Name>TA.NexDome.SharedTypes</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TestData\" />
   </ItemGroup>
   <Import Project="..\TA.NexDome.SharedCode\TA.NexDome.SharedCode.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

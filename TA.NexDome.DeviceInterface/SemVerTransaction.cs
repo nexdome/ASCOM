@@ -1,29 +1,35 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
-// Copyright © -2019 Tigra Astronomy, all rights reserved.
-
-using System;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using TA.Ascom.ReactiveCommunications;
-using TA.Ascom.ReactiveCommunications.Diagnostics;
-using TA.NexDome.SharedTypes;
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.DeviceInterface
     {
+    using System;
+    using System.Linq;
+    using System.Reactive.Linq;
+    using System.Text.RegularExpressions;
+
+    using TA.Ascom.ReactiveCommunications;
+    using TA.Ascom.ReactiveCommunications.Diagnostics;
+    using TA.NexDome.SharedTypes;
+
     internal class SemVerTransaction : DeviceTransaction
         {
         private const string VersionResponsePattern = @"^:FR(?<SemVer>[^#]+)#$";
-        private static readonly Regex versionResponseExpression = new Regex(VersionResponsePattern,
-            RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture |
-            RegexOptions.Singleline);
-        public SemVerTransaction(string command) : base(command.EnsureEncapsulation()) { }
+
+        private static readonly Regex versionResponseExpression = new Regex(
+            VersionResponsePattern,
+            RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture
+            | RegexOptions.Singleline);
+
+        public SemVerTransaction(string command)
+            : base(command.EnsureEncapsulation()) { }
+
+        public SemanticVersion SemanticVersion { get; private set; }
 
         /// <inheritdoc />
         public override void ObserveResponse(IObservable<char> source)
             {
-            var validResponses = from response in source.DelimitedMessageStrings(':', '#')
+            var validResponses = from response in source.DelimitedMessageStrings()
                                  let match = versionResponseExpression.Match(response)
                                  where match.Success
                                  let versionString = match.Groups["SemVer"].Value
@@ -39,7 +45,5 @@ namespace TA.NexDome.DeviceInterface
             SemanticVersion = new SemanticVersion(Response.Single());
             base.OnCompleted();
             }
-
-        public SemanticVersion SemanticVersion { get; private set; }
         }
     }

@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:wix="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <PayloadGroup Id="pgArduinoDriverInstaller">
+      <Payload Compressed="yes" SourceFile="drivers\AdafruitCircuitPlayground.cat"  />
+
+      <Payload Compressed="yes" SourceFile="drivers\AdafruitCircuitPlayground.inf" />
+
+      <Payload Compressed="yes" SourceFile="drivers\arduino-org.cat" />
+
+      <Payload Compressed="yes" SourceFile="drivers\arduino-org.inf" />
+
+      <Payload Compressed="yes" SourceFile="drivers\arduino.cat" />
+
+      <Payload Compressed="yes" SourceFile="drivers\arduino.inf" />
+
+      <Payload Compressed="yes" SourceFile="drivers\arduino_gemma.cat" />
+
+      <Payload Compressed="yes" SourceFile="drivers\arduino_gemma.inf" />
+
+      <Payload Compressed="yes" SourceFile="drivers\dpinst-amd64.exe" />
+
+      <Payload Compressed="yes" SourceFile="drivers\dpinst-x86.exe" />
+
+      <Payload Compressed="yes" SourceFile="drivers\genuino.cat" />
+
+      <Payload Compressed="yes" SourceFile="drivers\genuino.inf" />
+
+      <Payload Compressed="yes" SourceFile="drivers\linino-boards_amd64.cat" />
+
+      <Payload Compressed="yes" SourceFile="drivers\linino-boards_x86.cat" />
+
+      <Payload Compressed="yes" SourceFile="drivers\linino.inf" />
+
+      <Payload Compressed="yes" SourceFile="drivers\Old_Arduino_Drivers.zip" />
+
+      <Payload Compressed="yes" SourceFile="drivers\README.txt" />
+
+      <Payload Compressed="yes" SourceFile="drivers\amd64\libusb0.dll" />
+
+      <Payload Compressed="yes" SourceFile="drivers\amd64\libusb0.sys" />
+
+      <Payload Compressed="yes" SourceFile="drivers\CP210x_6.7\ReleaseNotes.txt" />
+
+      <Payload Compressed="yes" SourceFile="drivers\CP210x_6.7\slabvcp.cat" />
+
+      <Payload Compressed="yes" SourceFile="drivers\CP210x_6.7\slabvcp.inf" />
+
+      <Payload Compressed="yes" SourceFile="drivers\CP210x_6.7\SLAB_License_Agreement_VCP_Windows.txt" />
+
+      <Payload Compressed="yes" SourceFile="drivers\CP210x_6.7\x64\silabenm.sys" />
+
+      <Payload Compressed="yes" SourceFile="drivers\CP210x_6.7\x64\silabser.sys" />
+
+      <Payload Compressed="yes" SourceFile="drivers\CP210x_6.7\x64\WdfCoInstaller01009.dll" />
+
+      <Payload Compressed="yes" SourceFile="drivers\CP210x_6.7\x86\silabenm.sys" />
+
+      <Payload Compressed="yes" SourceFile="drivers\CP210x_6.7\x86\silabser.sys" />
+
+      <Payload Compressed="yes" SourceFile="drivers\CP210x_6.7\x86\WdfCoInstaller01009.dll" />
+
+      <Payload Compressed="yes" SourceFile="drivers\CP210x_6.7.4\slabvcp.cat" />
+
+      <Payload Compressed="yes" SourceFile="drivers\CP210x_6.7.4\slabvcp.inf" />
+
+      <Payload Compressed="yes" SourceFile="drivers\CP210x_6.7.4\x64\silabser.sys" />
+
+      <Payload Compressed="yes" SourceFile="drivers\CP210x_6.7.4\x64\WdfCoInstaller01009.dll" />
+
+      <Payload Compressed="yes" SourceFile="drivers\CP210x_6.7.4\x86\silabser.sys" />
+
+      <Payload Compressed="yes" SourceFile="drivers\CP210x_6.7.4\x86\WdfCoInstaller01009.dll" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\ftd2xx.h" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\ftdibus.cat" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\ftdibus.inf" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\ftdiport.cat" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\ftdiport.inf" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\LogoVerificationReport.pdf" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\amd64\ftbusui.dll" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\amd64\ftcserco.dll" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\amd64\ftd2xx.lib" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\amd64\ftd2xx64.dll" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\amd64\ftdibus.sys" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\amd64\ftlang.dll" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\amd64\ftser2k.sys" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\amd64\ftserui2.dll" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\i386\ftbusui.dll" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\i386\ftcserco.dll" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\i386\ftd2xx.dll" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\i386\ftd2xx.lib" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\i386\ftdibus.sys" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\i386\ftlang.dll" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\i386\ftser2k.sys" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\i386\ftserui2.dll" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\Static\amd64\ftd2xx.lib" />
+
+      <Payload Compressed="yes" SourceFile="drivers\FTDI USB Drivers\Static\i386\ftd2xx.lib" />
+
+      <Payload Compressed="yes" SourceFile="drivers\ia64\libusb0.dll" />
+
+      <Payload Compressed="yes" SourceFile="drivers\ia64\libusb0.sys" />
+
+      <Payload Compressed="yes" SourceFile="drivers\license\libusb0\installer_license.txt" />
+
+      <Payload Compressed="yes" SourceFile="drivers\x86\libusb0.sys" />
+
+      <Payload Compressed="yes" SourceFile="drivers\x86\libusb0_x86.dll" />
+    </PayloadGroup>
+  </Fragment>
+
+  <Fragment>
+    <PackageGroup Id="pgArduinoSerialDrivers">
+      <ExePackage Id="exeArduinoDriverInstallerAmd64" 
+                  Compressed="yes"
+                  Description="Arduino/Genuino USB Serial Driver Installer"
+                  DisplayName="Arduino/Genuino USB Serial Driver Installer"
+                  SourceFile="drivers/dpinst-amd64.exe"
+                  PerMachine="yes"
+                  Permanent="yes"
+                  Protocol="none"
+                  Vital="yes"
+                  SuppressSignatureVerification="yes"
+                  InstallCondition="VersionNT64">
+        <PayloadGroupRef Id="pgArduinoDriverInstaller"/>
+        <ExitCode Behavior="success"/>
+      </ExePackage>
+      <ExePackage Id="exeArduinoDriverInstallerX86"
+                  Compressed="yes"
+                  Description="Arduino/Genuino USB Serial Driver Installer"
+                  DisplayName="Arduino/Genuino USB Serial Driver Installer"
+                  SourceFile="drivers/dpinst-x86.exe"
+                  PerMachine="yes"
+                  Permanent="yes"
+                  Protocol="none"
+                  Vital="yes"
+                  SuppressSignatureVerification="yes"
+                  InstallCondition="NOT VersionNT64">
+        <PayloadGroupRef Id="pgArduinoDriverInstaller"/>
+        <ExitCode Behavior="success"/>
+      </ExePackage>
+    </PackageGroup>
+  </Fragment>
+</Wix>

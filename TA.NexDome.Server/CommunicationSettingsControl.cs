@@ -1,19 +1,16 @@
-﻿// This file is part of the TA.DigitalDomeworks project
-// 
-// Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
-// 
-// File: CommunicationSettingsControl.cs  Last modified: 2018-03-28@22:20 by Tim Long
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
-using TA.Ascom.ReactiveCommunications;
-using TA.NexDome.Server.Properties;
-using SerialPort = System.IO.Ports.SerialPort;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.Server
     {
+    using System;
+    using System.Collections.Generic;
+    using System.IO.Ports;
+    using System.Linq;
+    using System.Windows.Forms;
+
+    using TA.NexDome.Server.Properties;
+
     public partial class CommunicationSettingsControl : UserControl
         {
         public CommunicationSettingsControl()
@@ -21,11 +18,11 @@ namespace TA.NexDome.Server
             InitializeComponent();
             }
 
-            public void Save()
-                {
-                BuildConnectionString();
-                Settings.Default.Save();
-                }
+        public void Save()
+            {
+            BuildConnectionString();
+            Settings.Default.Save();
+            }
 
         protected static void BuildConnectionString()
             {
@@ -39,25 +36,24 @@ namespace TA.NexDome.Server
                      ,string where string in (rts| norts) for RTS bit state - optional
                      ,string where string in (None|XOnXOff|RequestToSend|RequestToSendXOnXOff) for handshake - optional
                     */
-            var dtr = Properties.Settings.Default.SerialAssertDTR ? "dtr" : "nodtr";
-            var rts = Settings.Default.SerialAssertRTS ? "rts" : "norts";
-            var connection =
+            string dtr = Settings.Default.SerialAssertDTR ? "dtr" : "nodtr";
+            string rts = Settings.Default.SerialAssertRTS ? "rts" : "norts";
+            string connection =
                 $"{Settings.Default.CommPortName}:{Settings.Default.SerialBaudRate},{Settings.Default.SerialParity},{Settings.Default.SerialDataBits},{Settings.Default.SerialStopBits},{dtr},{rts},{Settings.Default.SerialHandshake}";
             Settings.Default.ConnectionString = connection;
             }
 
         private void CommunicationSettingsControl_Load(object sender, EventArgs e)
             {
-            var currentSelection = Settings.Default.CommPortName;
+            string currentSelection = Settings.Default.CommPortName;
             var ports = new SortedSet<string>(SerialPort.GetPortNames());
             if (!ports.Contains(currentSelection)) ports.Add(currentSelection);
             CommPortName.Items.Clear();
             CommPortName.Items.AddRange(ports.ToArray());
-            var currentIndex = CommPortName.Items.IndexOf(currentSelection);
+            int currentIndex = CommPortName.Items.IndexOf(currentSelection);
             CommPortName.SelectedIndex = currentIndex;
             BuildConnectionString();
             }
-
 
         private void CommPortName_SelectedIndexChanged(object sender, EventArgs e)
             {

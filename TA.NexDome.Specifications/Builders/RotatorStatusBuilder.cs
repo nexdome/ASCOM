@@ -1,18 +1,18 @@
-﻿// Copyright © Tigra Astronomy, all rights reserved.
-using FakeItEasy;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TA.NexDome.SharedTypes;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.Specifications.Builders
     {
+    using FakeItEasy;
+
+    using TA.NexDome.SharedTypes;
+
     class RotatorStatusBuilder
         {
-        IRotatorStatus status = A.Fake<IRotatorStatus>();
+        readonly IRotatorStatus status = A.Fake<IRotatorStatus>();
+
         public IRotatorStatus Build() => status;
+
         public RotatorStatusBuilder Azimuth(int azimuth)
             {
             A.CallTo(() => status.Azimuth).Returns(azimuth);
@@ -29,14 +29,18 @@ namespace TA.NexDome.Specifications.Builders
             {
             A.CallTo(() => status.AtHome).Returns(true);
             A.CallTo(() => status.HomePosition).Returns(expectedAzimuth);
-            return this.Azimuth(expectedAzimuth);
+            return Azimuth(expectedAzimuth);
             }
         }
+
     class ShutterStatusBuilder
         {
         const int PresumedFullShutterTravel = 500;
-        IShutterStatus status = A.Fake<IShutterStatus>();
+
+        readonly IShutterStatus status = A.Fake<IShutterStatus>();
+
         public IShutterStatus Build() => status;
+
         public ShutterStatusBuilder Position(int steps)
             {
             A.CallTo(() => status.Position).Returns(steps);
@@ -66,6 +70,5 @@ namespace TA.NexDome.Specifications.Builders
             A.CallTo(() => status.Position).Returns(PresumedFullShutterTravel / 2);
             return this;
             }
-
         }
     }

@@ -1,28 +1,32 @@
-// This file is part of the TA.DigitalDomeworks project
-// 
-// Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
-// 
-// File: ServerStatusDisplay.cs  Last modified: 2018-08-30@09:12 by Tim Long
-
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Reactive;
-using System.Reactive.Linq;
-using System.Threading;
-using System.Windows.Forms;
-using ASCOM.Controls;
-using JetBrains.Annotations;
-using TA.NexDome.Server.Properties;
-using TA.NexDome.SharedTypes;
+// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.Server
     {
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.Linq;
+    using System.Reactive;
+    using System.Reactive.Linq;
+    using System.Threading;
+    using System.Windows.Forms;
+
+    using ASCOM.Controls;
+
+    using JetBrains.Annotations;
+
+    using TA.NexDome.Server.Properties;
+    using TA.NexDome.SharedTypes;
+
     public partial class ServerStatusDisplay : Form
         {
-        [NotNull] private readonly List<IDisposable> disposableSubscriptions = new List<IDisposable>();
-        [NotNull] private List<ClickCommand> clickCommands = new List<ClickCommand>();
+        [NotNull]
+        private readonly List<IDisposable> disposableSubscriptions = new List<IDisposable>();
+
+        [NotNull]
+        private List<ClickCommand> clickCommands = new List<ClickCommand>();
+
         private IDisposable clientStatusSubscription;
 
         public ServerStatusDisplay()
@@ -36,8 +40,7 @@ namespace TA.NexDome.Server
             var clientStatusObservable = Observable.FromEventPattern<EventHandler<EventArgs>, EventArgs>(
                 handler => SharedResources.ConnectionManager.ClientStatusChanged += handler,
                 handler => SharedResources.ConnectionManager.ClientStatusChanged -= handler);
-            clientStatusSubscription = clientStatusObservable
-                .ObserveOn(SynchronizationContext.Current)
+            clientStatusSubscription = clientStatusObservable.ObserveOn(SynchronizationContext.Current)
                 .Subscribe(ObserveClientStatusChanged);
             ObserveClientStatusChanged(null); // This sets the initial UI state before any notifications arrive
             SetupCommand.AttachCommand(ExecuteSetupDialog, CanSetup);
@@ -46,19 +49,26 @@ namespace TA.NexDome.Server
         private void ConfigureAnnunciators()
             {
             var annunciators = new List<Annunciator>
-                {
-                AzimuthMotorAnnunciator, ClockwiseAnnunciator, CounterClockwiseAnnunciator,
-                ShutterMotorAnnunciator, ShutterOpeningAnnunciator, ShutterClosingAnnunciator,
-                ShutterDispositionAnnunciator, ShutterLinkStateAnnunciator, 
-                UserPin1Annunciator, UserPin2Annunciator, UserPin3Annunciator, UserPin4Annunciator,
-                AtHomeAnnunciator, batteryVoltsAnnunciator
-                };
+                                   {
+                                   AzimuthMotorAnnunciator,
+                                   ClockwiseAnnunciator,
+                                   CounterClockwiseAnnunciator,
+                                   ShutterMotorAnnunciator,
+                                   ShutterOpeningAnnunciator,
+                                   ShutterClosingAnnunciator,
+                                   ShutterDispositionAnnunciator,
+                                   ShutterLinkStateAnnunciator,
+                                   RainAnnunciator,
+                                   AtHomeAnnunciator,
+                                   batteryVoltsAnnunciator
+                                   };
             annunciators.ForEach(p => p.Mute = false);
             annunciators.ForEach(p => p.Cadence = CadencePattern.SteadyOn);
             AzimuthMotorAnnunciator.Cadence = CadencePattern.BlinkAlarm;
             ShutterMotorAnnunciator.Cadence = CadencePattern.BlinkAlarm;
             ShutterDispositionAnnunciator.Cadence = CadencePattern.Wink;
             AtHomeAnnunciator.Cadence = CadencePattern.Wink;
+            RainAnnunciator.Cadence = CadencePattern.BlinkFast;
             annunciators.ForEach(p => p.Mute = true);
             }
 
@@ -67,7 +77,7 @@ namespace TA.NexDome.Server
             SetUiDeviceConnectedState();
             var clientStatus = SharedResources.ConnectionManager.Clients;
             registeredClientCount.Text = clientStatus.Count().ToString();
-            var onlineClientCount = clientStatus.Count(p => p.Online);
+            int onlineClientCount = clientStatus.Count(p => p.Online);
             OnlineClients.Text = onlineClientCount.ToString();
             ConfigureUiPropertyNotifications();
             if (onlineClientCount == 1)
@@ -99,10 +109,25 @@ namespace TA.NexDome.Server
             if (!maybeController.Any()) return;
             var controller = maybeController.Single();
             clickCommands = new List<ClickCommand>
-                {
-                OpenButton.AttachCommand(ExecuteOpenShutter, CanMoveShutterOrDome),
-                CloseButton.AttachCommand(ExecuteCloseShutter, CanMoveShutterOrDome)
-                };
+                                {
+                                OpenButton.AttachCommand(ExecuteOpenShutter, CanMoveShutterOrDome),
+                                CloseButton.AttachCommand(ExecuteCloseShutter, CanMoveShutterOrDome),
+                                StopCommand.AttachCommand(ExecuteStop, CanStop)
+                                };
+            }
+
+        private bool CanStop()
+            {
+            var maybeController = SharedResources.ConnectionManager.MaybeControllerInstance;
+            if (!maybeController.Any()) return false;
+            var controller = maybeController.Single();
+            return controller.IsMoving;
+            }
+
+        private void ExecuteStop()
+            {
+            if (SharedResources.ConnectionManager.MaybeControllerInstance.Any())
+                SharedResources.ConnectionManager.MaybeControllerInstance.Single().RequestEmergencyStop();
             }
 
         private void DetachCommands()
@@ -127,7 +152,7 @@ namespace TA.NexDome.Server
         /// </summary>
         private void ConfigureUiPropertyNotifications()
             {
-            var clientsOnline = SharedResources.ConnectionManager.OnlineClientCount;
+            int clientsOnline = SharedResources.ConnectionManager.OnlineClientCount;
             if (clientsOnline > 0)
                 SubscribePropertyChangeNotifications();
             else
@@ -151,116 +176,85 @@ namespace TA.NexDome.Server
             if (!SharedResources.ConnectionManager.MaybeControllerInstance.Any())
                 return;
             var controller = SharedResources.ConnectionManager.MaybeControllerInstance.Single();
+
             /* ToDo:
-             * Add subscriptions to PropertyChanged notifications using this pattern:
-             *  movingSubscription = controller
-             *      .GetObservableValueFor(m => m.IsMoving)
-             *      .ObserveOn(SynchronizationContext.Current)
-             *      .Subscribe(SetMotorMovingState);
-             */
+                         * Add subscriptions to PropertyChanged notifications using this pattern:
+                         *  movingSubscription = controller
+                         *      .GetObservableValueFor(m => m.IsMoving)
+                         *      .ObserveOn(SynchronizationContext.Current)
+                         *      .Subscribe(SetMotorMovingState);
+                         */
             disposableSubscriptions.Add(
-                controller
-                    .GetObservableValueFor(p => p.AzimuthMotorActive)
-                    .ObserveOn(SynchronizationContext.Current)
-                    .Subscribe(motorActive => AzimuthMotorAnnunciator.Mute = !motorActive)
-            );
+                controller.GetObservableValueFor(p => p.AzimuthMotorActive).ObserveOn(SynchronizationContext.Current)
+                    .Subscribe(motorActive => AzimuthMotorAnnunciator.Mute = !motorActive));
             disposableSubscriptions.Add(
-                controller
-                    .GetObservableValueFor(p => p.AzimuthDirection)
-                    .ObserveOn(SynchronizationContext.Current)
-                    .Subscribe(SetRotationDirection)
-            );
+                controller.GetObservableValueFor(p => p.AzimuthDirection).ObserveOn(SynchronizationContext.Current)
+                    .Subscribe(SetRotationDirection));
             disposableSubscriptions.Add(
-                controller
-                    .GetObservableValueFor(p => p.AzimuthDegrees)
-                    .ObserveOn(SynchronizationContext.Current)
-                    .Subscribe(SetAzimuthPosition)
-            );
+                controller.GetObservableValueFor(p => p.AzimuthDegrees).ObserveOn(SynchronizationContext.Current)
+                    .Subscribe(SetAzimuthPosition));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.ShutterMotorActive)
-                    .ObserveOn(SynchronizationContext.Current)
-                    .Subscribe(motorActive => ShutterMotorAnnunciator.Mute = !motorActive)
-            );
+                controller.GetObservableValueFor(p => p.ShutterMotorActive).ObserveOn(SynchronizationContext.Current)
+                    .Subscribe(motorActive => ShutterMotorAnnunciator.Mute = !motorActive));
             disposableSubscriptions.Add(
                 controller.GetObservableValueFor(p => p.ShutterMovementDirection)
-                    .ObserveOn(SynchronizationContext.Current)
-                    .Subscribe(SetShutterDirection)
-            );
+                    .ObserveOn(SynchronizationContext.Current).Subscribe(SetShutterDirection));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.ShutterDisposition)
-                    .ObserveOn(SynchronizationContext.Current)
-                    .Subscribe(SetShutterDisposition)
-            );
+                controller.GetObservableValueFor(p => p.ShutterDisposition).ObserveOn(SynchronizationContext.Current)
+                    .Subscribe(SetShutterDisposition));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.ShutterPercentOpen)
-                    .ObserveOn(SynchronizationContext.Current)
-                    .Subscribe(SetShutterPercentOpen)
-            );
+                controller.GetObservableValueFor(p => p.ShutterPercentOpen).ObserveOn(SynchronizationContext.Current)
+                    .Subscribe(SetShutterPercentOpen));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.ShutterLimitSwitches)
-                    .ObserveOn(SynchronizationContext.Current)
-                    .Subscribe(SetShutterLimitSwitches)
-            );
+                controller.GetObservableValueFor(p => p.ShutterLimitSwitches).ObserveOn(SynchronizationContext.Current)
+                    .Subscribe(SetShutterLimitSwitches));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.ShutterLinkState)
-                    .ObserveOn(SynchronizationContext.Current)
-                    .Subscribe(SetShutterLinkState)
-            );
+                controller.GetObservableValueFor(p => p.ShutterLinkState).ObserveOn(SynchronizationContext.Current)
+                    .Subscribe(SetShutterLinkState));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.AtHome)
-                    .ObserveOn(SynchronizationContext.Current)
-                    .Subscribe(home => AtHomeAnnunciator.Mute = !home)
-            );
+                controller.GetObservableValueFor(p => p.AtHome).ObserveOn(SynchronizationContext.Current)
+                    .Subscribe(home => AtHomeAnnunciator.Mute = !home));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.UserPins)
-                    .ObserveOn(SynchronizationContext.Current)
-                    .Subscribe(SetUserPins)
-            );
+                controller.GetPropertyChangedEvents().ObserveOn(SynchronizationContext.Current)
+                    .Subscribe(p => clickCommands.ForEach(q => q.CanExecuteChanged())));
             disposableSubscriptions.Add(
-                controller.GetPropertyChangedEvents()
-                    .ObserveOn(SynchronizationContext.Current)
-                    .Subscribe(p => clickCommands.ForEach(q => q.CanExecuteChanged()))
-            );
+                controller.GetObservableValueFor(p => p.ShutterBatteryVolts).ObserveOn(SynchronizationContext.Current)
+                    .Subscribe(SetBatteryVolts));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.ShutterBatteryVolts)
-                    .ObserveOn(SynchronizationContext.Current)
-                    .Subscribe(SetBatteryVolts)
-            );
+                controller.GetObservableValueFor(p => p.IsRaining).ObserveOn(SynchronizationContext.Current)
+                    .Subscribe(SetRainAlarm));
             }
 
-        private void SetUserPins(Octet pinState)
+        private void SetRainAlarm(bool isRaining)
             {
-            UserPin1Annunciator.Mute = !pinState[0];
-            UserPin2Annunciator.Mute = !pinState[1];
-            UserPin3Annunciator.Mute = !pinState[2];
-            UserPin4Annunciator.Mute = !pinState[3];
+            RainAnnunciator.Mute = !isRaining;
             }
 
         private void SetShutterLimitSwitches(SensorState position)
             {
-            //var controller = SharedResources.ConnectionManager.MaybeControllerInstance.Single();
-            //var shutterMoving = controller?.ShutterMotorActive ?? false;
-            //ShutterClosedAnnunciator.Mute = position != SensorState.Closed || shutterMoving;
-            //ShutterIndeterminateAnnunciator.Mute = position != SensorState.Indeterminate || shutterMoving;
-            //ShutterOpenAnnunciator.Mute = position != SensorState.Open || shutterMoving;
+            // var controller = SharedResources.ConnectionManager.MaybeControllerInstance.Single();
+            // var shutterMoving = controller?.ShutterMotorActive ?? false;
+            // ShutterClosedAnnunciator.Mute = position != SensorState.Closed || shutterMoving;
+            // ShutterIndeterminateAnnunciator.Mute = position != SensorState.Indeterminate || shutterMoving;
+            // ShutterOpenAnnunciator.Mute = position != SensorState.Open || shutterMoving;
             }
 
         private void SetAzimuthPosition(float position)
             {
-            var format = AzimuthPositionAnnunciator.Tag.ToString();
-            var formattedPosition = string.Format(format, (int)position);
+            string format = AzimuthPositionAnnunciator.Tag.ToString();
+            string formattedPosition = string.Format(format, (int)position);
             AzimuthPositionAnnunciator.Text = formattedPosition;
             }
 
         private void SetShutterPercentOpen(int percent)
             {
-            var safeValue = percent.Clip(0, 100);
-            var format = ShutterPercentOpenAnnunciator.Tag.ToString();
-            var formattedValue = string.Format(format, percent);
+            int safeValue = percent.Clip(0, 100);
+            string format = ShutterPercentOpenAnnunciator.Tag.ToString();
+            string formattedValue = string.Format(format, percent);
             ShutterPercentOpenAnnunciator.Text = formattedValue;
             ShutterPositionBar.Value = percent;
             var controller = SharedResources.ConnectionManager.MaybeControllerInstance.Single();
-            var moving = controller?.ShutterMotorActive ?? false;
+            bool moving = controller?.ShutterMotorActive ?? false;
             ShutterPositionBar.MarqueeAnimationSpeed = moving ? 2000 : 0;
             }
 
@@ -287,12 +281,11 @@ namespace TA.NexDome.Server
              *      Clip to minimum 10V and maximum 15V
              *      Colours as for annunciator.
              */
-
-            var annunciatorValue = volts.Clip(0.0f, 15.0f);
-            var formatString = batteryVoltsAnnunciator.Tag.ToString();
+            float annunciatorValue = volts.Clip(0.0f, 15.0f);
+            string formatString = batteryVoltsAnnunciator.Tag.ToString();
             batteryVoltsAnnunciator.Text = string.Format(formatString, annunciatorValue);
             batteryVoltsAnnunciator.Mute = false;
-            var barValue = (int)(volts * 10f);
+            int barValue = (int)(volts * 10f);
             batteryVoltsBar.Value = barValue.Clip(100, 150);
             if (volts >= Constants.BatteryHalfChargedVolts)
                 {
@@ -301,6 +294,7 @@ namespace TA.NexDome.Server
                 batteryVoltsBar.ForeColor = Color.DarkSeaGreen;
                 return;
                 }
+
             if (volts >= Constants.BatteryFullyDischargedVolts)
                 {
                 batteryVoltsAnnunciator.ActiveColor = Color.PaleGoldenrod;
@@ -308,13 +302,11 @@ namespace TA.NexDome.Server
                 batteryVoltsBar.ForeColor = Color.Orange;
                 return;
                 }
+
             batteryVoltsAnnunciator.ActiveColor = Color.Crimson;
             batteryVoltsAnnunciator.Cadence = CadencePattern.BlinkAlarm;
             batteryVoltsBar.ForeColor = Color.Crimson;
-            if (volts <= Constants.BatteryFullyDischargedVolts)
-                {
-                batteryVoltsBar.Value = batteryVoltsBar.Maximum;
-                }
+            if (volts <= Constants.BatteryFullyDischargedVolts) batteryVoltsBar.Value = batteryVoltsBar.Maximum;
             }
 
         private void SetShutterDisposition(ShutterDisposition disposition)
@@ -322,25 +314,25 @@ namespace TA.NexDome.Server
             ShutterDispositionAnnunciator.Text = disposition.DisplayEquivalent();
             switch (disposition)
                 {
-                case ShutterDisposition.Offline:
-                    ShutterDispositionAnnunciator.ForeColor = Color.FromArgb(200, 4, 4);
-                    ShutterDispositionAnnunciator.Cadence = CadencePattern.BlinkAlarm;
-                    break;
-                case ShutterDisposition.Opening:
-                case ShutterDisposition.Closing:
-                    ShutterDispositionAnnunciator.ForeColor = Color.LightGoldenrodYellow;
-                    ShutterDispositionAnnunciator.Cadence = CadencePattern.BlinkFast;
-                    break;
-                case ShutterDisposition.Open:
-                    ShutterDispositionAnnunciator.ForeColor = Color.DarkSeaGreen;
-                    ShutterDispositionAnnunciator.Cadence = CadencePattern.Wink;
-                    break;
-                case ShutterDisposition.Closed:
-                    ShutterDispositionAnnunciator.ForeColor = Color.DarkSeaGreen;
-                    ShutterDispositionAnnunciator.Cadence = CadencePattern.SteadyOn;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(disposition), disposition, null);
+                    case ShutterDisposition.Offline:
+                        ShutterDispositionAnnunciator.ForeColor = Color.FromArgb(200, 4, 4);
+                        ShutterDispositionAnnunciator.Cadence = CadencePattern.BlinkAlarm;
+                        break;
+                    case ShutterDisposition.Opening:
+                    case ShutterDisposition.Closing:
+                        ShutterDispositionAnnunciator.ForeColor = Color.LightGoldenrodYellow;
+                        ShutterDispositionAnnunciator.Cadence = CadencePattern.BlinkFast;
+                        break;
+                    case ShutterDisposition.Open:
+                        ShutterDispositionAnnunciator.ForeColor = Color.DarkSeaGreen;
+                        ShutterDispositionAnnunciator.Cadence = CadencePattern.Wink;
+                        break;
+                    case ShutterDisposition.Closed:
+                        ShutterDispositionAnnunciator.ForeColor = Color.DarkSeaGreen;
+                        ShutterDispositionAnnunciator.Cadence = CadencePattern.SteadyOn;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(disposition), disposition, null);
                 }
             ShutterDispositionAnnunciator.Mute = false;
             ShutterDispositionAnnunciator.Enabled = true;
@@ -351,25 +343,25 @@ namespace TA.NexDome.Server
             ShutterLinkStateAnnunciator.Text = disposition.DisplayEquivalent();
             switch (disposition)
                 {
-                case ShutterLinkState.Start:
-                    ShutterLinkStateAnnunciator.ForeColor = Color.FromArgb(200, 4, 4);
-                    ShutterLinkStateAnnunciator.Cadence = CadencePattern.SteadyOn;
-                    break;
-                case ShutterLinkState.WaitAT:
-                case ShutterLinkState.Config:
-                    ShutterLinkStateAnnunciator.ForeColor = Color.FromArgb(200, 4, 4);
-                    ShutterLinkStateAnnunciator.Cadence = CadencePattern.BlinkAlarm;
-                    break;
-                case ShutterLinkState.Detect:
-                    ShutterLinkStateAnnunciator.ForeColor = Color.PaleGoldenrod;
-                    ShutterLinkStateAnnunciator.Cadence = CadencePattern.BlinkFast;
-                    break;
-                case ShutterLinkState.Online:
-                    ShutterLinkStateAnnunciator.ForeColor = Color.DarkSeaGreen;
-                    ShutterLinkStateAnnunciator.Cadence = CadencePattern.SteadyOn;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(disposition), disposition, null);
+                    case ShutterLinkState.Start:
+                        ShutterLinkStateAnnunciator.ForeColor = Color.FromArgb(200, 4, 4);
+                        ShutterLinkStateAnnunciator.Cadence = CadencePattern.SteadyOn;
+                        break;
+                    case ShutterLinkState.WaitAT:
+                    case ShutterLinkState.Config:
+                        ShutterLinkStateAnnunciator.ForeColor = Color.FromArgb(200, 4, 4);
+                        ShutterLinkStateAnnunciator.Cadence = CadencePattern.BlinkAlarm;
+                        break;
+                    case ShutterLinkState.Detect:
+                        ShutterLinkStateAnnunciator.ForeColor = Color.PaleGoldenrod;
+                        ShutterLinkStateAnnunciator.Cadence = CadencePattern.BlinkFast;
+                        break;
+                    case ShutterLinkState.Online:
+                        ShutterLinkStateAnnunciator.ForeColor = Color.DarkSeaGreen;
+                        ShutterLinkStateAnnunciator.Cadence = CadencePattern.SteadyOn;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(disposition), disposition, null);
                 }
             ShutterLinkStateAnnunciator.Mute = false;
             ShutterLinkStateAnnunciator.Enabled = true;
@@ -386,7 +378,7 @@ namespace TA.NexDome.Server
 
         private void ExecuteSetupDialog()
             {
-            SharedResources.DoSetupDialog(default(Guid));
+            SharedResources.DoSetupDialog(default);
             }
 
         private void frmMain_LocationChanged(object sender, EventArgs e)

@@ -1,35 +1,48 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Text.RegularExpressions;
-using NLog;
-
 namespace TA.NexDome.SharedTypes
     {
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+
+    using NLog;
+
     /// <summary>
-    /// A factory class that creates immutable instances of various types of status object.
+    ///     A factory class that creates immutable instances of various types of status object.
     /// </summary>
     public sealed class ControllerStatusFactory
         {
-        public static string RotatorStatusPattern { get; } = @"^(?<Status>:SER(,(?<Values>-?\d{1,6}))+)#$";
-
-        public static string ShutterStatusPattern { get; } = @"^(?<Status>:SES(,(?<Values>-?\d{1,6}))+)#$";
-
         private static readonly Logger log = LogManager.GetCurrentClassLogger();
-        private static readonly char[] fieldDelimiters = {','};
-        private static readonly Regex RotatorStatusRegex = new Regex(RotatorStatusPattern,
-            RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.CultureInvariant);
-        private static readonly Regex ShutterStatusRegex = new Regex(ShutterStatusPattern,
-            RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.CultureInvariant);
+
+        private static readonly char[] fieldDelimiters = { ',' };
+
+        public static string RotatorStatusPattern { get; }
+        public static string ShutterStatusPattern { get; }
+
+        private static readonly Regex RotatorStatusRegex;
+        private static readonly Regex ShutterStatusRegex;
+
         private readonly IClock timeSource;
 
         public ControllerStatusFactory(IClock timeSource)
             {
             Contract.Requires(timeSource != null);
             this.timeSource = timeSource;
+            }
+
+        static ControllerStatusFactory()
+            {
+            RotatorStatusPattern = @"^(?<Status>:SER(,(?<Values>-?\d{1,6}))+)#$";
+            RotatorStatusRegex = new Regex(
+                RotatorStatusPattern,
+                RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.CultureInvariant);
+            ShutterStatusPattern = @"^(?<Status>:SES(,(?<Values>-?\d{1,6}))+)#$";
+            ShutterStatusRegex = new Regex(
+                ShutterStatusPattern,
+                RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.CultureInvariant);
             }
 
         /// <summary>
@@ -99,21 +112,22 @@ namespace TA.NexDome.SharedTypes
                 {
                 var values = valueCollection.ToArray();
                 var status = new RotatorStatus
-                    {
-                    Azimuth = int.Parse(values[0]),
-                    AtHome = values[1] == "1",
-                    DomeCircumference = int.Parse(values[2]),
-                    HomePosition = int.Parse(values[3]),
-                    DeadZone = 0 //int.Parse(values[4].Value),
-                    };
+                                 {
+                                 Azimuth = int.Parse(values[0]),
+                                 AtHome = values[1] == "1",
+                                 DomeCircumference = int.Parse(values[2]),
+                                 HomePosition = int.Parse(values[3]),
+                                 DeadZone = 0 // int.Parse(values[4].Value),
+                                 };
                 return status;
                 }
 
             /// <inheritdoc />
-            public override string ToString() => $"{nameof(AtHome)}: {AtHome}, {nameof(Azimuth)}: {Azimuth}, {nameof(DeadZone)}: {DeadZone}, {nameof(DomeCircumference)}: {DomeCircumference}, {nameof(HomePosition)}: {HomePosition}";
+            public override string ToString() =>
+                $"{nameof(AtHome)}: {AtHome}, {nameof(Azimuth)}: {Azimuth}, {nameof(DeadZone)}: {DeadZone}, {nameof(DomeCircumference)}: {DomeCircumference}, {nameof(HomePosition)}: {HomePosition}";
             }
 
-        class ShutterStatus : IShutterStatus
+        private class ShutterStatus : IShutterStatus
             {
             /// <inheritdoc />
             public int Position { get; private set; }
@@ -131,22 +145,25 @@ namespace TA.NexDome.SharedTypes
             ///     Creates and populates a ShutterStatus instance from a collection of string values.
             /// </summary>
             /// <param name="valueCollection">A collection of strings containing the status values that will need to be parsed.</param>
-            /// <returns><see cref="IShutterStatus"/></returns>
+            /// <returns>
+            ///     <see cref="IShutterStatus" />
+            /// </returns>
             public static IShutterStatus FromValueCollection(IEnumerable<string> valueCollection)
                 {
                 var values = valueCollection.ToArray();
-                var status = new ShutterStatus()
-                    {
-                    Position = int.Parse(values[0]),
-                    LimitOfTravel = int.Parse(values[1]),
-                    OpenSensorActive = values[2] == "1",
-                    ClosedSensorActive = values[3] == "1"
-                    };
+                var status = new ShutterStatus
+                                 {
+                                 Position = int.Parse(values[0]),
+                                 LimitOfTravel = int.Parse(values[1]),
+                                 OpenSensorActive = values[2] == "1",
+                                 ClosedSensorActive = values[3] == "1"
+                                 };
                 return status;
                 }
 
             /// <inheritdoc />
-            public override string ToString() => $"{nameof(ClosedSensorActive)}: {ClosedSensorActive}, {nameof(OpenSensorActive)}: {OpenSensorActive}, {nameof(Position)}: {Position}";
+            public override string ToString() =>
+                $"{nameof(ClosedSensorActive)}: {ClosedSensorActive}, {nameof(OpenSensorActive)}: {OpenSensorActive}, {nameof(Position)}: {Position}";
             }
         }
     }

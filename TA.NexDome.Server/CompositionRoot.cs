@@ -1,23 +1,25 @@
-﻿// This file is part of the TA.DigitalDomeworks project
-// 
-// Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
-// 
-// File: CompositionRoot.cs  Last modified: 2018-06-17@17:22 by Tim Long
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
-using System;
-using Ninject;
-using Ninject.Activation;
-using Ninject.Modules;
-using Ninject.Syntax;
-using NLog.Fluent;
-using TA.Ascom.ReactiveCommunications;
-using TA.NexDome.DeviceInterface;
-using TA.NexDome.DeviceInterface.StateMachine;
-using TA.NexDome.SharedTypes;
 using static TA.NexDome.Server.Properties.Settings;
 
 namespace TA.NexDome.Server
     {
+    using System;
+
+    using Ninject;
+    using Ninject.Activation;
+    using Ninject.Infrastructure.Disposal;
+    using Ninject.Modules;
+    using Ninject.Syntax;
+
+    using NLog.Fluent;
+
+    using TA.Ascom.ReactiveCommunications;
+    using TA.NexDome.DeviceInterface;
+    using TA.NexDome.DeviceInterface.StateMachine;
+    using TA.NexDome.SharedTypes;
+
     public static class CompositionRoot
         {
         static CompositionRoot()
@@ -32,9 +34,7 @@ namespace TA.NexDome.Server
         public static void BeginSessionScope()
             {
             var scope = new ScopeObject();
-            Log.Info()
-                .Message($"Beginning session scope id={scope.ScopeId}")
-                .Write();
+            Log.Info().Message("Beginning session scope {scope}", scope).Write();
             CurrentScope = scope;
             }
 
@@ -42,9 +42,16 @@ namespace TA.NexDome.Server
             {
             return binding.InScope(ctx => CurrentScope);
             }
+
+        public static void EndSessionScope()
+            {
+            Log.Info().Message("Ending session scope {scope}", CurrentScope).Write();
+            CurrentScope?.Dispose();
+            CurrentScope = null;
+            }
         }
 
-    internal class ScopeObject
+    internal class ScopeObject : INotifyWhenDisposed
         {
         private static int scopeId;
 
@@ -54,6 +61,28 @@ namespace TA.NexDome.Server
             }
 
         public int ScopeId => scopeId;
+
+        /// <inheritdoc />
+        public virtual void Dispose()
+            {
+            try
+                {
+                Disposed?.Invoke(this, EventArgs.Empty);
+                }
+            finally
+                {
+                IsDisposed = true;
+                }
+            }
+
+        /// <inheritdoc />
+        public bool IsDisposed { get; private set; }
+
+        /// <inheritdoc />
+        public event EventHandler Disposed;
+
+        /// <inheritdoc />
+        public override string ToString() => $"{nameof(ScopeId)}: {ScopeId}";
         }
 
     internal class CoreModule : NinjectModule
@@ -61,9 +90,7 @@ namespace TA.NexDome.Server
         public override void Load()
             {
             Bind<DeviceController>().ToSelf().InSessionScope();
-            Bind<ICommunicationChannel>()
-                .ToMethod(BuildCommunicationsChannel)
-                .InSessionScope();
+            Bind<ICommunicationChannel>().ToMethod(BuildCommunicationsChannel).InSessionScope();
             Bind<ChannelFactory>().ToSelf().InSessionScope();
             Bind<IClock>().To<SystemDateTimeUtcClock>().InSingletonScope();
             Bind<IControllerActions>().To<RxControllerActions>().InSessionScope();
@@ -79,7 +106,6 @@ namespace TA.NexDome.Server
             var processor = Kernel.Get<ReactiveTransactionProcessor>();
             processor.SubscribeTransactionObserver(observer);
             return processor;
-
             }
 
         private ICommunicationChannel BuildCommunicationsChannel(IContext context)
@@ -92,19 +118,22 @@ namespace TA.NexDome.Server
         private DeviceControllerOptions BuildDeviceOptions(IContext arg)
             {
             var options = new DeviceControllerOptions
-                {
-                HomeAzimuth = Default.HomeSensorAzimuth,
-                MaximumShutterCloseTime = TimeSpan.FromSeconds((double) Default.ShutterOpenCloseTimeSeconds),
-                MaximumFullRotationTime = TimeSpan.FromSeconds((double) Default.FullRotationTimeSeconds),
-                ShutterTickTimeout = Default.ShutterTickTimeout,
-                RotatorTickTimeout = Default.RotatorTickTimeout,
-                RotatorMaximumSpeed = Default.RotatorMaximumSpeed,
-                RotatorRampTime = TimeSpan.FromMilliseconds(Default.RotatorRampTimeMilliseconds),
-                ShutterMaximumSpeed = Default.ShutterMaximumSpeed,
-                ShutterRampTime=TimeSpan.FromMilliseconds(Default.ShutterAccelerationRampTimeMilliseconds),
-                ParkAzimuth = Default.ParkAzimuth,
-                WaitForShutterOnConnect = Default.OnConnectWaitForShutterOnline
-                };
+                              {
+                              HomeAzimuth = Default.HomeSensorAzimuth,
+                              MaximumShutterCloseTime =
+                                  TimeSpan.FromSeconds((double)Default.ShutterOpenCloseTimeSeconds),
+                              MaximumFullRotationTime = TimeSpan.FromSeconds((double)Default.FullRotationTimeSeconds),
+                              ShutterTickTimeout = Default.ShutterTickTimeout,
+                              RotatorTickTimeout = Default.RotatorTickTimeout,
+                              RotatorMaximumSpeed = Default.RotatorMaximumSpeed,
+                              RotatorRampTime = TimeSpan.FromMilliseconds(Default.RotatorRampTimeMilliseconds),
+                              ShutterMaximumSpeed = Default.ShutterMaximumSpeed,
+                              ShutterRampTime =
+                                  TimeSpan.FromMilliseconds(Default.ShutterAccelerationRampTimeMilliseconds),
+                              ParkAzimuth = Default.ParkAzimuth,
+                              TimeToWaitForShutterOnConnect = Default.OnConnectWaitForShutterOnline,
+                              ShutterIsInstalled = Default.ShutterIsInstalled
+                              };
             return options;
             }
         }
