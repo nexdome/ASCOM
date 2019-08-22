@@ -704,6 +704,7 @@ namespace TA.NexDome.Server
             this.Controls.Add(this.cmdOK);
             this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::TA.NexDome.Server.Properties.Settings.Default, "SetupDialogLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Location = global::TA.NexDome.Server.Properties.Settings.Default.SetupDialogLocation;
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(499, 773);
