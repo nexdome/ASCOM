@@ -7,9 +7,9 @@
   <Bundle Name="NexDome Control System"
           Version="$(var.GitVersion_AssemblySemVer)" 
           IconSourceFile="NexDome.ico"
-          SplashScreenSourceFile="NexDome.PNG"
+          SplashScreenSourceFile="NexDome.bmp"
           Manufacturer="$(var.Manufacturer)"
-          UpgradeCode="dfcd27f0-865d-4b10-8930-d18f79844ac4">
+          UpgradeCode="08de0592-f311-44ec-b1fd-0f729d4ce4a2">
     <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.HyperlinkSidebarLicense">
       <bal:WixStandardBootstrapperApplication
         LicenseUrl="https://tigra.mit-license.org/"
@@ -34,12 +34,12 @@
 
     <Chain>
       <!-- Install .Net Framework 4.7.2 if necessary -->
-      <PackageGroupRef Id="NetFx472Redist"/>
+      <PackageGroupRef Id="NetFx472Web"/>
       <RollbackBoundary Vital="yes" />
 
       <!-- Install Arduino serial port drivers -->
       <PackageGroupRef Id="pgArduinoSerialDrivers"/>
-      <RollbackBoundary Vital="yes" />
+      <RollbackBoundary />
 
 
       <!-- Install the NexDome Constrol System ASCOM server -->
