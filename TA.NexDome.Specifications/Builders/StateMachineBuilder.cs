@@ -1,55 +1,72 @@
-﻿using FakeItEasy;
-using System;
-using JetBrains.Annotations;
-using TA.NexDome.DeviceInterface.StateMachine;
-using TA.NexDome.DeviceInterface.StateMachine.Shutter;
-using TA.NexDome.SharedTypes;
-using TA.NexDome.Specifications.Contexts;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.Specifications.Builders
     {
-    internal class StateMachineBuilder
+    using System;
+
+    using FakeItEasy;
+
+    using JetBrains.Annotations;
+
+    using TA.NexDome.DeviceInterface.StateMachine;
+    using TA.NexDome.DeviceInterface.StateMachine.Rotator;
+    using TA.NexDome.DeviceInterface.StateMachine.Shutter;
+    using TA.NexDome.SharedTypes;
+    using TA.NexDome.Specifications.Contexts;
+
+    using RequestStatusState = TA.NexDome.DeviceInterface.StateMachine.Rotator.RequestStatusState;
+
+    class StateMachineBuilder
         {
         const int shutterLimitOfTravel = 500;
-        private IControllerActions actions = A.Fake<IControllerActions>();
 
-        private DeviceControllerOptions deviceControllerOptions = new DeviceControllerOptions
-            {
-            MaximumFullRotationTime = TimeSpan.FromMinutes(1),
-            MaximumShutterCloseTime = TimeSpan.FromMinutes(1),
-            ShutterTickTimeout = TimeSpan.FromSeconds(5),
-            RotatorTickTimeout = TimeSpan.FromSeconds(5),
-            HomeAzimuth = 10.0m
-            };
+        readonly IControllerActions actions = A.Fake<IControllerActions>();
 
-        private bool initializeRotatorStateMachine = false;
-        private bool initializeShuttterStateMachine = false;
-        private bool rotatorIsRotating = false;
-        private Type rotatorStartType = typeof(TA.NexDome.DeviceInterface.StateMachine.Rotator.ReadyState);
-        private Type shutterStartType = typeof(TA.NexDome.DeviceInterface.StateMachine.Shutter.OfflineState);
-        [UsedImplicitly] SensorState shutterSensorState = SensorState.Indeterminate;
-        int shutterStepPosition = 0;
+        readonly DeviceControllerOptions deviceControllerOptions = new DeviceControllerOptions
+                                                                       {
+                                                                       MaximumFullRotationTime =
+                                                                           TimeSpan.FromMinutes(1),
+                                                                       MaximumShutterCloseTime =
+                                                                           TimeSpan.FromMinutes(1),
+                                                                       ShutterTickTimeout = TimeSpan.FromSeconds(5),
+                                                                       RotatorTickTimeout = TimeSpan.FromSeconds(5),
+                                                                       HomeAzimuth = 10.0m
+                                                                       };
+
+        bool initializeRotatorStateMachine;
+
+        bool initializeShuttterStateMachine;
+
+        bool rotatorIsRotating;
+
+        Type rotatorStartType = typeof(ReadyState);
+
+        Type shutterStartType = typeof(OfflineState);
+
+        [UsedImplicitly]
+        SensorState shutterSensorState = SensorState.Indeterminate;
+
+        int shutterStepPosition;
 
         internal StateMachineContext Build()
             {
             var machine = new ControllerStateMachine(actions, deviceControllerOptions, new SystemDateTimeUtcClock());
             machine.ShutterStepPosition = shutterStepPosition;
             machine.ShutterLimitSwitches = shutterSensorState;
-            var context = new StateMachineContext
-                {
-                Actions = actions,
-                Machine = machine
-                };
+            var context = new StateMachineContext { Actions = actions, Machine = machine };
             if (initializeRotatorStateMachine)
                 {
-                IRotatorState rotatorState = Activator.CreateInstance(rotatorStartType, machine) as IRotatorState;
+                var rotatorState = Activator.CreateInstance(rotatorStartType, machine) as IRotatorState;
                 machine.Initialize(rotatorState);
                 }
+
             if (initializeShuttterStateMachine)
                 {
-                IShutterState shutterState = Activator.CreateInstance(shutterStartType, machine) as IShutterState;
+                var shutterState = Activator.CreateInstance(shutterStartType, machine) as IShutterState;
                 machine.Initialize(shutterState);
                 }
+
             if (rotatorIsRotating)
                 {
                 machine.AzimuthMotorActive = true;
@@ -57,20 +74,21 @@ namespace TA.NexDome.Specifications.Builders
                 machine.AzimuthDirection = RotationDirection.Clockwise; // Arbitrary choice
                 machine.AzimuthEncoderPosition = 100; // Arbitrary choice
                 }
+
             return context;
             }
 
         internal StateMachineBuilder WithReadyRotator()
             {
-            rotatorStartType = typeof(TA.NexDome.DeviceInterface.StateMachine.Rotator.ReadyState);
+            rotatorStartType = typeof(ReadyState);
             initializeRotatorStateMachine = true;
             return this;
             }
 
         internal StateMachineBuilder WithReadyRotatorAndOfflineShutter()
             {
-            rotatorStartType = typeof(TA.NexDome.DeviceInterface.StateMachine.Rotator.ReadyState);
-            shutterStartType = typeof(TA.NexDome.DeviceInterface.StateMachine.Shutter.OfflineState);
+            rotatorStartType = typeof(ReadyState);
+            shutterStartType = typeof(OfflineState);
             initializeRotatorStateMachine = true;
             initializeShuttterStateMachine = true;
             return this;
@@ -78,7 +96,7 @@ namespace TA.NexDome.Specifications.Builders
 
         internal StateMachineBuilder WithRotatingRotator()
             {
-            rotatorStartType = typeof(TA.NexDome.DeviceInterface.StateMachine.Rotator.RotatingState);
+            rotatorStartType = typeof(RotatingState);
             initializeRotatorStateMachine = true;
             rotatorIsRotating = true;
             return this;
@@ -86,7 +104,7 @@ namespace TA.NexDome.Specifications.Builders
 
         internal StateMachineBuilder WithTimedOutRotator()
             {
-            rotatorStartType = typeof(TA.NexDome.DeviceInterface.StateMachine.Rotator.RequestStatusState);
+            rotatorStartType = typeof(RequestStatusState);
             initializeRotatorStateMachine = true;
             rotatorIsRotating = true;
             return this;
@@ -102,7 +120,7 @@ namespace TA.NexDome.Specifications.Builders
 
         public StateMachineBuilder WithShutterInRequestStatusState()
             {
-            shutterStartType = typeof(RequestStatusState);
+            shutterStartType = typeof(NexDome.DeviceInterface.StateMachine.Shutter.RequestStatusState);
             initializeShuttterStateMachine = true;
             shutterSensorState = SensorState.Indeterminate;
             return this;
@@ -122,7 +140,7 @@ namespace TA.NexDome.Specifications.Builders
             shutterStartType = typeof(OpenState);
             initializeShuttterStateMachine = true;
             shutterSensorState = SensorState.Indeterminate;
-            shutterStepPosition = shutterLimitOfTravel/2;
+            shutterStepPosition = shutterLimitOfTravel / 2;
             return this;
             }
 
@@ -149,7 +167,7 @@ namespace TA.NexDome.Specifications.Builders
             shutterStartType = typeof(ClosingState);
             initializeShuttterStateMachine = true;
             shutterSensorState = SensorState.Indeterminate;
-            shutterStepPosition = shutterLimitOfTravel/2;
+            shutterStepPosition = shutterLimitOfTravel / 2;
             return this;
             }
         }

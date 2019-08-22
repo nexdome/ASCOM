@@ -131,14 +131,6 @@ battery charger. Issuing the Park command
 rotates to the park azimuth then closes
 the shutter. </value>
   </data>
-  <data name="communicationSettingsControl1.ToolTip" xml:space="preserve">
-    <value>Set the communications parameters for your installation.
-If the "Use Simulator" box is checked, then the driver uses
-a built-in hardware simulator that can be used for testing
-and experimentation (no serial port or dome hardware
-required). Otherwise, select the COM port where your
-Digital Domeworks hardware is connected.</value>
-  </data>
   <metadata name="ConnectionErrorProvider.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>

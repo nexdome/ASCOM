@@ -1,31 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.SharedTypes
     {
     public enum ShutterDisposition
         {
         /// <summary>
-        /// Wireless link down
+        ///     Wireless link down
         /// </summary>
         Offline,
+
         /// <summary>
-        /// Moving towards open
+        ///     Moving towards open
         /// </summary>
         Opening,
+
         /// <summary>
-        /// Stationary and not closed
+        ///     Stationary and not closed
         /// </summary>
         Open,
+
         /// <summary>
-        /// Moving towards closed
+        ///     Moving towards closed
         /// </summary>
         Closing,
+
         /// <summary>
-        /// Stationary and closed
+        ///     Stationary and closed
         /// </summary>
         Closed
         }

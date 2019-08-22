@@ -1,0 +1,1 @@
+"%WIX%bin\heat.exe" dir "drivers" -dr Dir_NotUsed -cg pgArduinoDriverInstaller -ag -sreg -scom -srd -var "var.DriverInstallerSource" -t "ComponentToPayload.xsl" -out "ArduinoDriverInstallerPayload.wxs"

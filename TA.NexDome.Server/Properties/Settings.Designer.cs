@@ -12,7 +12,7 @@ namespace TA.NexDome.Server.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.2.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.3.0.0")]
     public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -302,12 +302,36 @@ namespace TA.NexDome.Server.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool FirmwareUploadVerboseOutput {
             get {
                 return ((bool)(this["FirmwareUploadVerboseOutput"]));
+            }
+            set {
+                this["FirmwareUploadVerboseOutput"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShutterIsInstalled {
+            get {
+                return ((bool)(this["ShutterIsInstalled"]));
+            }
+            set {
+                this["ShutterIsInstalled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://bitbucket.org/tigra-astronomy/nexdome-ascom-driver/wiki/Home")]
+        public string OnlineHelpWebDestination {
+            get {
+                return ((string)(this["OnlineHelpWebDestination"]));
             }
         }
     }

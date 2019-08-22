@@ -1,6 +1,8 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
-// Copyright © -2019 Tigra Astronomy, all rights reserved.
-namespace TA.NexDome.DeviceInterface.StateMachine {
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
+
+namespace TA.NexDome.DeviceInterface.StateMachine
+    {
     public interface IState
         {
         string Name { get; }

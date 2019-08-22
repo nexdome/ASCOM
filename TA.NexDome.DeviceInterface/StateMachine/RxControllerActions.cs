@@ -1,17 +1,15 @@
-﻿// This file is part of the TA.DigitalDomeworks project
-// 
-// Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
-// 
-// File: RxControllerActions.cs  Last modified: 2018-03-24@22:27 by Tim Long
-
-using System;
-using System.Linq;
-using System.Text;
-using TA.Ascom.ReactiveCommunications;
-using TA.NexDome.SharedTypes;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.DeviceInterface.StateMachine
     {
+    using System;
+    using System.Linq;
+    using System.Text;
+
+    using TA.Ascom.ReactiveCommunications;
+    using TA.NexDome.SharedTypes;
+
     public class RxControllerActions : IControllerActions
         {
         private readonly ICommunicationChannel channel;
@@ -35,7 +33,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
 
         public void RotateToAzimuth(int degreesClockwiseFromNorth)
             {
-            var cmd = string.Format(Constants.CmdGotoAzimuthTemplate, degreesClockwiseFromNorth);
+            string cmd = string.Format(Constants.CmdGotoAzimuthTemplate, degreesClockwiseFromNorth);
             SendCommand(cmd);
             }
 
@@ -69,7 +67,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         /// <inheritdoc />
         public void SetHomeSensorPosition(int stepsFromTrueNorth)
             {
-            var command = string.Format(Constants.CmdSetHomeSensorAzimuthTemplate, stepsFromTrueNorth);
+            string command = string.Format(Constants.CmdSetHomeSensorAzimuthTemplate, stepsFromTrueNorth);
             SendCommand(command);
             }
 
@@ -88,7 +86,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         private string EnsureCommandEncapsulation(string command)
             {
             const string lineTerminators = "\r\n";
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             if (!command.StartsWith("@"))
                 builder.Append('@');
             builder.Append(command);

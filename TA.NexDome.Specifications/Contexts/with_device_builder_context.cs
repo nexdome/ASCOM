@@ -1,26 +1,26 @@
-﻿// This file is part of the TA.DigitalDomeworks project
-// 
-// Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
-// 
-// File: with_device_builder_context.cs  Last modified: 2018-03-19@17:38 by Tim Long
-
-using Machine.Specifications;
-using TA.Ascom.ReactiveCommunications;
-using TA.NexDome.DeviceInterface;
-using TA.NexDome.Specifications.Builders;
-using TA.NexDome.Specifications.Fakes;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.Specifications.Contexts
     {
+    using Machine.Specifications;
+
+    using TA.Ascom.ReactiveCommunications;
+    using TA.NexDome.DeviceInterface;
+    using TA.NexDome.Specifications.Builders;
+    using TA.NexDome.Specifications.Fakes;
+
     #region  Context base classes
-    internal class with_device_controller_context
+    class with_device_controller_context
         {
         Establish context = () => DeviceControllerContextBuilder = new DeviceControllerContextBuilder();
+
         Cleanup after = () =>
             {
             DeviceControllerContextBuilder = null;
             Context = null;
             };
+
         protected static DeviceControllerContext Context;
 
         protected static DeviceControllerContextBuilder DeviceControllerContextBuilder;

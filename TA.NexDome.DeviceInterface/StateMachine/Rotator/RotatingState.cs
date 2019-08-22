@@ -1,9 +1,12 @@
-﻿// Copyright © Tigra Astronomy, all rights reserved.
-using System;
-using TA.NexDome.SharedTypes;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.DeviceInterface.StateMachine.Rotator
     {
+    using System;
+
+    using TA.NexDome.SharedTypes;
+
     internal class RotatingState : RotatorStateBase
         {
         /// <summary>
@@ -14,7 +17,8 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Rotator
         private static readonly TimeSpan EncoderTickTimeout = TimeSpan.FromSeconds(2.5);
 
         /// <inheritdoc />
-        public RotatingState(ControllerStateMachine machine) : base(machine) { }
+        public RotatingState(ControllerStateMachine machine)
+            : base(machine) { }
 
         /// <inheritdoc />
         public override void OnEnter()

@@ -72,7 +72,6 @@
     <Compile Include="FirmwareUpdate.Designer.cs">
       <DependentUpon>FirmwareUpdate.cs</DependentUpon>
     </Compile>
-    <Compile Include="GitVersionExtensions.cs" />
     <Compile Include="ServerStatusDisplay.cs">
       <SubType>Form</SubType>
     </Compile>

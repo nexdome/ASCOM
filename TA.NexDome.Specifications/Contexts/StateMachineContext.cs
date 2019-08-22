@@ -1,11 +1,12 @@
-﻿// Copyright © Tigra Astronomy, all rights reserved.
-using System;
-using TA.NexDome.DeviceInterface.StateMachine;
-using TA.NexDome.SharedTypes;
-using TA.NexDome.Specifications.Builders;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.Specifications.Contexts
     {
+    using System;
+
+    using TA.NexDome.DeviceInterface.StateMachine;
+
     class StateMachineContext
         {
         internal IControllerActions Actions { get; set; }

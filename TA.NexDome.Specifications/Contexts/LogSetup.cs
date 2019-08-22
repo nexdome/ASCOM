@@ -1,17 +1,16 @@
-// This file is part of the TA.DigitalDomeworks project
-// 
-// Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
-// 
-// File: LogSetup.cs  Last modified: 2018-03-11@21:11 by Tim Long
-
-using JetBrains.Annotations;
-using Machine.Specifications;
-using NLog;
-using NLog.Config;
-using NLog.Targets;
+// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.Specifications.Contexts
     {
+    using JetBrains.Annotations;
+
+    using Machine.Specifications;
+
+    using NLog;
+    using NLog.Config;
+    using NLog.Targets;
+
     [UsedImplicitly]
     public class LogSetup : IAssemblyContext
         {

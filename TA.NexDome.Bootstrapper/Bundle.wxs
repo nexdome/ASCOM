@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" 
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
+     xmlns:bal="http://schemas.microsoft.com/wix/BalExtension" >
+  <?include Config.wxi?>
+  <Bundle Name="NexDome Control System"
+          Version="$(var.GitVersion_MajorMinorPatch)" 
+          Manufacturer="$(var.Manufacturer)" UpgradeCode="dfcd27f0-865d-4b10-8930-d18f79844ac4">
+    <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.HyperlinkSidebarLicense">
+      <bal:WixStandardBootstrapperApplication
+        LicenseUrl="https://tigra.mit-license.org/"
+        ShowVersion="yes"
+        LogoSideFile="SidePanel.jpg"  
+        LogoFile="NexDome64x64.png" />
+    </BootstrapperApplicationRef>
+
+    <!-- SidePanel.jpg courtesy of Tony Bennett -->
+
+    <!-- Launch condition: .NET 35 must be enabled 
+    <util:RegistrySearchRef Id="NETFRAMEWORK35_SP_LEVEL"/>
+    <bal:Condition Message="!(loc.NetFx35NotInstalled)" >
+      NETFRAMEWORK35_SP_LEVEL OR WixBundleInstalled
+    </bal:Condition> -->
+
+    <!-- Launch Condition - ASCOM Platform 6.4 or later must be installed -->
+    <util:RegistrySearchRef Id="rsAscomPlatform"/>
+    <bal:Condition Message="!(loc.Ascom64NotInstalled)" >
+      <![CDATA[AscomPlatformInstalledVersion OR WixBundleInstalled]]>
+    </bal:Condition>
+
+    <Chain>
+      <!-- Install .Net Framework 4.7.2 if necessary -->
+      <PackageGroupRef Id="NetFx472Redist"/>
+      <RollbackBoundary Vital="yes" />
+
+      <!-- Install Arduino serial port drivers -->
+      <PackageGroupRef Id="pgArduinoSerialDrivers"/>
+      <RollbackBoundary Vital="yes" />
+
+
+      <!-- Install the NexDome Constrol System ASCOM server -->
+      <PackageGroupRef Id="pgNexDomeAscomServer"/>
+
+    </Chain>
+	</Bundle>
+</Wix>

@@ -1,16 +1,13 @@
-﻿// This file is part of the TA.DigitalDomeworks project
-// 
-// Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
-// 
-// File: AboutBox.cs  Last modified: 2018-09-03@17:00 by Tim Long
-
-using System;
-using System.Diagnostics;
-using System.Reflection;
-using System.Windows.Forms;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.Server
     {
+    using System;
+    using System.Diagnostics;
+    using System.Reflection;
+    using System.Windows.Forms;
+
     public partial class AboutBox : Form
         {
         public AboutBox()
@@ -25,7 +22,7 @@ namespace TA.NexDome.Server
             var me = Assembly.GetExecutingAssembly();
             var name = me.GetName();
             var driverVersion = name.Version;
-            var productVersion = me.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+            string productVersion = me.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
             DriverVersion.Text = driverVersion.ToString();
             InformationalVersion.Text = productVersion;
             }
@@ -37,7 +34,7 @@ namespace TA.NexDome.Server
             var control = sender as Control;
             if (control == null)
                 return;
-            var url = control.Tag.ToString();
+            string url = control.Tag.ToString();
             if (!url.StartsWith("http:"))
                 return;
             try

@@ -1,17 +1,16 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
-// Copyright © -2019 Tigra Astronomy, all rights reserved.
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
-using TA.NexDome.SharedTypes;
+namespace TA.NexDome.DeviceInterface.StateMachine
+    {
+    using TA.NexDome.SharedTypes;
 
-namespace TA.NexDome.DeviceInterface.StateMachine {
     public interface IRotatorState : IState
         {
-
         /// <summary>
-        ///     Trigger: called to signal that dome rotation is detected.
-        ///     This can be triggered by a dome rotation direction notification,
-        ///     or by an azimuth encoder tick. States are not interested in the actual
-        ///     encoder position, only that movement is detected.
+        ///     Trigger: called to signal that dome rotation is detected. This can be triggered by a
+        ///     dome rotation direction notification, or by an azimuth encoder tick. States are not
+        ///     interested in the actual encoder position, only that movement is detected.
         /// </summary>
         void RotationDetected();
 
@@ -38,7 +37,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine {
         void RequestHardwareStatus();
 
         /// <summary>
-        /// Attempts to stop any rotation in progress as quickly as possible.
+        ///     Attempts to stop any rotation in progress as quickly as possible.
         /// </summary>
         void HardStopRequested();
         }

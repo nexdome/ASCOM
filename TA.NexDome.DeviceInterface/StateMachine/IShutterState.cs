@@ -1,15 +1,15 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
-// Copyright © -2019 Tigra Astronomy, all rights reserved.
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
-using TA.NexDome.SharedTypes;
+namespace TA.NexDome.DeviceInterface.StateMachine
+    {
+    using TA.NexDome.SharedTypes;
 
-namespace TA.NexDome.DeviceInterface.StateMachine {
     public interface IShutterState : IState
         {
-
         /// <summary>
-        ///     Trigger: called to signal that a shutter motor current measurement
-        ///     has been received.
+        ///     Trigger: called to signal that a shutter motor current measurement has been
+        ///     received.
         /// </summary>
         void ShutterMovementDetected();
 

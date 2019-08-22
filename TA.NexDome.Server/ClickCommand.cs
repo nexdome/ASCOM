@@ -1,20 +1,23 @@
-﻿// This file is part of the TA.DigitalDomeworks project
-// 
-// Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
-// 
-// File: ClickCommand.cs  Last modified: 2018-03-28@22:20 by Tim Long
-
-using System;
-using System.Windows.Forms;
-using JetBrains.Annotations;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.Server
     {
+    using System;
+    using System.Windows.Forms;
+
+    using JetBrains.Annotations;
+
     internal class ClickCommand : IDisposable
         {
-        [CanBeNull] private readonly Func<bool> canExecute;
-        [NotNull] private readonly Control control;
-        [NotNull] private readonly Action execute;
+        [CanBeNull]
+        private readonly Func<bool> canExecute;
+
+        [NotNull]
+        private readonly Control control;
+
+        [NotNull]
+        private readonly Action execute;
 
         public ClickCommand(Control control, Action execute, Func<bool> canExecute = null)
             {
@@ -34,7 +37,6 @@ namespace TA.NexDome.Server
         #region IDisposable Pattern
         // The IDisposable pattern, as described at
         // http://www.codeproject.com/Articles/15360/Implementing-IDisposable-and-the-Dispose-Pattern-P
-
 
         /// <summary>
         ///     Finalizes this instance (called prior to garbage collection by the CLR)
@@ -63,12 +65,15 @@ namespace TA.NexDome.Server
             // ToDo: Call the base class's Dispose(Boolean) method, if available.
             // base.Dispose(fromUserCode);
             }
+
         #endregion
         }
 
     internal static class ControlExtensions
         {
-        public static ClickCommand AttachCommand(this Control clickableControl, Action execute,
+        public static ClickCommand AttachCommand(
+            this Control clickableControl,
+            Action execute,
             Func<bool> canExecute = null)
             {
             var command = new ClickCommand(clickableControl, execute, canExecute);

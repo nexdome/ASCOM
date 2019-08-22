@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" 
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+     xmlns:bal="http://schemas.microsoft.com/wix/BalExtension" >
+
+  <Fragment>
+    <PackageGroup Id="pgNexDomeAscomServer">
+      <MsiPackage Vital="yes"
+                  SourceFile="..\BuildOutput\Release\TA.NexDome.Setup.x86.msi"
+                  InstallCondition="NOT VersionNT64" />
+      <MsiPackage Vital="yes"
+                  SourceFile="..\BuildOutput\Release\TA.NexDome.Setup.x64.msi"
+                  InstallCondition="VersionNT64" />
+    </PackageGroup>
+  </Fragment>
+</Wix>

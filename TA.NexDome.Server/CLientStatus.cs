@@ -1,13 +1,10 @@
-﻿// This file is part of the TA.DigitalDomeworks project
-// 
-// Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
-// 
-// File: CLientStatus.cs  Last modified: 2018-03-28@22:20 by Tim Long
-
-using System;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.Server
     {
+    using System;
+
     /// <summary>
     ///     Records the connection status of a client.
     /// </summary>
@@ -51,7 +48,7 @@ namespace TA.NexDome.Server
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != typeof(ClientStatus)) return false;
-            return Equals((ClientStatus) obj);
+            return Equals((ClientStatus)obj);
             }
 
         public override int GetHashCode()
@@ -86,7 +83,7 @@ namespace TA.NexDome.Server
 
         public string ToDisplayString()
             {
-            var online = Online ? "Online" : "Idle  ";
+            string online = Online ? "Online" : "Idle  ";
             return $"{ClientId} {online} {Name}";
             }
         }

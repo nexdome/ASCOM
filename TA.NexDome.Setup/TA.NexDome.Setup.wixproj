@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" InitialTargets="EnsureWixToolsetInstalled" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\UtilPack.NuGet.MSBuild.2.9.1\build\UtilPack.NuGet.MSBuild.props" Condition="Exists('..\packages\UtilPack.NuGet.MSBuild.2.9.1\build\UtilPack.NuGet.MSBuild.props')" />
+  <Import Project="..\packages\GitVersionTask.5.0.1\build\GitVersionTask.props" Condition="Exists('..\packages\GitVersionTask.5.0.1\build\GitVersionTask.props')" />
   <Import Project="..\packages\WiX.3.11.1\build\wix.props" Condition="Exists('..\packages\WiX.3.11.1\build\wix.props')" />
-  <Import Project="..\packages\UtilPack.NuGet.MSBuild.2.7.0\build\UtilPack.NuGet.MSBuild.props" Condition="Exists('..\packages\UtilPack.NuGet.MSBuild.2.7.0\build\UtilPack.NuGet.MSBuild.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>5d942ee6-e504-4f1f-a9b0-a3818c5513b2</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>TA.NexDome.Setup</OutputName>
     <OutputType>Package</OutputType>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -17,20 +17,27 @@
     <OutputPath>..\BuildOutput\Debug\</OutputPath>
     <IntermediateOutputPath>obj\Debug\x86\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
+    <OutputName>TA.NexDome.Setup.x86</OutputName>
+    <SuppressSpecificWarnings>69;1076</SuppressSpecificWarnings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>..\BuildOutput\Release\</OutputPath>
     <IntermediateOutputPath>obj\Release\x86\</IntermediateOutputPath>
+    <OutputName>TA.NexDome.Setup.x86</OutputName>
+    <SuppressSpecificWarnings>69;1076</SuppressSpecificWarnings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <OutputPath>..\BuildOutput\Debug\</OutputPath>
     <IntermediateOutputPath>obj\Debug\x64\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
-    <SuppressSpecificWarnings>1076</SuppressSpecificWarnings>
+    <SuppressSpecificWarnings>69;1076</SuppressSpecificWarnings>
+    <OutputName>TA.NexDome.Setup.x64</OutputName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>..\BuildOutput\Release\</OutputPath>
     <IntermediateOutputPath>obj\Release\x64\</IntermediateOutputPath>
+    <OutputName>TA.NexDome.Setup.x64</OutputName>
+    <SuppressSpecificWarnings>69;1076</SuppressSpecificWarnings>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AscomCustomActions.wxs" />
@@ -75,6 +82,14 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\TA.NexDome.FirmwareUpdater\TA.NexDome.FirmwareUpdater.csproj">
+      <Name>FirmwareUpdater</Name>
+      <Project>{741967c5-9a92-4062-a777-f3118442974c}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\TA.NexDome.Server\TA.NexDome.Server.csproj">
       <Name>AscomServer</Name>
       <Project>{ff0b89e7-3601-4b5f-b0da-17c329d2ee2d}</Project>
@@ -109,7 +124,7 @@
   </Target>
   <!-- [TPL] name the output file to include the version from theLocalServer assembly -->
   <Target Name="BeforeBuild">
-    <CreateProperty Value="$(OutputName)-$(Platform)-$(GitVersion_SemVer)">
+    <!--<CreateProperty Value="$(OutputName)-$(Platform)-$(GitVersion_SemVer)">
       <Output TaskParameter="Value" PropertyName="TargetName" />
     </CreateProperty>
     <CreateProperty Value="$(TargetName)$(TargetExt)">
@@ -117,21 +132,23 @@
     </CreateProperty>
     <CreateProperty Value="$(TargetDir)$(TargetFileName)">
       <Output TaskParameter="Value" PropertyName="TargetPath" />
-    </CreateProperty>
-    <Exec Command="dotnet publish ..\TA.NexDome.FirmwareUpdater\TA.NexDome.FirmwareUpdater.csproj -c $(Configuration) -r win-x86 --framework netcoreapp2.1 --self-contained" />
+    </CreateProperty>-->
+    <!-- [TPL] Publish the .Net Core firmware update utility and harvest the published output directory -->
+    <Exec Command="dotnet publish ..\TA.NexDome.FirmwareUpdater\TA.NexDome.FirmwareUpdater.csproj -c $(Configuration) -r win-x86 --framework netcoreapp30 --self-contained" />
     <PropertyGroup>
-      <LinkerBaseInputPaths>..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp2.1\win-x86\publish</LinkerBaseInputPaths>
-      <DefineConstants>BasePath=..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp2.1\win-x86\publish</DefineConstants>
+      <LinkerBaseInputPaths>..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp30\win-x86\publish</LinkerBaseInputPaths>
+      <DefineConstants>BasePath=..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp30\win-x86\publish</DefineConstants>
     </PropertyGroup>
-    <HeatDirectory OutputFile="FirmwareUploader.wxs" DirectoryRefId="dirFirmwareUploader" ComponentGroupName="cgFirmwareUploader" SuppressCom="true" Directory="..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp2.1\win-x86\publish" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" AutoGenerateGuids="false" GenerateGuidsNow="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.BasePath" />
+    <HeatDirectory OutputFile="FirmwareUploader.wxs" DirectoryRefId="dirFirmwareUploader" ComponentGroupName="cgFirmwareUploader" SuppressCom="true" Directory="..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp30\win-x86\publish" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" AutoGenerateGuids="false" GenerateGuidsNow="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.BasePath" />
   </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\UtilPack.NuGet.MSBuild.2.7.0\build\UtilPack.NuGet.MSBuild.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\UtilPack.NuGet.MSBuild.2.7.0\build\UtilPack.NuGet.MSBuild.props'))" />
-    <Error Condition="!Exists('..\packages\GitVersionTask.4.0.0\build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.4.0.0\build\GitVersionTask.targets'))" />
     <Error Condition="!Exists('..\packages\WiX.3.11.1\build\wix.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\WiX.3.11.1\build\wix.props'))" />
+    <Error Condition="!Exists('..\packages\GitVersionTask.5.0.1\build\GitVersionTask.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.5.0.1\build\GitVersionTask.props'))" />
+    <Error Condition="!Exists('..\packages\GitVersionTask.5.0.1\build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.5.0.1\build\GitVersionTask.targets'))" />
+    <Error Condition="!Exists('..\packages\UtilPack.NuGet.MSBuild.2.9.1\build\UtilPack.NuGet.MSBuild.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\UtilPack.NuGet.MSBuild.2.9.1\build\UtilPack.NuGet.MSBuild.props'))" />
   </Target>
-  <Import Project="..\packages\GitVersionTask.4.0.0\build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.4.0.0\build\GitVersionTask.targets')" />
+  <Import Project="..\packages\GitVersionTask.5.0.1\build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.5.0.1\build\GitVersionTask.targets')" />
 </Project>

@@ -1,12 +1,17 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using NLog.Fluent;
-using TA.NexDome.SharedTypes;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
     {
-    class ShutterStateBase : IShutterState
+    using System;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    using NLog.Fluent;
+
+    using TA.NexDome.SharedTypes;
+
+    internal class ShutterStateBase : IShutterState
         {
         private CancellationTokenSource timeoutCancellation;
 
@@ -18,7 +23,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
         protected ControllerStateMachine Machine { get; }
 
         /// <inheritdoc />
-        public virtual string Name => this.GetType().Name;
+        public virtual string Name => GetType().Name;
 
         /// <inheritdoc />
         public virtual void OnEnter() => Log.Debug().Message("Entering {state}", Name).Write();
@@ -54,6 +59,13 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
                 Machine.TransitionToState(new OfflineState(Machine));
             }
 
+        public virtual void ShutterDirectionReceived(ShutterDirection direction) =>
+            Log.Debug().Message("Shutter direction {direction}", direction).Write();
+
+        /// <inheritdoc />
+        public virtual void EncoderTickReceived(int encoderPosition) =>
+            Log.Debug().Message("Shutter position {position}", encoderPosition).Write();
+
         /// <summary>
         ///     Cancels any existing timeout and starts a new one with the specified time interval.
         /// </summary>
@@ -66,13 +78,15 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
             }
 
         /// <summary>
-        ///     Uses <see cref="Task.Delay"/> to queue up a deferred timeout handler. 
-        ///     <see cref="HandleTimeout"/> will be called after the specified delay, unless 
-        ///     <see cref="CancelTimeout"/> is called.
+        ///     Uses <see cref="Task.Delay" /> to queue up a deferred timeout handler.
+        ///     <see cref="HandleTimeout" /> will be called after the specified delay, unless
+        ///     <see cref="CancelTimeout" /> is called.
         /// </summary>
         /// <param name="timeout">The time span before the timeout handler should be called.</param>
-        /// <param name="cancel">A <see cref="CancellationToken" /> that can be used to cancel the
-        /// timeout.</param>
+        /// <param name="cancel">
+        ///     A <see cref="CancellationToken" /> that can be used to cancel the
+        ///     timeout.
+        /// </param>
         private async void ResetTimeoutAsync(TimeSpan timeout, CancellationToken cancel)
             {
             /*
@@ -93,10 +107,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
                 }
             catch (Exception ex)
                 {
-                Log.Warn()
-                    .Exception(ex)
-                    .Message("Exception while awaiting state timeout. This is unexpected.")
-                    .Write();
+                Log.Warn().Exception(ex).Message("Exception while awaiting state timeout. This is unexpected.").Write();
                 }
             }
 
@@ -117,10 +128,5 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
             {
             timeoutCancellation?.Cancel();
             }
-
-        public virtual void ShutterDirectionReceived(ShutterDirection direction) => Log.Debug().Message("Shutter direction {direction}", direction).Write();
-
-        /// <inheritdoc />
-        public virtual void EncoderTickReceived(int encoderPosition) => Log.Debug().Message("Shutter position {position}", encoderPosition).Write();
         }
     }

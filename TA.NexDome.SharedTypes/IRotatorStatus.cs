@@ -2,12 +2,12 @@
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.SharedTypes
-{
+    {
     /// <summary>
-    /// Represents the information contained in a Rotator Status Event (SER event).
+    ///     Represents the information contained in a Rotator Status Event (SER event).
     /// </summary>
     public interface IRotatorStatus
-    {
+        {
         /// <summary>
         ///     Indicates when the dome is in the Home Position.
         ///     Note that the home position covers a small range of encoder ticks and is not
@@ -45,5 +45,5 @@ namespace TA.NexDome.SharedTypes
         /// </summary>
         /// <value>Positive integer</value>
         int HomePosition { get; }
+        }
     }
-}

@@ -1,32 +1,36 @@
-﻿// This file is part of the TA.DigitalDomeworks project
-// 
-// Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
-// 
-// File: ClientConnectionManager.cs  Last modified: 2018-03-28@22:20 by Tim Long
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using JetBrains.Annotations;
-using Ninject;
-using NLog;
-using PostSharp.Patterns.Model;
-using PostSharp.Patterns.Threading;
-using TA.Ascom.ReactiveCommunications;
-using TA.NexDome.DeviceInterface;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.Server
     {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using JetBrains.Annotations;
+
+    using Ninject;
+
+    using NLog;
+
+    using PostSharp.Patterns.Model;
+    using PostSharp.Patterns.Threading;
+
+    using TA.Ascom.ReactiveCommunications;
+    using TA.NexDome.DeviceInterface;
+
     /// <summary>
     ///     Manages client (driver) connections to the shared device controller. Uses the Reader
     ///     Writer Lock pattern to ensure thread safety.
     /// </summary>
-    //[ReaderWriterSynchronized]
+
+    // [ReaderWriterSynchronized]
     public class ClientConnectionManager
         {
-        [Reference] private readonly ILogger log = LogManager.GetCurrentClassLogger();
+        [Reference]
+        private readonly ILogger log = LogManager.GetCurrentClassLogger();
+
         private readonly bool performActionsOnOpen;
-        [Reference] private Maybe<DeviceController> controllerInstance;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ClientConnectionManager" /> class.
@@ -35,7 +39,8 @@ namespace TA.NexDome.Server
         ///     A factory class that can create and destroy transaction processors (and by implication,
         ///     the entire communications stack).
         /// </param>
-        public ClientConnectionManager() : this(performActionsOnOpen: true) { }
+        public ClientConnectionManager()
+            : this(performActionsOnOpen: true) { }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ClientConnectionManager" /> class and allows
@@ -53,7 +58,7 @@ namespace TA.NexDome.Server
             {
             this.performActionsOnOpen = performActionsOnOpen;
             Clients = new List<ClientStatus>();
-            controllerInstance = Maybe<DeviceController>.Empty;
+            MaybeControllerInstance = Maybe<DeviceController>.Empty;
             }
 
         [Reference]
@@ -71,7 +76,12 @@ namespace TA.NexDome.Server
         ///     Gets the controller instance if it has been created.
         /// </summary>
         /// <value>The controller instance.</value>
-        internal Maybe<DeviceController> MaybeControllerInstance => controllerInstance;
+        [field: Reference]
+        internal Maybe<DeviceController> MaybeControllerInstance
+            {
+            get;
+            private set;
+            }
 
         /// <summary>
         ///     Gets the controller instance, ensuring that it is open and ready for use.
@@ -95,9 +105,10 @@ namespace TA.NexDome.Server
                 }
             catch (InvalidOperationException e)
                 {
-                var message = $"Attempt to go online with unregistered client {clientId}";
+                string message = $"Attempt to go online with unregistered client {clientId}";
                 log.Error(e, message);
-                //ThrowOnUnrecognizedClient(clientId, e, message);
+
+                // ThrowOnUnrecognizedClient(clientId, e, message);
                 }
 
             try
@@ -106,14 +117,14 @@ namespace TA.NexDome.Server
                 }
             catch (TimeoutException tex)
                 {
-                log.Error(tex, $"Not connected because state machine did not become ready");
+                log.Error(tex, "Not connected because state machine did not become ready");
                 DestroyControllerInstance();
                 return null;
                 }
 
             client.Online = true;
             RaiseClientStatusChanged();
-            return controllerInstance.Single();
+            return MaybeControllerInstance.Single();
             }
 
         internal event EventHandler<EventArgs> ClientStatusChanged;
@@ -126,14 +137,14 @@ namespace TA.NexDome.Server
         [Writer]
         private void EnsureControllerInstanceCreatedAndOpen()
             {
-            if (!controllerInstance.Any())
+            if (!MaybeControllerInstance.Any())
                 {
                 CompositionRoot.BeginSessionScope();
                 var controller = CompositionRoot.Kernel.Get<DeviceController>();
-                controllerInstance = new Maybe<DeviceController>(controller);
+                MaybeControllerInstance = new Maybe<DeviceController>(controller);
                 }
 
-            var instance = controllerInstance.Single();
+            var instance = MaybeControllerInstance.Single();
             if (!instance.IsConnected)
                 instance.Open(performActionsOnOpen);
             }
@@ -141,9 +152,9 @@ namespace TA.NexDome.Server
         [Writer]
         private void DestroyControllerInstance()
             {
-            if (controllerInstance.Any())
-                controllerInstance.Single().Dispose();
-            controllerInstance = Maybe<DeviceController>.Empty;
+            if (MaybeControllerInstance.Any())
+                MaybeControllerInstance.Single().Dispose();
+            MaybeControllerInstance = Maybe<DeviceController>.Empty;
             CompositionRoot.EndSessionScope();
             }
 
@@ -158,27 +169,27 @@ namespace TA.NexDome.Server
                 }
             catch (InvalidOperationException e)
                 {
-                var message = $"Attempt to go offline by unecognized client {clientId}";
+                string message = $"Attempt to go offline by unecognized client {clientId}";
                 log.Error(e, message);
-                //ThrowOnUnrecognizedClient(clientId, e, message);
+
+                // ThrowOnUnrecognizedClient(clientId, e, message);
                 }
 
             client.Online = false;
             RaiseClientStatusChanged();
             if (OnlineClientCount == 0)
                 {
-                log.Warn($"The last client has gone offline - closing connection");
+                log.Warn("The last client has gone offline - closing connection");
 
-                if (controllerInstance.Any())
+                if (MaybeControllerInstance.Any())
                     {
-                    var controller = controllerInstance.Single();
+                    var controller = MaybeControllerInstance.Single();
                     controller.Close();
                     }
 
-                controllerInstance = Maybe<DeviceController>.Empty;
+                MaybeControllerInstance = Maybe<DeviceController>.Empty;
                 }
             }
-
 
         /// <summary>
         ///     Determines whether the client with the specified ID is registered.
@@ -196,7 +207,7 @@ namespace TA.NexDome.Server
         public Guid RegisterClient(string name = null)
             {
             var id = Guid.NewGuid();
-            var status = new ClientStatus {ClientId = id, Name = name ?? id.ToString(), Online = false};
+            var status = new ClientStatus { ClientId = id, Name = name ?? id.ToString(), Online = false };
             Clients.Add(status);
             RaiseClientStatusChanged();
             return id;
@@ -206,7 +217,7 @@ namespace TA.NexDome.Server
         public void UnregisterClient(Guid clientId)
             {
             log.Info($"Unregistering client {clientId}");
-            var previousClientCount = RegisteredClientCount;
+            int previousClientCount = RegisteredClientCount;
             try
                 {
                 Clients.Remove(Clients.Single(p => p.Equals(clientId)));
@@ -214,9 +225,10 @@ namespace TA.NexDome.Server
                 }
             catch (InvalidOperationException e)
                 {
-                var message = $"Attempt to unregister unknown client {clientId}";
+                string message = $"Attempt to unregister unknown client {clientId}";
                 log.Error(e, message);
-                //ThrowOnUnrecognizedClient(clientId, e, "Attempt to unregister an unknown client");
+
+                // ThrowOnUnrecognizedClient(clientId, e, "Attempt to unregister an unknown client");
                 }
 
             if (previousClientCount == 1 && RegisteredClientCount == 0)

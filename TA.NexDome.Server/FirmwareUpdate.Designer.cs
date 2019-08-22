@@ -33,15 +33,15 @@
             this.ConsoleOutput = new ConsoleControl.ConsoleControl();
             this.FirmwareImageName = new System.Windows.Forms.ComboBox();
             this.InputGroup = new System.Windows.Forms.GroupBox();
+            this.VerboseLogging = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.ShowAllComPorts = new System.Windows.Forms.CheckBox();
             this.ComPortName = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.UpdateCommand = new System.Windows.Forms.Button();
             this.ConsoleGroup = new System.Windows.Forms.GroupBox();
             this.UpdateProcessError = new System.Windows.Forms.ErrorProvider(this.components);
-            this.ShowAllComPorts = new System.Windows.Forms.CheckBox();
             this.BalloonHelp = new System.Windows.Forms.ToolTip(this.components);
-            this.VerboseLogging = new System.Windows.Forms.CheckBox();
             this.InputGroup.SuspendLayout();
             this.ConsoleGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.UpdateProcessError)).BeginInit();
@@ -50,8 +50,10 @@
             // ConsoleOutput
             // 
             this.ConsoleOutput.AutoScroll = true;
+            this.ConsoleOutput.Cursor = System.Windows.Forms.Cursors.No;
             this.ConsoleOutput.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ConsoleOutput.IsInputEnabled = true;
+            this.ConsoleOutput.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConsoleOutput.IsInputEnabled = false;
             this.ConsoleOutput.Location = new System.Drawing.Point(3, 16);
             this.ConsoleOutput.Name = "ConsoleOutput";
             this.ConsoleOutput.SendKeyboardCommandsToProcess = false;
@@ -59,6 +61,7 @@
             this.ConsoleOutput.Size = new System.Drawing.Size(694, 427);
             this.ConsoleOutput.TabIndex = 0;
             this.BalloonHelp.SetToolTip(this.ConsoleOutput, "Displays log output from the flash programmer");
+            this.ConsoleOutput.OnConsoleOutput += new ConsoleControl.ConsoleEventHandler(this.ConsoleOutput_OnConsoleOutput);
             // 
             // FirmwareImageName
             // 
@@ -88,6 +91,20 @@
             this.InputGroup.TabStop = false;
             this.InputGroup.Text = "Firmware Selections";
             // 
+            // VerboseLogging
+            // 
+            this.VerboseLogging.AutoSize = true;
+            this.VerboseLogging.Checked = global::TA.NexDome.Server.Properties.Settings.Default.FirmwareUploadVerboseOutput;
+            this.VerboseLogging.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::TA.NexDome.Server.Properties.Settings.Default, "FirmwareUploadVerboseOutput", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.VerboseLogging.Location = new System.Drawing.Point(99, 47);
+            this.VerboseLogging.Name = "VerboseLogging";
+            this.VerboseLogging.Size = new System.Drawing.Size(106, 17);
+            this.VerboseLogging.TabIndex = 7;
+            this.VerboseLogging.Text = "Verbose Logging";
+            this.BalloonHelp.SetToolTip(this.VerboseLogging, "Enables verbose logging mode for the flash programmer.\r\nDefault: disabled\r\n\r\nEnab" +
+        "le this only if you are troublshooting firmware update issues.");
+            this.VerboseLogging.UseVisualStyleBackColor = true;
+            // 
             // label1
             // 
             this.label1.Location = new System.Drawing.Point(6, 16);
@@ -97,14 +114,19 @@
             this.label1.Text = "Firmware Image";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // label2
+            // ShowAllComPorts
             // 
-            this.label2.Location = new System.Drawing.Point(334, 16);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(59, 23);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "COM Port";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ShowAllComPorts.AutoSize = true;
+            this.ShowAllComPorts.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.ShowAllComPorts.Location = new System.Drawing.Point(399, 46);
+            this.ShowAllComPorts.Name = "ShowAllComPorts";
+            this.ShowAllComPorts.Size = new System.Drawing.Size(118, 17);
+            this.ShowAllComPorts.TabIndex = 6;
+            this.ShowAllComPorts.Text = "Show all COM Ports";
+            this.ShowAllComPorts.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.BalloonHelp.SetToolTip(this.ShowAllComPorts, resources.GetString("ShowAllComPorts.ToolTip"));
+            this.ShowAllComPorts.UseVisualStyleBackColor = true;
+            this.ShowAllComPorts.CheckedChanged += new System.EventHandler(this.ShowAllComPorts_CheckedChanged);
             // 
             // ComPortName
             // 
@@ -115,6 +137,15 @@
             this.ComPortName.TabIndex = 4;
             this.BalloonHelp.SetToolTip(this.ComPortName, "Select the COM port to upload firmware to.");
             this.ComPortName.SelectedIndexChanged += new System.EventHandler(this.ComPortName_SelectedIndexChanged);
+            // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(334, 16);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(59, 23);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "COM Port";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // UpdateCommand
             // 
@@ -145,20 +176,6 @@
             this.UpdateProcessError.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.AlwaysBlink;
             this.UpdateProcessError.ContainerControl = this;
             // 
-            // ShowAllComPorts
-            // 
-            this.ShowAllComPorts.AutoSize = true;
-            this.ShowAllComPorts.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.ShowAllComPorts.Location = new System.Drawing.Point(399, 46);
-            this.ShowAllComPorts.Name = "ShowAllComPorts";
-            this.ShowAllComPorts.Size = new System.Drawing.Size(118, 17);
-            this.ShowAllComPorts.TabIndex = 6;
-            this.ShowAllComPorts.Text = "Show all COM Ports";
-            this.ShowAllComPorts.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.BalloonHelp.SetToolTip(this.ShowAllComPorts, resources.GetString("ShowAllComPorts.ToolTip"));
-            this.ShowAllComPorts.UseVisualStyleBackColor = true;
-            this.ShowAllComPorts.CheckedChanged += new System.EventHandler(this.ShowAllComPorts_CheckedChanged);
-            // 
             // BalloonHelp
             // 
             this.BalloonHelp.AutomaticDelay = 0;
@@ -167,19 +184,6 @@
             this.BalloonHelp.ReshowDelay = 250;
             this.BalloonHelp.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.BalloonHelp.ToolTipTitle = "Help with Controls";
-            // 
-            // VerboseLogging
-            // 
-            this.VerboseLogging.AutoSize = true;
-            this.VerboseLogging.Checked = global::TA.NexDome.Server.Properties.Settings.Default.FirmwareUploadVerboseOutput;
-            this.VerboseLogging.Location = new System.Drawing.Point(99, 47);
-            this.VerboseLogging.Name = "VerboseLogging";
-            this.VerboseLogging.Size = new System.Drawing.Size(106, 17);
-            this.VerboseLogging.TabIndex = 7;
-            this.VerboseLogging.Text = "Verbose Logging";
-            this.BalloonHelp.SetToolTip(this.VerboseLogging, "Enables verbose logging mode for the flash programmer.\r\nDefault: disabled\r\n\r\nEnab" +
-        "le this only if you are troublshooting firmware update issues.");
-            this.VerboseLogging.UseVisualStyleBackColor = true;
             // 
             // FirmwareUpdate
             // 

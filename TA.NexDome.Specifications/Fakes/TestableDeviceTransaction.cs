@@ -1,13 +1,18 @@
-﻿using System;
-using TA.Ascom.ReactiveCommunications;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 namespace TA.NexDome.Specifications.Fakes
     {
-    internal class TestableDeviceTransaction : DeviceTransaction
+    using System;
+
+    using TA.Ascom.ReactiveCommunications;
+
+    class TestableDeviceTransaction : DeviceTransaction
         {
         readonly DeviceTransaction sourceTransaction;
 
-        public TestableDeviceTransaction(DeviceTransaction sourceTransaction) : base(sourceTransaction.Command)
+        public TestableDeviceTransaction(DeviceTransaction sourceTransaction)
+            : base(sourceTransaction.Command)
             {
             this.sourceTransaction = sourceTransaction;
             }
