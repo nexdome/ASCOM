@@ -192,6 +192,7 @@
             this.ClientSize = new System.Drawing.Size(724, 561);
             this.Controls.Add(this.ConsoleGroup);
             this.Controls.Add(this.InputGroup);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(740, 600);
             this.Name = "FirmwareUpdate";
             this.Text = "Firmware Update Utility";

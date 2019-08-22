@@ -51,6 +51,7 @@ namespace TA.NexDome.Server
             this.ShutterAccelerationRampTimeTrackBar = new System.Windows.Forms.TrackBar();
             this.ShutterMaximumSpeedTrackBar = new System.Windows.Forms.TrackBar();
             this.communicationSettingsControl1 = new TA.NexDome.Server.CommunicationSettingsControl();
+            this.OnlineHelp = new System.Windows.Forms.Button();
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.AboutBox = new System.Windows.Forms.Button();
@@ -78,7 +79,6 @@ namespace TA.NexDome.Server
             this.label19 = new System.Windows.Forms.Label();
             this.settingsWarningLabel = new System.Windows.Forms.Label();
             this.FirmwareUpdateCommand = new System.Windows.Forms.Button();
-            this.OnlineHelp = new System.Windows.Forms.Button();
             toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.ShutterOpenCloseTimeSeconds)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FullRotationTimeSeconds)).BeginInit();
@@ -386,6 +386,17 @@ namespace TA.NexDome.Server
             this.communicationSettingsControl1.TabIndex = 7;
             toolTip1.SetToolTip(this.communicationSettingsControl1, "Set the communications parameters for your installation.");
             // 
+            // OnlineHelp
+            // 
+            this.OnlineHelp.Location = new System.Drawing.Point(388, 351);
+            this.OnlineHelp.Name = "OnlineHelp";
+            this.OnlineHelp.Size = new System.Drawing.Size(83, 25);
+            this.OnlineHelp.TabIndex = 18;
+            this.OnlineHelp.Text = "Online Help";
+            toolTip1.SetToolTip(this.OnlineHelp, "Open a web browser and navigate to the online help pages.");
+            this.OnlineHelp.UseVisualStyleBackColor = true;
+            this.OnlineHelp.Click += new System.EventHandler(this.BrowseToWebPage);
+            // 
             // cmdOK
             // 
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -670,17 +681,6 @@ namespace TA.NexDome.Server
             this.FirmwareUpdateCommand.UseVisualStyleBackColor = true;
             this.FirmwareUpdateCommand.Click += new System.EventHandler(this.FirmwareUpdateCommand_Click);
             // 
-            // OnlineHelp
-            // 
-            this.OnlineHelp.Location = new System.Drawing.Point(388, 351);
-            this.OnlineHelp.Name = "OnlineHelp";
-            this.OnlineHelp.Size = new System.Drawing.Size(83, 25);
-            this.OnlineHelp.TabIndex = 18;
-            this.OnlineHelp.Text = "Online Help";
-            toolTip1.SetToolTip(this.OnlineHelp, "Open a web browser and navigate to the online help pages.");
-            this.OnlineHelp.UseVisualStyleBackColor = true;
-            this.OnlineHelp.Click += new System.EventHandler(this.BrowseToWebPage);
-            // 
             // SetupDialogForm
             // 
             this.AcceptButton = this.cmdOK;
@@ -703,6 +703,7 @@ namespace TA.NexDome.Server
             this.Controls.Add(this.cmdOK);
             this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::TA.NexDome.Server.Properties.Settings.Default, "SetupDialogLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Location = global::TA.NexDome.Server.Properties.Settings.Default.SetupDialogLocation;
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(499, 773);

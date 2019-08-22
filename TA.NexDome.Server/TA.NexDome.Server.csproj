@@ -168,7 +168,8 @@
     <Content Include="Resources\ASCOM.ico" />
     <Content Include="Resources\ASCOM.png" />
     <Content Include="Resources\AuroraWideWithText.png" />
-    <Content Include="Resources\DigitalDomeworks.jpg" />
+    <Content Include="Resources\MNR-Twilight.JPG" />
+    <Content Include="Resources\NexDome.ico" />
     <Content Include="Resources\NexDome.PNG" />
     <Content Include="Resources\TiGra Astronomy Icon 256x256.png" />
     <Content Include="Resources\TiGra Astronomy logo 800x900.png" />
