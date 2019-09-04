@@ -102,7 +102,7 @@ namespace TA.NexDome.AscomDome
         /// <inheritdoc />
         public async void Park()
             {
-            if (!Connected) 
+            if (!Connected)
                 LogAndThrow<NotConnectedException>("The driver must be connected in order to park");
 
             // It is important to catch any and all exceptions because we are using async void
@@ -127,7 +127,15 @@ namespace TA.NexDome.AscomDome
         public void SlewToAltitude(double altitude) => throw MethodNotImplemented();
 
         /// <inheritdoc />
-        public void SlewToAzimuth(double Azimuth) => controller?.SlewToAzimuth(Azimuth);
+        public void SlewToAzimuth(double azimuth)
+            {
+            if (azimuth < 0.0 || azimuth >= 360.0)
+                throw new ASCOM.InvalidValueException(
+                    nameof(SlewToAzimuth),
+                    azimuth.ToString(),
+                    "Expected 0.0 <= azimuth < 360.0");
+            controller?.SlewToAzimuth(azimuth);
+            }
 
         /// <inheritdoc />
         public void SyncToAzimuth(double Azimuth) => throw MethodNotImplemented();
