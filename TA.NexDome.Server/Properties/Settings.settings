@@ -90,7 +90,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="OnlineHelpWebDestination" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">https://bitbucket.org/tigra-astronomy/nexdome-ascom-driver/wiki/Home</Value>
+      <Value Profile="(Default)">https://github.com/nexdome/ASCOM/wiki</Value>
     </Setting>
   </Settings>
 </SettingsFile>

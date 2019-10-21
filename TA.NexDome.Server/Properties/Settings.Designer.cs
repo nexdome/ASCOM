@@ -328,7 +328,7 @@ namespace TA.NexDome.Server.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://bitbucket.org/tigra-astronomy/nexdome-ascom-driver/wiki/Home")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://github.com/nexdome/ASCOM/wiki")]
         public string OnlineHelpWebDestination {
             get {
                 return ((string)(this["OnlineHelpWebDestination"]));
