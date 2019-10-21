@@ -41,7 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommunicationsStackBuilder.cs" />
     <Compile Include="DeviceController.cs" />
     <Compile Include="EmptyResponseTransaction.cs" />
     <Compile Include="ObservableExtensions.cs" />

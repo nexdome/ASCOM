@@ -150,9 +150,13 @@ namespace TA.NexDome.DeviceInterface
             TransactEmptyReponse(
                 string.Format(Constants.CmdSetRampTimeTemplate, 'R', configuration.RotatorRampTime.TotalMilliseconds));
 
-            // ToDo - Shutter doesn't come online immediately. How do we wait for it?
-            // TransactEmptyReponse(string.Format(Constants.CmdSetMotorSpeedTemplate, 'S', configuration.ShutterMaximumSpeed));
-            // TransactEmptyReponse(string.Format(Constants.CmdSetRampTimeTemplate, 'S', configuration.ShutterRampTime.TotalMilliseconds));
+            if (configuration.ShutterIsInstalled && stateMachine.ShutterLinkState == ShutterLinkState.Online)
+                {
+                TransactEmptyReponse(string.Format(Constants.CmdSetMotorSpeedTemplate, 'S',
+                    configuration.ShutterMaximumSpeed));
+                TransactEmptyReponse(string.Format(Constants.CmdSetRampTimeTemplate, 'S',
+                    configuration.ShutterRampTime.TotalMilliseconds));
+                }
             }
 
         private void TransactEmptyReponse(string command)

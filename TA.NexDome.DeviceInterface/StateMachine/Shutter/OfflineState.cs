@@ -29,5 +29,11 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
             if (state == ShutterLinkState.Online)
                 Machine.TransitionToState(new RequestStatusState(Machine));
             }
+
+        /// <inheritdoc />
+        public override void OnExit()
+            {
+            base.OnExit();
+            }
         }
     }
