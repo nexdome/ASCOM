@@ -1,6 +1,8 @@
 // This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using TA.WinFormsControls;
+
 namespace TA.NexDome.Server
     {
     using System;
@@ -11,11 +13,7 @@ namespace TA.NexDome.Server
     using System.Reactive.Linq;
     using System.Threading;
     using System.Windows.Forms;
-
-    using ASCOM.Controls;
-
     using JetBrains.Annotations;
-
     using TA.NexDome.Server.Properties;
     using TA.NexDome.SharedTypes;
 
@@ -44,6 +42,7 @@ namespace TA.NexDome.Server
                 .Subscribe(ObserveClientStatusChanged);
             ObserveClientStatusChanged(null); // This sets the initial UI state before any notifications arrive
             SetupCommand.AttachCommand(ExecuteSetupDialog, CanSetup);
+            this.EnsureVisible();
             }
 
         private void ConfigureAnnunciators()
@@ -401,6 +400,11 @@ namespace TA.NexDome.Server
             {
             if (SharedResources.ConnectionManager.MaybeControllerInstance.Any())
                 SharedResources.ConnectionManager.MaybeControllerInstance.Single().CloseShutter();
+            }
+
+        private void ServerStatusDisplay_EnsureVisible(object sender, EventArgs e)
+            {
+            this.EnsureVisible();
             }
         }
     }

@@ -51,6 +51,7 @@ namespace TA.NexDome.Server
             this.ShutterMaximumSpeedTrackBar = new System.Windows.Forms.TrackBar();
             this.communicationSettingsControl1 = new TA.NexDome.Server.CommunicationSettingsControl();
             this.OnlineHelp = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.AboutBox = new System.Windows.Forms.Button();
@@ -79,7 +80,6 @@ namespace TA.NexDome.Server
             this.settingsWarningLabel = new System.Windows.Forms.Label();
             this.FirmwareUpdateCommand = new System.Windows.Forms.Button();
             this.optionsGroup = new System.Windows.Forms.GroupBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.LoadDefaultsCommand = new System.Windows.Forms.Button();
             toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.ShutterOpenCloseTimeSeconds)).BeginInit();
@@ -393,6 +393,19 @@ namespace TA.NexDome.Server
             toolTip1.SetToolTip(this.OnlineHelp, "Open a web browser and navigate to the online help pages.");
             this.OnlineHelp.UseVisualStyleBackColor = true;
             this.OnlineHelp.Click += new System.EventHandler(this.BrowseToWebPage);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Checked = global::TA.NexDome.Server.Properties.Settings.Default.KeepStatusWindowOnScreen;
+            this.checkBox1.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::TA.NexDome.Server.Properties.Settings.Default, "KeepStatusWindowOnScreen", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.checkBox1.Location = new System.Drawing.Point(7, 20);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(218, 17);
+            this.checkBox1.TabIndex = 0;
+            this.checkBox1.Text = "Ensure Status Windows is Always Visible";
+            toolTip1.SetToolTip(this.checkBox1, resources.GetString("checkBox1.ToolTip"));
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // cmdOK
             // 
@@ -708,25 +721,17 @@ namespace TA.NexDome.Server
             this.optionsGroup.TabStop = false;
             this.optionsGroup.Text = "Options";
             // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(7, 20);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(218, 17);
-            this.checkBox1.TabIndex = 0;
-            this.checkBox1.Text = "Ensure Status Windows is Always Visible";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
             // LoadDefaultsCommand
             // 
             this.LoadDefaultsCommand.BackColor = System.Drawing.Color.IndianRed;
+            this.LoadDefaultsCommand.Enabled = false;
             this.LoadDefaultsCommand.Location = new System.Drawing.Point(397, 189);
             this.LoadDefaultsCommand.Name = "LoadDefaultsCommand";
             this.LoadDefaultsCommand.Size = new System.Drawing.Size(166, 39);
             this.LoadDefaultsCommand.TabIndex = 20;
             this.LoadDefaultsCommand.Text = "Factory Defaults";
             this.LoadDefaultsCommand.UseVisualStyleBackColor = false;
+            this.LoadDefaultsCommand.Visible = false;
             this.LoadDefaultsCommand.Click += new System.EventHandler(this.LoadDefaultsCommand_Click);
             // 
             // SetupDialogForm

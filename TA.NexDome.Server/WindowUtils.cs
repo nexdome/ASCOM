@@ -40,7 +40,7 @@ namespace TA.NexDome.Server
         /// Ensures that the specified form is fully visible. If not, it will be moved to the primary monitor
         /// </summary>
         /// <param name="form">The form.</param>
-        public static void EnsureVisible(Form form)
+        public static void EnsureVisible(this Form form)
             {
             if (!IsOnScreen(form))
                 {
