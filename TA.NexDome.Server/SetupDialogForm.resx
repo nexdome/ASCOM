@@ -123,6 +123,32 @@
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>203, 17</value>
   </metadata>
+  <data name="ShutterOpenCloseTimeSeconds.ToolTip" xml:space="preserve">
+    <value>The maximum time that the shutter motor
+should be allowed to run before an error
+condition is assumed.
+
+This value should be chosen to be 110% to 150%
+of the time needed to fully open or close the
+shutter.</value>
+  </data>
+  <data name="FullRotationTimeSeconds.ToolTip" xml:space="preserve">
+    <value>The maximum time that the rotatior motor
+should be allowed to run before an error
+condition is assumed.
+
+This value should be chosen to be 110% to 150%
+of the time needed for a full 360° rotation.</value>
+  </data>
+  <data name="PresetHD10.ToolTip" xml:space="preserve">
+    <value>Safety timeouts limit the time that motors can run
+before an error condition is assumed.
+
+This preset uses longer than normal safety timeouts.
+This choice is appropriate if you have had to reduce
+your motor speeds, increase ramp time, or are using
+the NexDome motors on a nonstandard  observatory.</value>
+  </data>
   <data name="ParkAzimuth.ToolTip" xml:space="preserve">
     <value>Park Azimuth is the azimuth (in degrees)
 measured clockwise fromTrue North, where
@@ -130,6 +156,17 @@ the shutter charging contacts align with the
 battery charger. Issuing the Park command
 rotates to the park azimuth then closes
 the shutter. </value>
+  </data>
+  <data name="checkBox1.ToolTip" xml:space="preserve">
+    <value>Ensure that the Status Windows is Always Visible on
+one of the currently available monitors.
+
+Default: disabled
+
+Enable this if you find that the status window gets "lost".
+This can happen if you access your observatory computer
+remotely from a system that has more or larger monitors.
+</value>
   </data>
   <metadata name="ConnectionErrorProvider.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>

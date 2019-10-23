@@ -1,18 +1,18 @@
 // This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Reactive.Linq;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Windows.Forms;
+using NLog.Fluent;
+using TA.NexDome.Server.Properties;
+
 namespace TA.NexDome.Server
     {
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Reactive.Linq;
-    using System.Runtime.InteropServices;
-    using System.Threading;
-    using System.Windows.Forms;
-
-    using NLog.Fluent;
-
     [ComVisible(false)] // Form not registered for COM!
     public partial class SetupDialogForm : Form
         {
@@ -21,12 +21,10 @@ namespace TA.NexDome.Server
         public SetupDialogForm() => InitializeComponent();
 
         private void cmdOK_Click(object sender, EventArgs e) // OK button event handler
-            =>
-                communicationSettingsControl1.Save();
+            => communicationSettingsControl1.Save();
 
         private void cmdCancel_Click(object sender, EventArgs e) // Cancel button event handler
-            =>
-                Close();
+            => Close();
 
         private void BrowseToWebPage(object sender, EventArgs e)
             {
@@ -92,10 +90,8 @@ namespace TA.NexDome.Server
             SetControlAppearance();
             }
 
-        private void ConnectionManager_ClientStatusChanged(object sender, EventArgs e)
-            {
+        private void ConnectionManager_ClientStatusChanged(object sender, EventArgs e) =>
             updateClickCommand.CanExecuteChanged();
-            }
 
         private void ExecuteFirmwareUpdate()
             {
@@ -103,10 +99,7 @@ namespace TA.NexDome.Server
             updateForm.ShowDialog();
             }
 
-        private bool CanUpdateFirmware()
-            {
-            return SharedResources.ConnectionManager.OnlineClientCount == 0;
-            }
+        private bool CanUpdateFirmware() => SharedResources.ConnectionManager.OnlineClientCount == 0;
 
         private void AboutBox_Click(object sender, EventArgs e)
             {
@@ -159,9 +152,11 @@ namespace TA.NexDome.Server
 
         private void FirmwareUpdateCommand_Click(object sender, EventArgs e) { }
 
-        private void OnlineHelp_Click(object sender, EventArgs e)
-            {
+        private void OnlineHelp_Click(object sender, EventArgs e) { }
 
+        private void LoadDefaultsCommand_Click(object sender, EventArgs e)
+            {
+            Settings.Default.Reset();
             }
         }
     }
