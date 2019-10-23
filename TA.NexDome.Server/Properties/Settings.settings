@@ -95,5 +95,14 @@
     <Setting Name="KeepStatusWindowOnScreen" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="DowngradeWarningAcknowledged" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="FaqWebDestination" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://github.com/nexdome/ASCOM/wiki</Value>
+    </Setting>
+    <Setting Name="FacebookWebDestination" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://www.facebook.com/groups/477732789267400</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

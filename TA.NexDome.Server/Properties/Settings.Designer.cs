@@ -346,5 +346,35 @@ namespace TA.NexDome.Server.Properties {
                 this["KeepStatusWindowOnScreen"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DowngradeWarningAcknowledged {
+            get {
+                return ((bool)(this["DowngradeWarningAcknowledged"]));
+            }
+            set {
+                this["DowngradeWarningAcknowledged"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://github.com/nexdome/ASCOM/wiki")]
+        public string FaqWebDestination {
+            get {
+                return ((string)(this["FaqWebDestination"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://www.facebook.com/groups/477732789267400")]
+        public string FacebookWebDestination {
+            get {
+                return ((string)(this["FacebookWebDestination"]));
+            }
+        }
     }
 }
