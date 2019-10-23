@@ -66,6 +66,12 @@
       <DependentUpon>CommunicationSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="CompositionRoot.cs" />
+    <Compile Include="DowngradeWarning.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DowngradeWarning.Designer.cs">
+      <DependentUpon>DowngradeWarning.cs</DependentUpon>
+    </Compile>
     <Compile Include="FirmwareUpdate.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -87,6 +93,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CommunicationSettingsControl.resx">
       <DependentUpon>CommunicationSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DowngradeWarning.resx">
+      <DependentUpon>DowngradeWarning.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FirmwareUpdate.resx">
       <DependentUpon>FirmwareUpdate.cs</DependentUpon>

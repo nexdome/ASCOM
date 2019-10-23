@@ -136,6 +136,11 @@ namespace TA.NexDome.Server
             FirmwareImageName.DisplayMember = "DisplayName";
             PopulateComPortsComboBox();
             Cursor.Current = originalCursor;
+            if (!Settings.Default.DowngradeWarningAcknowledged)
+                {
+                var supportInfoDialog = new DowngradeWarning();
+                supportInfoDialog.ShowDialog();
+                }
             }
 
         private void PopulateComPortsComboBox(bool showAll = false)
