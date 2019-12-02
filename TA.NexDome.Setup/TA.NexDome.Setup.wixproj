@@ -133,13 +133,13 @@
     <CreateProperty Value="$(TargetDir)$(TargetFileName)">
       <Output TaskParameter="Value" PropertyName="TargetPath" />
     </CreateProperty>-->
-    <!-- [TPL] Publish the .Net Core firmware update utility and harvest the published output directory -->
-    <Exec Command="dotnet publish ..\TA.NexDome.FirmwareUpdater\TA.NexDome.FirmwareUpdater.csproj -c $(Configuration) -r win-x86 --framework netcoreapp30 --self-contained" />
+    <!-- [TPL] Publish the .Net Core firmware update utility -->
+    <Exec Command="dotnet publish ..\TA.NexDome.FirmwareUpdater\TA.NexDome.FirmwareUpdater.csproj -c $(Configuration) -r win-x86 --self-contained --framework netcoreapp30 -property:PublishSingleFile=true,PublishTrimmed=true,PublishReadyToRunShowWarnings=true " />
     <PropertyGroup>
       <LinkerBaseInputPaths>..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp30\win-x86\publish</LinkerBaseInputPaths>
       <DefineConstants>BasePath=..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp30\win-x86\publish</DefineConstants>
     </PropertyGroup>
-    <HeatDirectory OutputFile="FirmwareUploader.wxs" DirectoryRefId="dirFirmwareUploader" ComponentGroupName="cgFirmwareUploader" SuppressCom="true" Directory="..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp30\win-x86\publish" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" AutoGenerateGuids="false" GenerateGuidsNow="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.BasePath" />
+    <!--<HeatDirectory OutputFile="FirmwareUploader.wxs" DirectoryRefId="dirFirmwareUploader" ComponentGroupName="cgFirmwareUploader" SuppressCom="true" Directory="..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp30\win-x86\publish" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" AutoGenerateGuids="false" GenerateGuidsNow="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.BasePath" />-->
   </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

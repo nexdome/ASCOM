@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <DirectoryRef Id="dirFirmwareUploader" />
+    <ComponentGroup Id="cgFirmwareUploader" Directory="dirFirmwareUploader">
+      <Component Id="cmpFirwareUploaderExecutable" Guid="{050d212f-b02e-4f8d-ad89-2887ec41c436}">
+        <File Id="filFirwareUploaderExecutable"
+              KeyPath="yes"
+              Source="$(var.FirmwareUpdater.ProjectDir)bin\Release\netcoreapp30\win-x86\publish\TA.NexDome.FirmwareUpdater.exe"
+               Vital="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>
