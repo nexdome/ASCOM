@@ -258,6 +258,12 @@ namespace TA.NexDome.Server
             // HomeAzimuthUpDown
             // 
             this.HomeAzimuthUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::TA.NexDome.Server.Properties.Settings.Default, "HomeSensorAzimuth", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.HomeAzimuthUpDown.DecimalPlaces = 1;
+            this.HomeAzimuthUpDown.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
             this.HomeAzimuthUpDown.Location = new System.Drawing.Point(88, 18);
             this.HomeAzimuthUpDown.Maximum = new decimal(new int[] {
             359,
@@ -287,6 +293,12 @@ namespace TA.NexDome.Server
             // ParkAzimuth
             // 
             this.ParkAzimuth.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::TA.NexDome.Server.Properties.Settings.Default, "ParkAzimuth", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ParkAzimuth.DecimalPlaces = 1;
+            this.ParkAzimuth.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
             this.ParkAzimuth.Location = new System.Drawing.Point(237, 18);
             this.ParkAzimuth.Maximum = new decimal(new int[] {
             359,
