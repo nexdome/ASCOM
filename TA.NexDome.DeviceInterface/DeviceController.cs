@@ -29,7 +29,8 @@ namespace TA.NexDome.DeviceInterface
         // private SemanticVersion shutterFirmwareVersion;
         private static readonly SemanticVersion MinimumRequiredRotatorVersion = new SemanticVersion(2, 9, 9);
 
-        private static SemanticVersion MinimumRequiredShutterVersion = new SemanticVersion(2, 9, 9);
+        private static readonly SemanticVersion MinimumRequiredShutterVersion = new SemanticVersion(2, 9, 9);
+        private static readonly SemanticVersion HighPrecisionSlewingSupport = new SemanticVersion("3.2.0-alpha.19");
 
         [NotNull]
         private readonly ICommunicationChannel channel;
@@ -452,6 +453,22 @@ namespace TA.NexDome.DeviceInterface
             }
 
         public void SlewToAzimuth(double azimuth)
+            {
+            if (rotatorFirmwareVersion < HighPrecisionSlewingSupport)
+                LowPrecisionSlewStrategy(azimuth);
+            else
+                HighPrecisionSlewStrategy(azimuth);
+            }
+
+        private void HighPrecisionSlewStrategy(double azimuth)
+            {
+            var circumference = (double)stateMachine.DomeCircumference;
+            var stepsPerDegree = circumference / 360.0;
+            var targetStepPosition = (int)(azimuth * stepsPerDegree);
+            stateMachine.RotateToStepPosition(targetStepPosition);
+            }
+
+        private void LowPrecisionSlewStrategy(double azimuth)
             {
             if (azimuth < 0.0 || azimuth >= 360.0)
                 throw new ArgumentOutOfRangeException(

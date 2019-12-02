@@ -81,5 +81,8 @@
       <Version>6.2.13</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Diagrams\DriverArchitecture.cd" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

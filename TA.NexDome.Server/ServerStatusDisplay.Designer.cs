@@ -190,10 +190,10 @@
             this.AzimuthPositionAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.AzimuthPositionAnnunciator.Location = new System.Drawing.Point(171, 0);
             this.AzimuthPositionAnnunciator.Name = "AzimuthPositionAnnunciator";
-            this.AzimuthPositionAnnunciator.Size = new System.Drawing.Size(40, 17);
+            this.AzimuthPositionAnnunciator.Size = new System.Drawing.Size(56, 17);
             this.AzimuthPositionAnnunciator.TabIndex = 5;
-            this.AzimuthPositionAnnunciator.Tag = "{0:D3}°";
-            this.AzimuthPositionAnnunciator.Text = "000°";
+            this.AzimuthPositionAnnunciator.Tag = "{0:000.0}°";
+            this.AzimuthPositionAnnunciator.Text = "000.0°";
             // 
             // AtHomeAnnunciator
             // 
@@ -203,7 +203,7 @@
             this.AtHomeAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
             this.AtHomeAnnunciator.ForeColor = System.Drawing.Color.DarkSeaGreen;
             this.AtHomeAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
-            this.AtHomeAnnunciator.Location = new System.Drawing.Point(217, 0);
+            this.AtHomeAnnunciator.Location = new System.Drawing.Point(233, 0);
             this.AtHomeAnnunciator.Name = "AtHomeAnnunciator";
             this.AtHomeAnnunciator.Size = new System.Drawing.Size(40, 17);
             this.AtHomeAnnunciator.TabIndex = 12;
@@ -219,7 +219,7 @@
             this.RainAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
             this.RainAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.RainAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
-            this.RainAnnunciator.Location = new System.Drawing.Point(263, 0);
+            this.RainAnnunciator.Location = new System.Drawing.Point(279, 0);
             this.RainAnnunciator.Name = "RainAnnunciator";
             this.RainAnnunciator.Size = new System.Drawing.Size(40, 17);
             this.RainAnnunciator.TabIndex = 19;
@@ -292,10 +292,10 @@
             this.ShutterPercentOpenAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.ShutterPercentOpenAnnunciator.Location = new System.Drawing.Point(171, 17);
             this.ShutterPercentOpenAnnunciator.Name = "ShutterPercentOpenAnnunciator";
-            this.ShutterPercentOpenAnnunciator.Size = new System.Drawing.Size(32, 17);
+            this.ShutterPercentOpenAnnunciator.Size = new System.Drawing.Size(40, 17);
             this.ShutterPercentOpenAnnunciator.TabIndex = 10;
             this.ShutterPercentOpenAnnunciator.Tag = "{0:D3}%";
-            this.ShutterPercentOpenAnnunciator.Text = "000";
+            this.ShutterPercentOpenAnnunciator.Text = "000%";
             // 
             // ShutterDispositionAnnunciator
             // 
@@ -306,7 +306,7 @@
             this.ShutterDispositionAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
             this.ShutterDispositionAnnunciator.ForeColor = System.Drawing.Color.LightGoldenrodYellow;
             this.ShutterDispositionAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
-            this.ShutterDispositionAnnunciator.Location = new System.Drawing.Point(209, 17);
+            this.ShutterDispositionAnnunciator.Location = new System.Drawing.Point(217, 17);
             this.ShutterDispositionAnnunciator.Name = "ShutterDispositionAnnunciator";
             this.ShutterDispositionAnnunciator.Size = new System.Drawing.Size(40, 17);
             this.ShutterDispositionAnnunciator.TabIndex = 11;
@@ -320,7 +320,7 @@
             this.ShutterLinkStateAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
             this.ShutterLinkStateAnnunciator.ForeColor = System.Drawing.Color.DarkSeaGreen;
             this.ShutterLinkStateAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
-            this.ShutterLinkStateAnnunciator.Location = new System.Drawing.Point(255, 17);
+            this.ShutterLinkStateAnnunciator.Location = new System.Drawing.Point(263, 17);
             this.ShutterLinkStateAnnunciator.Name = "ShutterLinkStateAnnunciator";
             this.ShutterLinkStateAnnunciator.Size = new System.Drawing.Size(64, 17);
             this.ShutterLinkStateAnnunciator.TabIndex = 13;
@@ -334,7 +334,7 @@
             this.batteryVoltsAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
             this.batteryVoltsAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.batteryVoltsAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
-            this.batteryVoltsAnnunciator.Location = new System.Drawing.Point(325, 17);
+            this.batteryVoltsAnnunciator.Location = new System.Drawing.Point(333, 17);
             this.batteryVoltsAnnunciator.Name = "batteryVoltsAnnunciator";
             this.batteryVoltsAnnunciator.Size = new System.Drawing.Size(64, 17);
             this.batteryVoltsAnnunciator.TabIndex = 18;

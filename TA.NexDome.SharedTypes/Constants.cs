@@ -57,6 +57,13 @@ namespace TA.NexDome.SharedTypes
         public const string CmdGotoAzimuthTemplate = "GAR,{0:000}";
 
         /// <summary>
+        ///     Format string used with <see cref="string.Format(string,object)" /> for building a "GoTo Step-position" command.
+        ///     Format GSR, 6 digits packed with leading zeroes as necessary.
+        ///     <seealso cref="string.Format(string,object)" />
+        /// </summary>
+        public const string CmdGotoStepPositionTemplate = "GSR,{0:000000}";
+
+        /// <summary>
         ///     Command to move the dome to the home position.
         ///     Response is a series of Pxxx position update packets, followed by a SER status packet.
         /// </summary>

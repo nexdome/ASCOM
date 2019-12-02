@@ -241,7 +241,7 @@ namespace TA.NexDome.Server
         private void SetAzimuthPosition(float position)
             {
             string format = AzimuthPositionAnnunciator.Tag.ToString();
-            string formattedPosition = string.Format(format, (int)position);
+            string formattedPosition = string.Format(format, position);
             AzimuthPositionAnnunciator.Text = formattedPosition;
             }
 
@@ -315,7 +315,7 @@ namespace TA.NexDome.Server
                 {
                     case ShutterDisposition.Offline:
                         ShutterDispositionAnnunciator.ForeColor = Color.FromArgb(200, 4, 4);
-                        ShutterDispositionAnnunciator.Cadence = CadencePattern.BlinkAlarm;
+                        ShutterDispositionAnnunciator.Cadence = CadencePattern.Wink;
                         break;
                     case ShutterDisposition.Opening:
                     case ShutterDisposition.Closing:
@@ -349,11 +349,11 @@ namespace TA.NexDome.Server
                     case ShutterLinkState.WaitAT:
                     case ShutterLinkState.Config:
                         ShutterLinkStateAnnunciator.ForeColor = Color.FromArgb(200, 4, 4);
-                        ShutterLinkStateAnnunciator.Cadence = CadencePattern.BlinkAlarm;
+                        ShutterLinkStateAnnunciator.Cadence = CadencePattern.SteadyOn;
                         break;
                     case ShutterLinkState.Detect:
                         ShutterLinkStateAnnunciator.ForeColor = Color.PaleGoldenrod;
-                        ShutterLinkStateAnnunciator.Cadence = CadencePattern.BlinkFast;
+                        ShutterLinkStateAnnunciator.Cadence = CadencePattern.BlinkSlow;
                         break;
                     case ShutterLinkState.Online:
                         ShutterLinkStateAnnunciator.ForeColor = Color.DarkSeaGreen;
