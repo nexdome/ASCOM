@@ -249,9 +249,9 @@ namespace TA.NexDome.Server
             {
             int safeValue = percent.Clip(0, 100);
             string format = ShutterPercentOpenAnnunciator.Tag.ToString();
-            string formattedValue = string.Format(format, percent);
+            string formattedValue = string.Format(format, safeValue);
             ShutterPercentOpenAnnunciator.Text = formattedValue;
-            ShutterPositionBar.Value = percent;
+            ShutterPositionBar.Value = safeValue;
             var controller = SharedResources.ConnectionManager.MaybeControllerInstance.Single();
             bool moving = controller?.ShutterMotorActive ?? false;
             ShutterPositionBar.MarqueeAnimationSpeed = moving ? 2000 : 0;
