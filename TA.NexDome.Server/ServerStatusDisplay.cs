@@ -404,7 +404,8 @@ namespace TA.NexDome.Server
 
         private void ServerStatusDisplay_EnsureVisible(object sender, EventArgs e)
             {
-            this.EnsureVisible();
+            if (Settings.Default.KeepStatusWindowOnScreen)
+                this.EnsureVisible();
             }
         }
     }
