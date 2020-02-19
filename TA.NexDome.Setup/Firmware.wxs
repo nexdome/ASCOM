@@ -4,10 +4,10 @@
     <DirectoryRef Id="FIRMWAREUTILS" />
     <ComponentGroup Id="cgFirmware" Directory="FIRMWAREUTILS">
             <Component Id="cmpRotatorFirmware" Guid="{F5C76E87-7957-4E62-B2A8-EC7C5949BECD}">
-                <File Id="filRotatorFirmware" KeyPath="yes" Source="$(var.SolutionDir)Firmware\Rotator-3.2.1.hex" />
+                <File Id="filRotatorFirmware" KeyPath="yes" Source="$(var.SolutionDir)Firmware\Rotator-3.3.0.hex" />
             </Component>
             <Component Id="cmpShutterFirmware" Guid="{730106BE-1652-4C03-A2C1-F0B57415105F}">
-                <File Id="filShutterFirmware" KeyPath="yes" Source="$(var.SolutionDir)Firmware\Shutter-3.2.1.hex" />
+                <File Id="filShutterFirmware" KeyPath="yes" Source="$(var.SolutionDir)Firmware\Shutter-3.3.0.hex" />
             </Component>
         </ComponentGroup>
   </Fragment>
