@@ -41,6 +41,14 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Rotator
             }
 
         /// <inheritdoc />
+        public override void RotateToStepPosition(int targetPosition)
+            {
+            base.RotateToStepPosition(targetPosition);
+            Machine.ControllerActions.RotateToStepPosition(targetPosition);
+            Machine.TransitionToState(new RotatingState(Machine));
+            }
+
+        /// <inheritdoc />
         public override void RotateToHomePosition()
             {
             base.RotateToHomePosition();

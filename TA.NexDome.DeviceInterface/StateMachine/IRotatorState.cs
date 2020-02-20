@@ -40,5 +40,12 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         ///     Attempts to stop any rotation in progress as quickly as possible.
         /// </summary>
         void HardStopRequested();
+
+        /// <summary>
+        /// Requests that the dome rotate to the given step position in whole motor steps,
+        /// where position zero is true north, increasing clockwise.
+        /// </summary>
+        /// <param name="targetStepPosition">The target step position.</param>
+        void RotateToStepPosition(int targetStepPosition);
         }
     }

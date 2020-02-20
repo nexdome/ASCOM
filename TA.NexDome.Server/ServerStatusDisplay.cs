@@ -1,6 +1,8 @@
 // This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using TA.WinFormsControls;
+
 namespace TA.NexDome.Server
     {
     using System;
@@ -11,11 +13,7 @@ namespace TA.NexDome.Server
     using System.Reactive.Linq;
     using System.Threading;
     using System.Windows.Forms;
-
-    using ASCOM.Controls;
-
     using JetBrains.Annotations;
-
     using TA.NexDome.Server.Properties;
     using TA.NexDome.SharedTypes;
 
@@ -44,6 +42,7 @@ namespace TA.NexDome.Server
                 .Subscribe(ObserveClientStatusChanged);
             ObserveClientStatusChanged(null); // This sets the initial UI state before any notifications arrive
             SetupCommand.AttachCommand(ExecuteSetupDialog, CanSetup);
+            this.EnsureVisible();
             }
 
         private void ConfigureAnnunciators()
@@ -242,7 +241,7 @@ namespace TA.NexDome.Server
         private void SetAzimuthPosition(float position)
             {
             string format = AzimuthPositionAnnunciator.Tag.ToString();
-            string formattedPosition = string.Format(format, (int)position);
+            string formattedPosition = string.Format(format, position);
             AzimuthPositionAnnunciator.Text = formattedPosition;
             }
 
@@ -250,9 +249,9 @@ namespace TA.NexDome.Server
             {
             int safeValue = percent.Clip(0, 100);
             string format = ShutterPercentOpenAnnunciator.Tag.ToString();
-            string formattedValue = string.Format(format, percent);
+            string formattedValue = string.Format(format, safeValue);
             ShutterPercentOpenAnnunciator.Text = formattedValue;
-            ShutterPositionBar.Value = percent;
+            ShutterPositionBar.Value = safeValue;
             var controller = SharedResources.ConnectionManager.MaybeControllerInstance.Single();
             bool moving = controller?.ShutterMotorActive ?? false;
             ShutterPositionBar.MarqueeAnimationSpeed = moving ? 2000 : 0;
@@ -316,7 +315,7 @@ namespace TA.NexDome.Server
                 {
                     case ShutterDisposition.Offline:
                         ShutterDispositionAnnunciator.ForeColor = Color.FromArgb(200, 4, 4);
-                        ShutterDispositionAnnunciator.Cadence = CadencePattern.BlinkAlarm;
+                        ShutterDispositionAnnunciator.Cadence = CadencePattern.Wink;
                         break;
                     case ShutterDisposition.Opening:
                     case ShutterDisposition.Closing:
@@ -350,11 +349,11 @@ namespace TA.NexDome.Server
                     case ShutterLinkState.WaitAT:
                     case ShutterLinkState.Config:
                         ShutterLinkStateAnnunciator.ForeColor = Color.FromArgb(200, 4, 4);
-                        ShutterLinkStateAnnunciator.Cadence = CadencePattern.BlinkAlarm;
+                        ShutterLinkStateAnnunciator.Cadence = CadencePattern.SteadyOn;
                         break;
                     case ShutterLinkState.Detect:
                         ShutterLinkStateAnnunciator.ForeColor = Color.PaleGoldenrod;
-                        ShutterLinkStateAnnunciator.Cadence = CadencePattern.BlinkFast;
+                        ShutterLinkStateAnnunciator.Cadence = CadencePattern.BlinkSlow;
                         break;
                     case ShutterLinkState.Online:
                         ShutterLinkStateAnnunciator.ForeColor = Color.DarkSeaGreen;
@@ -401,6 +400,12 @@ namespace TA.NexDome.Server
             {
             if (SharedResources.ConnectionManager.MaybeControllerInstance.Any())
                 SharedResources.ConnectionManager.MaybeControllerInstance.Single().CloseShutter();
+            }
+
+        private void ServerStatusDisplay_EnsureVisible(object sender, EventArgs e)
+            {
+            if (Settings.Default.KeepStatusWindowOnScreen)
+                this.EnsureVisible();
             }
         }
     }

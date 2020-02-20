@@ -31,20 +31,7 @@ namespace TA.NexDome.Server
 
         private void NavigateToWebPage(object sender, EventArgs e)
             {
-            var control = sender as Control;
-            if (control == null)
-                return;
-            string url = control.Tag.ToString();
-            if (!url.StartsWith("http:"))
-                return;
-            try
-                {
-                Process.Start(url);
-                }
-            catch (Exception)
-                {
-                // Just fail silently
-                }
+            WindowUtils.NavigateToWebDestination(sender);
             }
 
         private void OkCommand_Click(object sender, EventArgs e)

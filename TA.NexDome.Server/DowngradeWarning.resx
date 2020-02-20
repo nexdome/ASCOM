@@ -117,60 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="toolTip1.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>False</value>
-  </metadata>
-  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>203, 17</value>
-  </metadata>
-  <data name="ShutterOpenCloseTimeSeconds.ToolTip" xml:space="preserve">
-    <value>The maximum time that the shutter motor
-should be allowed to run before an error
-condition is assumed.
+  <data name="richTextBox1.Text" xml:space="preserve">
+    <value>IMPORTANT SUPPORT NOTICE - please read
 
-This value should be chosen to be 110% to 150%
-of the time needed to fully open or close the
-shutter.</value>
-  </data>
-  <data name="FullRotationTimeSeconds.ToolTip" xml:space="preserve">
-    <value>The maximum time that the rotatior motor
-should be allowed to run before an error
-condition is assumed.
+Firmware version 3 is a ground-up re-write and uses different settings format, a different command protocol and implements some features differently
+to previous versions.
 
-This value should be chosen to be 110% to 150%
-of the time needed for a full 360° rotation.</value>
-  </data>
-  <data name="PresetHD10.ToolTip" xml:space="preserve">
-    <value>Safety timeouts limit the time that motors can run
-before an error condition is assumed.
+ASCOM driver version 3 is designed to work with Firmware version 3 and will not work with earlier firmware versions. There are also INDI and X2 drivers available that work with version 3 firmware.
 
-This preset uses longer than normal safety timeouts.
-This choice is appropriate if you have had to reduce
-your motor speeds, increase ramp time, or are using
-the NexDome motors on a nonstandard  observatory.</value>
-  </data>
-  <data name="ParkAzimuth.ToolTip" xml:space="preserve">
-    <value>Park Azimuth is the azimuth (in degrees)
-measured clockwise fromTrue North, where
-the shutter charging contacts align with the
-battery charger. Issuing the Park command
-rotates to the park azimuth then closes
-the shutter. </value>
-  </data>
-  <data name="checkBox1.ToolTip" xml:space="preserve">
-    <value>Ensure that the Status Windows is Always Visible on
-one of the currently available monitors.
+Settings are always reset to factory defaults for a major version upgrade and may also be reset for minor version upgrades.
 
-Default: disabled
-
-Enable this if you find that the status window gets "lost".
-This can happen if you access your observatory computer
-remotely from a system that has more or larger monitors.
-</value>
+DOWNGRADE TO PREVIOUS VERSIONS IS NOT SUPPORTED.
+This is known to cause issues and is therefore not recommended for any reason. Please do not downgrade as a troubleshooting step. In particular, the old firmware does not fully reconfigure the XBee wireless link and you may have problems with your shutter connection. Re-upgrading to version 3 may then cause EEPROM corruption so you may need to clear your EEPROM. Please do not create these problems for yourself by downgrading. If you choose to do so, YOU ARE ON YOUR OWN.</value>
   </data>
-  <metadata name="ConnectionErrorProvider.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

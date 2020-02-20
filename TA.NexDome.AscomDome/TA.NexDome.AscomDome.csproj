@@ -21,6 +21,9 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PostSharpHost>Managed</PostSharpHost>
+    <PostSharpTargetProcessor>x86</PostSharpTargetProcessor>
+    <PostSharpOptimizationMode>OptimizeForBuildTime</PostSharpOptimizationMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -60,6 +63,10 @@
       <Project>{1224a06b-5a84-452f-af63-cf8ef7d6713e}</Project>
       <Name>TA.NexDome.SharedTypes</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TA.PostSharp.Aspects\TA.PostSharp.Aspects.csproj">
+      <Project>{9CDCF319-DADC-41EB-B787-DE3862017E95}</Project>
+      <Name>TA.PostSharp.Aspects</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ASCOM.Platform">
@@ -70,6 +77,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="PostSharp">
+      <Version>6.2.13</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Diagrams\DriverArchitecture.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

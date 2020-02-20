@@ -49,7 +49,7 @@ namespace TA.NexDome.Server.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("100, 100")]
         public global::System.Drawing.Point SetupDialogLocation {
             get {
                 return ((global::System.Drawing.Point)(this["SetupDialogLocation"]));
@@ -226,7 +226,7 @@ namespace TA.NexDome.Server.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("600")]
+        [global::System.Configuration.DefaultSettingValueAttribute("800")]
         public int ShutterMaximumSpeed {
             get {
                 return ((int)(this["ShutterMaximumSpeed"]));
@@ -328,10 +328,52 @@ namespace TA.NexDome.Server.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://bitbucket.org/tigra-astronomy/nexdome-ascom-driver/wiki/Home")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://github.com/nexdome/ASCOM/wiki")]
         public string OnlineHelpWebDestination {
             get {
                 return ((string)(this["OnlineHelpWebDestination"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool KeepStatusWindowOnScreen {
+            get {
+                return ((bool)(this["KeepStatusWindowOnScreen"]));
+            }
+            set {
+                this["KeepStatusWindowOnScreen"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DowngradeWarningAcknowledged {
+            get {
+                return ((bool)(this["DowngradeWarningAcknowledged"]));
+            }
+            set {
+                this["DowngradeWarningAcknowledged"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://github.com/nexdome/ASCOM/wiki")]
+        public string FaqWebDestination {
+            get {
+                return ((string)(this["FaqWebDestination"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://www.facebook.com/groups/477732789267400")]
+        public string FacebookWebDestination {
+            get {
+                return ((string)(this["FacebookWebDestination"]));
             }
         }
     }

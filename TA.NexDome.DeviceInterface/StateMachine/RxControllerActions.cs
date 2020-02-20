@@ -37,6 +37,12 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             SendCommand(cmd);
             }
 
+        public void RotateToStepPosition(int targetPosition)
+            {
+            string cmd = string.Format(Constants.CmdGotoStepPositionTemplate, targetPosition);
+            SendCommand(cmd);
+            }
+
         public void OpenShutter()
             {
             SendCommand(Constants.CmdOpenShutter);

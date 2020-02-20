@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" InitialTargets="EnsureWixToolsetInstalled" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\WiX.3.11.2\build\wix.props" Condition="Exists('..\packages\WiX.3.11.2\build\wix.props')" />
   <Import Project="..\packages\UtilPack.NuGet.MSBuild.2.9.1\build\UtilPack.NuGet.MSBuild.props" Condition="Exists('..\packages\UtilPack.NuGet.MSBuild.2.9.1\build\UtilPack.NuGet.MSBuild.props')" />
   <Import Project="..\packages\GitVersionTask.5.0.1\build\GitVersionTask.props" Condition="Exists('..\packages\GitVersionTask.5.0.1\build\GitVersionTask.props')" />
-  <Import Project="..\packages\WiX.3.11.1\build\wix.props" Condition="Exists('..\packages\WiX.3.11.1\build\wix.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -60,6 +60,7 @@
     <Compile Include="ReactiveExtensions.wxs" />
     <Compile Include="SharedTypes.wxs" />
     <Compile Include="System.wxs" />
+    <Compile Include="WinFormsControls.wxs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config.wxi" />
@@ -106,6 +107,14 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\TA.PostSharp.Aspects\TA.PostSharp.Aspects.csproj">
+      <Name>Aspects</Name>
+      <Project>{9cdcf319-dadc-41eb-b787-de3862017e95}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixNetFxExtension">
@@ -133,22 +142,22 @@
     <CreateProperty Value="$(TargetDir)$(TargetFileName)">
       <Output TaskParameter="Value" PropertyName="TargetPath" />
     </CreateProperty>-->
-    <!-- [TPL] Publish the .Net Core firmware update utility and harvest the published output directory -->
-    <Exec Command="dotnet publish ..\TA.NexDome.FirmwareUpdater\TA.NexDome.FirmwareUpdater.csproj -c $(Configuration) -r win-x86 --framework netcoreapp30 --self-contained" />
+    <!-- [TPL] Publish the .Net Core firmware update utility -->
+    <Exec Command="dotnet publish ..\TA.NexDome.FirmwareUpdater\TA.NexDome.FirmwareUpdater.csproj -c $(Configuration) -r win-x86 --self-contained --framework netcoreapp30 -property:PublishSingleFile=true,PublishTrimmed=true,PublishReadyToRunShowWarnings=true " />
     <PropertyGroup>
       <LinkerBaseInputPaths>..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp30\win-x86\publish</LinkerBaseInputPaths>
       <DefineConstants>BasePath=..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp30\win-x86\publish</DefineConstants>
     </PropertyGroup>
-    <HeatDirectory OutputFile="FirmwareUploader.wxs" DirectoryRefId="dirFirmwareUploader" ComponentGroupName="cgFirmwareUploader" SuppressCom="true" Directory="..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp30\win-x86\publish" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" AutoGenerateGuids="false" GenerateGuidsNow="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.BasePath" />
+    <!--<HeatDirectory OutputFile="FirmwareUploader.wxs" DirectoryRefId="dirFirmwareUploader" ComponentGroupName="cgFirmwareUploader" SuppressCom="true" Directory="..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp30\win-x86\publish" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" AutoGenerateGuids="false" GenerateGuidsNow="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.BasePath" />-->
   </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\WiX.3.11.1\build\wix.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\WiX.3.11.1\build\wix.props'))" />
     <Error Condition="!Exists('..\packages\GitVersionTask.5.0.1\build\GitVersionTask.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.5.0.1\build\GitVersionTask.props'))" />
     <Error Condition="!Exists('..\packages\GitVersionTask.5.0.1\build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.5.0.1\build\GitVersionTask.targets'))" />
     <Error Condition="!Exists('..\packages\UtilPack.NuGet.MSBuild.2.9.1\build\UtilPack.NuGet.MSBuild.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\UtilPack.NuGet.MSBuild.2.9.1\build\UtilPack.NuGet.MSBuild.props'))" />
+    <Error Condition="!Exists('..\packages\WiX.3.11.2\build\wix.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\WiX.3.11.2\build\wix.props'))" />
   </Target>
   <Import Project="..\packages\GitVersionTask.5.0.1\build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.5.0.1\build\GitVersionTask.targets')" />
 </Project>

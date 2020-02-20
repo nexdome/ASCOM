@@ -248,6 +248,8 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             RotatorState.RotateToAzimuthDegrees(azimuth);
             }
 
+        public void RotateToStepPosition(int targetStepPosition) => RotatorState.RotateToStepPosition(targetStepPosition);
+
         public void OpenShutter() => ShutterState.OpenShutter();
 
         public void CloseShutter() => ShutterState.CloseShutter();
@@ -318,5 +320,6 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             }
 
         #endregion State triggers
+
         }
     }

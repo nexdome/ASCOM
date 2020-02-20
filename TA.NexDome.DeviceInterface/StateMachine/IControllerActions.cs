@@ -22,6 +22,13 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         void RotateToAzimuth(int degreesClockwiseFromNorth);
 
         /// <summary>
+        ///     Requests that the controller move to the specified step position.
+        ///     The direction of rotation is at the controller's discretion.
+        /// </summary>
+        /// <param name="targetPosition">The target whole step position.</param>
+        void RotateToStepPosition(int targetPosition);
+
+        /// <summary>
         ///     Requests that the controller open the shutter.
         /// </summary>
         void OpenShutter();
