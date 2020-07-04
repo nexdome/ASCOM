@@ -17,6 +17,9 @@ namespace TA.NexDome.Server
     public partial class SetupDialogForm : Form
         {
         private ClickCommand updateClickCommand;
+        private ClickCommand lowVoltsClickCommand;
+        private ClickCommand enableAutoCloseClickCommand;
+        private ClickCommand enableShutterClickCommand;
 
         public SetupDialogForm() => InitializeComponent();
 
@@ -64,6 +67,10 @@ namespace TA.NexDome.Server
                 handler => SharedResources.ConnectionManager.ClientStatusChanged += handler,
                 handler => SharedResources.ConnectionManager.ClientStatusChanged -= handler);
             updateClickCommand = FirmwareUpdateCommand.AttachCommand(ExecuteFirmwareUpdate, CanUpdateFirmware);
+            lowVoltsClickCommand = ShutterLowVoltsThreshold.AttachCommand(() => { }, CanEditVoltsThreshold);
+            enableAutoCloseClickCommand =
+                EnableShutterAutoClose.AttachCommand(ExecuteEnableShutterAutoClose, CanEnableAutoClose);
+            enableShutterClickCommand = ShutterEnabled.AttachCommand(ExecuteShutterEnabled, CanEnableShutter);
             observableClientStatus.ObserveOn(SynchronizationContext.Current)
                 .Subscribe(item => updateClickCommand.CanExecuteChanged());
             int onlineClients = SharedResources.ConnectionManager.OnlineClientCount;
@@ -90,16 +97,36 @@ namespace TA.NexDome.Server
             SetControlAppearance();
             }
 
+        #region Command pattern implementations
+        /*
+         * The Command Pattern being used here is a variant of the MVVM command pattern.
+         * Each ClickCommand is attached to a clickable control, which wires into the control's Click event.
+         * When the control is clicked, the ClickCommand.Execute method is called.
+         * The ClickCommand.CanExecute method may be called at any time to determine whether the control is
+         * valid for interaction (enabled) at that moment.
+         * As the view model data is updated, ClickCommand.CanExecuteChanged may be called to tell the control
+         * that circumstances have changed and it needs to re-evaluate its status.
+         * This pattern tend to produce cleaner and more cohesive code than handling click events directly.
+         */
+
+        private bool CanEnableShutter() => true;
+        private void ExecuteShutterEnabled()
+            {
+            lowVoltsClickCommand.CanExecuteChanged();
+            enableAutoCloseClickCommand.CanExecuteChanged();
+            }
+        private bool CanEnableAutoClose() => ShutterEnabled.Checked;
+        private void ExecuteEnableShutterAutoClose() => lowVoltsClickCommand.CanExecuteChanged();
+        private bool CanEditVoltsThreshold() => EnableShutterAutoClose.Checked && ShutterEnabled.Checked;
         private void ConnectionManager_ClientStatusChanged(object sender, EventArgs e) =>
             updateClickCommand.CanExecuteChanged();
-
+        private bool CanUpdateFirmware() => SharedResources.ConnectionManager.OnlineClientCount == 0;
         private void ExecuteFirmwareUpdate()
             {
             var updateForm = new FirmwareUpdate();
             updateForm.ShowDialog();
             }
-
-        private bool CanUpdateFirmware() => SharedResources.ConnectionManager.OnlineClientCount == 0;
+        #endregion
 
         private void AboutBox_Click(object sender, EventArgs e)
             {
@@ -158,5 +185,6 @@ namespace TA.NexDome.Server
             {
             Settings.Default.Reset();
             }
+
         }
     }

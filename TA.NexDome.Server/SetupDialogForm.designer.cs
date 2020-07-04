@@ -80,6 +80,9 @@ namespace TA.NexDome.Server
             this.settingsWarningLabel = new System.Windows.Forms.Label();
             this.FirmwareUpdateCommand = new System.Windows.Forms.Button();
             this.optionsGroup = new System.Windows.Forms.GroupBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.ShutterLowVoltsThreshold = new System.Windows.Forms.NumericUpDown();
+            this.EnableShutterAutoClose = new System.Windows.Forms.CheckBox();
             this.LoadDefaultsCommand = new System.Windows.Forms.Button();
             toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.ShutterOpenCloseTimeSeconds)).BeginInit();
@@ -99,6 +102,7 @@ namespace TA.NexDome.Server
             this.RotatorParametersGroup.SuspendLayout();
             this.ShutterParametersGroup.SuspendLayout();
             this.optionsGroup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ShutterLowVoltsThreshold)).BeginInit();
             this.SuspendLayout();
             // 
             // toolTip1
@@ -702,6 +706,7 @@ namespace TA.NexDome.Server
             // 
             // settingsWarningLabel
             // 
+            this.settingsWarningLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.settingsWarningLabel.AutoSize = true;
             this.settingsWarningLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.settingsWarningLabel.ForeColor = System.Drawing.Color.IndianRed;
@@ -724,6 +729,9 @@ namespace TA.NexDome.Server
             // 
             // optionsGroup
             // 
+            this.optionsGroup.Controls.Add(this.label9);
+            this.optionsGroup.Controls.Add(this.ShutterLowVoltsThreshold);
+            this.optionsGroup.Controls.Add(this.EnableShutterAutoClose);
             this.optionsGroup.Controls.Add(this.ShutterEnabled);
             this.optionsGroup.Controls.Add(this.checkBox1);
             this.optionsGroup.Location = new System.Drawing.Point(12, 247);
@@ -732,6 +740,51 @@ namespace TA.NexDome.Server
             this.optionsGroup.TabIndex = 19;
             this.optionsGroup.TabStop = false;
             this.optionsGroup.Text = "Options";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(229, 68);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(30, 13);
+            this.label9.TabIndex = 11;
+            this.label9.Text = "Volts";
+            // 
+            // ShutterLowVoltsThreshold
+            // 
+            this.ShutterLowVoltsThreshold.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::TA.NexDome.Server.Properties.Settings.Default, "ShutterLowVoltsThreshold", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ShutterLowVoltsThreshold.DecimalPlaces = 1;
+            this.ShutterLowVoltsThreshold.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ShutterLowVoltsThreshold.Location = new System.Drawing.Point(136, 66);
+            this.ShutterLowVoltsThreshold.Maximum = new decimal(new int[] {
+            150,
+            0,
+            0,
+            65536});
+            this.ShutterLowVoltsThreshold.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            65536});
+            this.ShutterLowVoltsThreshold.Name = "ShutterLowVoltsThreshold";
+            this.ShutterLowVoltsThreshold.Size = new System.Drawing.Size(87, 20);
+            this.ShutterLowVoltsThreshold.TabIndex = 10;
+            this.ShutterLowVoltsThreshold.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.ShutterLowVoltsThreshold.Value = global::TA.NexDome.Server.Properties.Settings.Default.ShutterLowVoltsThreshold;
+            // 
+            // EnableShutterAutoClose
+            // 
+            this.EnableShutterAutoClose.AutoSize = true;
+            this.EnableShutterAutoClose.Location = new System.Drawing.Point(7, 67);
+            this.EnableShutterAutoClose.Name = "EnableShutterAutoClose";
+            this.EnableShutterAutoClose.Size = new System.Drawing.Size(123, 17);
+            this.EnableShutterAutoClose.TabIndex = 9;
+            this.EnableShutterAutoClose.Text = "Enable auto-close at";
+            this.EnableShutterAutoClose.UseVisualStyleBackColor = true;
             // 
             // LoadDefaultsCommand
             // 
@@ -801,6 +854,7 @@ namespace TA.NexDome.Server
             this.ShutterParametersGroup.PerformLayout();
             this.optionsGroup.ResumeLayout(false);
             this.optionsGroup.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ShutterLowVoltsThreshold)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -858,5 +912,8 @@ namespace TA.NexDome.Server
         private System.Windows.Forms.GroupBox optionsGroup;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button LoadDefaultsCommand;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.NumericUpDown ShutterLowVoltsThreshold;
+        private System.Windows.Forms.CheckBox EnableShutterAutoClose;
         }
 }
