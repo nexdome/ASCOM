@@ -19,5 +19,11 @@ namespace TA.NexDome.SharedTypes
             // if (input.CompareTo(minimum) < 0)
             // return minimum;
             }
+
+        private const decimal MaxAdu = 1023.0M;
+        private const decimal MaxVolts = 15.0M;
+        public static uint VoltsToAdu(this decimal volts) => (uint)Math.Round(MaxAdu / MaxVolts * volts);
+
+        public static decimal AduToVolts(this uint analogDigitalUnits) => analogDigitalUnits / MaxAdu * MaxVolts;
         }
     }

@@ -173,7 +173,6 @@ namespace TA.NexDome.DeviceInterface
         public static IObservable<float> BatteryVoltageUpdates(this IObservable<char> source)
             {
             const string voltageUpdatePattern = @"^:BV(?<Value>\d{1,5})#$";
-            const float aduToVref = 5f / 1023 * 3f;
             var regex = new Regex(
                 voltageUpdatePattern,
                 RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture);
@@ -182,10 +181,65 @@ namespace TA.NexDome.DeviceInterface
                                   let message = new string(response.ToArray())
                                   let match = regex.Match(message)
                                   where match.Success
-                                  let measurement = int.Parse(match.Groups["Value"].Value)
-                                  let volts = measurement * aduToVref
+                                  let measurement = uint.Parse(match.Groups["Value"].Value)
+                                  let volts = (float)measurement.AduToVolts()
                                   select volts;
             return observableVolts.Trace("Volts");
+            }
+
+        /// <summary>
+        /// Transform a sequence of characters into a sequence that emits <c>true</c>
+        /// whenever a low volts notification is received, and <c>false</c> when no
+        /// notification has been received for a period of time.
+        /// </summary>
+        /// <param name="source">The source sequence.</param>
+        /// <param name="notificationTimeToLive">
+        /// The time that a positive low volts indication is considered valid, after which false is emitted.
+        /// </param>
+        /// <returns>
+        /// An observable sequence <see cref="IObservable{bool}"/> that represents the battery low volts condition.
+        /// </returns>
+        /// <remarks>
+        ///   <para>
+        ///   This is a somewhat complex Rx query so it is worth explaining.</para>
+        ///   <para>First, we tokenize the input stream into response messages (<c>source.DelimitedMessageStrings()</c>).</para>
+        ///   <para>Next, we test each response to see if is a low volts notification, using a regular expression.
+        ///   If it is, we emit <c>true</c>. We now have a sequence of booleans containing only true, in
+        ///   <c>lowVoltsNotifications</c>.</para>
+        ///   <para>This is the tricky bit. Now we transform that sequence into a sequence of sequences of {true, false} where the two elements
+        ///   are separated by a time delay.
+        ///   Finally we use the <c>Select()</c> operator to select only the most recently produced sequence.
+        /// </para>
+        ///   <para>
+        ///   The effect is that, as long as the tuple sequences are being produced close together,
+        ///   we only ever see the first element of the sequence (true). Only when the source sequence
+        ///   is quiet for the required time period do we see the second element (false).
+        /// </para>
+        ///   <para>
+        ///   Credit to @Enigmativity for this solution: https://stackoverflow.com/a/62748101/9851
+        ///   </para>
+        /// </remarks>
+        public static IObservable<bool> LowVoltsNotifications(this IObservable<char> source, TimeSpan notificationTimeToLive)
+            {
+            const string lowVoltsPattern = @"^:Volts#$";
+            var regex = new Regex(lowVoltsPattern,
+                RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture);
+            var responses = source.DelimitedMessageStrings();
+            // emit 'true' whenever a low volts notification is received.
+            var lowVoltsNotifications = from response in responses
+                                     let message = new string(response.ToArray())
+                                     let match = regex.Match(message)
+                                     where match.Success
+                                     select true;
+            // emit 'false' when lowVoltsNotifications hasn't produced a value for 60 seconds
+            var observableVoltsLowOrSafe = lowVoltsNotifications
+                    .Select(x =>
+                        Observable
+                            .Timer(notificationTimeToLive)
+                            .Select(y => false)
+                            .StartWith(true))
+                    .Switch();
+            return observableVoltsLowOrSafe.Trace("LowVolts");
             }
         }
     }

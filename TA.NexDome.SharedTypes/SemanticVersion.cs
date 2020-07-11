@@ -367,6 +367,21 @@ namespace TA.NexDome.SharedTypes
             return version.CompareTo(other) > 0;
             }
 
+        public static bool operator <=(SemanticVersion left, SemanticVersion right)
+            {
+            Contract.Requires(null != left);
+            Contract.Requires(null != right);
+            if (left.Equals(right)) return true;
+            return left.CompareTo(right) < 0;
+            }
+
+        public static bool operator >=(SemanticVersion left, SemanticVersion right)
+            {
+            Contract.Requires(null != left);
+            Contract.Requires(null != right);
+            if (left.Equals(right)) return true;
+            return left.CompareTo(right) > 0;
+            }
         #endregion
         }
     }

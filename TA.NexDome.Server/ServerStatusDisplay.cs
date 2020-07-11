@@ -59,7 +59,8 @@ namespace TA.NexDome.Server
                                    ShutterLinkStateAnnunciator,
                                    RainAnnunciator,
                                    AtHomeAnnunciator,
-                                   batteryVoltsAnnunciator
+                                   batteryVoltsAnnunciator,
+                                   BatteryLowAlert
                                    };
             annunciators.ForEach(p => p.Mute = false);
             annunciators.ForEach(p => p.Cadence = CadencePattern.SteadyOn);
@@ -68,6 +69,7 @@ namespace TA.NexDome.Server
             ShutterDispositionAnnunciator.Cadence = CadencePattern.Wink;
             AtHomeAnnunciator.Cadence = CadencePattern.Wink;
             RainAnnunciator.Cadence = CadencePattern.BlinkFast;
+            BatteryLowAlert.Cadence = CadencePattern.BlinkFast;
             annunciators.ForEach(p => p.Mute = true);
             }
 
@@ -165,6 +167,7 @@ namespace TA.NexDome.Server
             {
             disposableSubscriptions.ForEach(p => p.Dispose());
             disposableSubscriptions.Clear();
+            ConfigureAnnunciators();
             }
 
         /// <summary>
@@ -176,53 +179,71 @@ namespace TA.NexDome.Server
                 return;
             var controller = SharedResources.ConnectionManager.MaybeControllerInstance.Single();
 
-            /* ToDo:
-                         * Add subscriptions to PropertyChanged notifications using this pattern:
-                         *  movingSubscription = controller
-                         *      .GetObservableValueFor(m => m.IsMoving)
-                         *      .ObserveOn(SynchronizationContext.Current)
-                         *      .Subscribe(SetMotorMovingState);
-                         */
+            /*
+             * Add subscriptions to PropertyChanged notifications using this pattern:
+             *  disposableSubscriptions.Add(
+             *      controller.GetObservableValueFor(p => p.PropertyName)
+             *      .ObserveOn(SynchronizationContext.Current)
+             *      .Subscribe(OnNextHandler);
+             */
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.AzimuthMotorActive).ObserveOn(SynchronizationContext.Current)
+                controller.GetObservableValueFor(p => p.AzimuthMotorActive)
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(motorActive => AzimuthMotorAnnunciator.Mute = !motorActive));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.AzimuthDirection).ObserveOn(SynchronizationContext.Current)
+                controller.GetObservableValueFor(p => p.AzimuthDirection)
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(SetRotationDirection));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.AzimuthDegrees).ObserveOn(SynchronizationContext.Current)
+                controller.GetObservableValueFor(p => p.AzimuthDegrees)
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(SetAzimuthPosition));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.ShutterMotorActive).ObserveOn(SynchronizationContext.Current)
+                controller.GetObservableValueFor(p => p.ShutterMotorActive)
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(motorActive => ShutterMotorAnnunciator.Mute = !motorActive));
             disposableSubscriptions.Add(
                 controller.GetObservableValueFor(p => p.ShutterMovementDirection)
                     .ObserveOn(SynchronizationContext.Current).Subscribe(SetShutterDirection));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.ShutterDisposition).ObserveOn(SynchronizationContext.Current)
+                controller.GetObservableValueFor(p => p.ShutterDisposition)
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(SetShutterDisposition));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.ShutterPercentOpen).ObserveOn(SynchronizationContext.Current)
+                controller.GetObservableValueFor(p => p.ShutterPercentOpen)
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(SetShutterPercentOpen));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.ShutterLimitSwitches).ObserveOn(SynchronizationContext.Current)
+                controller.GetObservableValueFor(p => p.ShutterLimitSwitches)
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(SetShutterLimitSwitches));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.ShutterLinkState).ObserveOn(SynchronizationContext.Current)
+                controller.GetObservableValueFor(p => p.ShutterLinkState)
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(SetShutterLinkState));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.AtHome).ObserveOn(SynchronizationContext.Current)
+                controller.GetObservableValueFor(p => p.AtHome)
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(home => AtHomeAnnunciator.Mute = !home));
             disposableSubscriptions.Add(
-                controller.GetPropertyChangedEvents().ObserveOn(SynchronizationContext.Current)
+                controller.GetPropertyChangedEvents()
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(p => clickCommands.ForEach(q => q.CanExecuteChanged())));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.ShutterBatteryVolts).ObserveOn(SynchronizationContext.Current)
+                controller.GetObservableValueFor(p => p.ShutterBatteryVolts)
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(SetBatteryVolts));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.IsRaining).ObserveOn(SynchronizationContext.Current)
+                controller.GetObservableValueFor(p => p.IsRaining)
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(SetRainAlarm));
+            disposableSubscriptions.Add(
+                controller.GetObservableValueFor(p => p.IsBatteryLow)
+                    .ObserveOn(SynchronizationContext.Current)
+                    .Subscribe(SetBatteryLow));
             }
+
+        private void SetBatteryLow(bool isLow) => BatteryLowAlert.Mute = !isLow;
 
         private void SetRainAlarm(bool isRaining)
             {

@@ -132,7 +132,10 @@ namespace TA.NexDome.Server
                                   TimeSpan.FromMilliseconds(Default.ShutterAccelerationRampTimeMilliseconds),
                               ParkAzimuth = Default.ParkAzimuth,
                               TimeToWaitForShutterOnConnect = Default.OnConnectWaitForShutterOnline,
-                              ShutterIsInstalled = Default.ShutterIsInstalled
+                              ShutterIsInstalled = Default.ShutterIsInstalled,
+                              ShutterLowBatteryThresholdVolts = Default.ShutterLowVoltsThreshold,
+                              ShutterLowVoltsNotificationTimeToLive = Default.ShutterLowVoltsNotificationTimeToLive,
+                              EnableAutoCloseOnLowBattery = Default.ShutterAutoCloseOnLowBattery
                               };
             return options;
             }

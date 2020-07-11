@@ -388,5 +388,26 @@ namespace TA.NexDome.Server.Properties {
                 this["ShutterLowVoltsThreshold"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:01:00")]
+        public global::System.TimeSpan ShutterLowVoltsNotificationTimeToLive {
+            get {
+                return ((global::System.TimeSpan)(this["ShutterLowVoltsNotificationTimeToLive"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShutterAutoCloseOnLowBattery {
+            get {
+                return ((bool)(this["ShutterAutoCloseOnLowBattery"]));
+            }
+            set {
+                this["ShutterAutoCloseOnLowBattery"] = value;
+            }
+        }
     }
 }

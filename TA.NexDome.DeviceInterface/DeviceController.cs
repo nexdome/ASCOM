@@ -1,6 +1,8 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using System.Text;
+
 namespace TA.NexDome.DeviceInterface
     {
     using System;
@@ -30,7 +32,8 @@ namespace TA.NexDome.DeviceInterface
         private static readonly SemanticVersion MinimumRequiredRotatorVersion = new SemanticVersion(2, 9, 9);
 
         private static readonly SemanticVersion MinimumRequiredShutterVersion = new SemanticVersion(2, 9, 9);
-        private static readonly SemanticVersion HighPrecisionSlewingSupport = new SemanticVersion("3.2.0-alpha.19");
+        private static readonly SemanticVersion FirmwareHighPrecisionSlewingSupport = new SemanticVersion("3.2.0-alpha.19");
+        private static readonly SemanticVersion FirmwareShutterAutoCloseSupport = new SemanticVersion("3.4.0-alpha.1");
 
         [NotNull]
         private readonly ICommunicationChannel channel;
@@ -51,6 +54,7 @@ namespace TA.NexDome.DeviceInterface
         private bool disposed;
 
         private SemanticVersion rotatorFirmwareVersion;
+        private SemanticVersion shutterFirmwareVersion;
 
         public DeviceController(
             ICommunicationChannel channel,
@@ -110,6 +114,7 @@ namespace TA.NexDome.DeviceInterface
         public bool AtPark { get; private set; }
 
         public bool IsRaining { get; private set; }
+        public bool IsBatteryLow { get; set; }
 
         /// <inheritdoc />
         public void Dispose()
@@ -157,6 +162,12 @@ namespace TA.NexDome.DeviceInterface
                     configuration.ShutterMaximumSpeed));
                 TransactEmptyReponse(string.Format(Constants.CmdSetRampTimeTemplate, 'S',
                     configuration.ShutterRampTime.TotalMilliseconds));
+                if (configuration.EnableAutoCloseOnLowBattery &&
+                    shutterFirmwareVersion >= FirmwareShutterAutoCloseSupport)
+                    {
+                    var lowBatteryAdu = configuration.ShutterLowBatteryThresholdVolts.VoltsToAdu();
+                    TransactEmptyReponse(string.Format(Constants.CmdSetLowBatteryVoltsThreshold, lowBatteryAdu));
+                    }
                 }
             }
 
@@ -190,32 +201,49 @@ namespace TA.NexDome.DeviceInterface
                 Close();
                 throw new UnsupportedFirmwareVersionException(MinimumRequiredRotatorVersion, rotatorFirmwareVersion);
                 }
-
-            // versionTransaction = new SemVerTransaction(Constants.CmdGetShutterVersion);
-            // processor.CommitTransaction(versionTransaction);
-            // versionTransaction.WaitForCompletionOrTimeout();
-            // versionTransaction.ThrowIfFailed();
-            // shutterFirmwareVersion = versionTransaction.SemanticVersion;
-            // if (rotatorFirmwareVersion < MinimumRequiredRotatorVersion)
-            // {
-            // Log.Error()
-            // .Message("Unsupported shutter firmware version {version}; will throw.", shutterFirmwareVersion)
-            // .Write();
-            // MessageBox.Show(
-            // "Your rotator firmware is too old to work with this driver.\nPlease contact NexDome for an upgrade.\n\n"
-            // + $"Your version: {rotatorFirmwareVersion}\n"
-            // + $"Minimum required version: {MinimumRequiredRotatorVersion}\n\n"
-            // + "The connection will now close.", "Firmware Version Incompatible", MessageBoxButtons.OK,
-            // MessageBoxIcon.Stop);
-            // Close();
-            // throw new UnsupportedFirmwareVersionException(MinimumRequiredRotatorVersion, rotatorFirmwareVersion);
-            // }
             Log.Info().Message("Rotator firmware version {version}", rotatorFirmwareVersion).Write();
-
-            // Log.Info().Message("Shutter firmware version {version}", shutterFirmwareVersion).Write();
-            // if (rotatorFirmwareVersion != shutterFirmwareVersion)
-            // Log.Warn()
-            // .Message("Rotator/Shutter firmware version mismatch - this is not a recommended configuration");
+            if (!configuration.ShutterIsInstalled || !IsShutterOperational)
+                return; // No shutter
+            versionTransaction = new SemVerTransaction(Constants.CmdGetShutterVersion);
+            processor.CommitTransaction(versionTransaction);
+            versionTransaction.WaitForCompletionOrTimeout();
+            versionTransaction.ThrowIfFailed();
+            shutterFirmwareVersion = versionTransaction.SemanticVersion;
+            if (shutterFirmwareVersion < MinimumRequiredShutterVersion)
+                {
+                Log.Error().Message(
+                    "Unsupported rotator firmware version {version}; will throw.",
+                    shutterFirmwareVersion).Write();
+                MessageBox.Show(
+                    "Your shutter firmware is too old to work with this driver.\nPlease contact NexDome for an upgrade.\n\n"
+                    + $"Your version: {shutterFirmwareVersion}\n"
+                    + $"Minimum required version: {MinimumRequiredShutterVersion}\n\n"
+                    + "The connection will now close.\n\n" + "See the Setup screen for firmware update options.",
+                    "Firmware Version Incompatible",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Stop);
+                Close();
+                throw new UnsupportedFirmwareVersionException(MinimumRequiredShutterVersion, shutterFirmwareVersion);
+                }
+            Log.Info().Message("Shutter firmware version {version}", shutterFirmwareVersion).Write();
+            if (rotatorFirmwareVersion != shutterFirmwareVersion)
+                {
+                Log.Warn()
+                    .Message("Rotator/Shutter firmware version mismatch - this is not a recommended configuration");
+                var messageBuilder = new StringBuilder();
+                messageBuilder.AppendLine("Your shutter and rotator firmware versions do not match.");
+                messageBuilder.AppendLine("This is not a recommended configuration.");
+                messageBuilder.AppendLine("Please upgrade one or both units so they are on the same version.");
+                messageBuilder.AppendLine();
+                messageBuilder.AppendLine($"Rotator version: {rotatorFirmwareVersion}");
+                messageBuilder.AppendLine($"Shutter version: {shutterFirmwareVersion}");
+                messageBuilder.AppendLine();
+                messageBuilder.AppendLine("See the Setup screen for firmware update options.");
+                MessageBox.Show(messageBuilder.ToString(),
+                    "Firmware Versions Mismatch",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                }
             }
 
         /// <summary>
@@ -238,6 +266,7 @@ namespace TA.NexDome.DeviceInterface
             SubscribeLinkStateUpdates();
             SubscribeShutterVolts();
             SubscribeRainSensorUpdates();
+            SubscribeLowVoltsNotification();
             }
 
         private void SubscribeLinkStateUpdates()
@@ -363,6 +392,14 @@ namespace TA.NexDome.DeviceInterface
             disposableSubscriptions.Add(subscription);
             }
 
+        private void SubscribeLowVoltsNotification()
+            {
+            var observableLowVolts = channel.ObservableReceivedCharacters.LowVoltsNotifications(configuration.ShutterLowVoltsNotificationTimeToLive);
+            var subscription = observableLowVolts.Subscribe(s => IsBatteryLow = s);
+            disposableSubscriptions.Add(subscription);
+
+            }
+
         private void SubscribeAzimuthEncoderTicks()
             {
             var azimuthEncoderTicks = channel.ObservableReceivedCharacters.AzimuthEncoderTicks();
@@ -454,7 +491,7 @@ namespace TA.NexDome.DeviceInterface
 
         public void SlewToAzimuth(double azimuth)
             {
-            if (rotatorFirmwareVersion < HighPrecisionSlewingSupport)
+            if (rotatorFirmwareVersion < FirmwareHighPrecisionSlewingSupport)
                 LowPrecisionSlewStrategy(azimuth);
             else
                 HighPrecisionSlewStrategy(azimuth);

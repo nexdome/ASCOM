@@ -66,10 +66,10 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="NLog">
-      <Version>4.6.7</Version>
+      <Version>4.7.2</Version>
     </PackageReference>
     <PackageReference Include="PostSharp">
-      <Version>6.2.13</Version>
+      <Version>6.6.10</Version>
     </PackageReference>
     <PackageReference Include="System.Xml.XmlSerializer">
       <Version>4.3.0</Version>

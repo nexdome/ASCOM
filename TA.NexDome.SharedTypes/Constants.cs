@@ -10,6 +10,7 @@ namespace TA.NexDome.SharedTypes
     /// </summary>
     public class Constants
         {
+
         #region NexDome Responses
         public const string RotatorStatusReply = ":SER,";
 
@@ -46,6 +47,8 @@ namespace TA.NexDome.SharedTypes
         public const string CmdSetMotorSpeedTemplate = "@VW{0},{1:0000}";
 
         public const string CmdSetRampTimeTemplate = "@AW{0},{1:0000}";
+        public const string CmdSetLowBatteryVoltsThreshold = "@BWS,{1:0000}";
+
 
         /// <summary>
         ///     Format string used with <see cref="string.Format(string,object)" /> for building a "GoTo Azimuth" command.

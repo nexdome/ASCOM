@@ -484,6 +484,8 @@ namespace TA.NexDome.Server
             this.ShutterEnabled.Size = new System.Drawing.Size(132, 17);
             this.ShutterEnabled.TabIndex = 8;
             this.ShutterEnabled.Text = "Enable Shutter Control";
+            toolTip1.SetToolTip(this.ShutterEnabled, "Enables shutter control.\r\nEnable this option if you have installed the\r\nNexDome s" +
+        "hutter automation kit.\r\n\r\nDefault: disabled");
             this.ShutterEnabled.UseVisualStyleBackColor = true;
             // 
             // label4
@@ -774,16 +776,20 @@ namespace TA.NexDome.Server
             this.ShutterLowVoltsThreshold.Size = new System.Drawing.Size(87, 20);
             this.ShutterLowVoltsThreshold.TabIndex = 10;
             this.ShutterLowVoltsThreshold.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            toolTip1.SetToolTip(this.ShutterLowVoltsThreshold, resources.GetString("ShutterLowVoltsThreshold.ToolTip"));
             this.ShutterLowVoltsThreshold.Value = global::TA.NexDome.Server.Properties.Settings.Default.ShutterLowVoltsThreshold;
             // 
             // EnableShutterAutoClose
             // 
             this.EnableShutterAutoClose.AutoSize = true;
+            this.EnableShutterAutoClose.Checked = global::TA.NexDome.Server.Properties.Settings.Default.ShutterAutoCloseOnLowBattery;
+            this.EnableShutterAutoClose.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::TA.NexDome.Server.Properties.Settings.Default, "ShutterAutoCloseOnLowBattery", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.EnableShutterAutoClose.Location = new System.Drawing.Point(7, 67);
             this.EnableShutterAutoClose.Name = "EnableShutterAutoClose";
             this.EnableShutterAutoClose.Size = new System.Drawing.Size(123, 17);
             this.EnableShutterAutoClose.TabIndex = 9;
             this.EnableShutterAutoClose.Text = "Enable auto-close at";
+            toolTip1.SetToolTip(this.EnableShutterAutoClose, resources.GetString("EnableShutterAutoClose.ToolTip"));
             this.EnableShutterAutoClose.UseVisualStyleBackColor = true;
             // 
             // LoadDefaultsCommand
