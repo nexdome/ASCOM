@@ -41,27 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AsciiExtensions.cs" />
-    <Compile Include="AsciiSymbols.cs" />
-    <Compile Include="AsyncExtensions.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="ControllerStatusFactory.cs" />
     <Compile Include="DeviceControllerOptions.cs" />
-    <Compile Include="DisplayEquivalentAttribute.cs" />
-    <Compile Include="EnumExtensions.cs" />
-    <Compile Include="GitVersionExtensions.cs" />
     <Compile Include="IClock.cs" />
     <Compile Include="IHardwareStatus.cs" />
     <Compile Include="IRotatorStatus.cs" />
     <Compile Include="IShutterStatus.cs" />
     <Compile Include="LogHelper.cs" />
-    <Compile Include="MathExtensions.cs" />
-    <Compile Include="Maybe.cs" />
     <Compile Include="NotifyPropertyChangeReactiveExtensions.cs" />
-    <Compile Include="Octet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RotationDirection.cs" />
-    <Compile Include="SemanticVersion.cs" />
     <Compile Include="SensorState.cs" />
     <Compile Include="ShutterDirection.cs" />
     <Compile Include="ShutterDisposition.cs" />
@@ -82,6 +72,9 @@
     </PackageReference>
     <PackageReference Include="System.Reactive">
       <Version>4.4.1</Version>
+    </PackageReference>
+    <PackageReference Include="TA.Utils.Core">
+      <Version>0.1.0-alpha.1</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="..\TA.NexDome.SharedCode\TA.NexDome.SharedCode.projitems" Label="Shared" />

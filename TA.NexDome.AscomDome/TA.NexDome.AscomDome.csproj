@@ -80,6 +80,9 @@
     <PackageReference Include="PostSharp">
       <Version>6.6.10</Version>
     </PackageReference>
+    <PackageReference Include="TA.Utils.Core">
+      <Version>0.1.0-alpha.1</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Diagrams\DriverArchitecture.cd" />

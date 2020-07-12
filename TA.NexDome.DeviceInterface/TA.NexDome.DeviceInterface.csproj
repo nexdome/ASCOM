@@ -65,6 +65,7 @@
     <Compile Include="StateMachine\Shutter\ShutterStateBase.cs" />
     <Compile Include="TransactionException.cs" />
     <Compile Include="TransactionExtensions.cs" />
+    <Compile Include="ValueConverters.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="GitVersionTask">
@@ -80,6 +81,9 @@
     </PackageReference>
     <PackageReference Include="TA.Ascom.ReactiveCommunications">
       <Version>1.2.2</Version>
+    </PackageReference>
+    <PackageReference Include="TA.Utils.Core">
+      <Version>0.1.0-alpha.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

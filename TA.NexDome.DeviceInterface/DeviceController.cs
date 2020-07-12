@@ -2,6 +2,7 @@
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
 using System.Text;
+using TA.Utils.Core;
 
 namespace TA.NexDome.DeviceInterface
     {

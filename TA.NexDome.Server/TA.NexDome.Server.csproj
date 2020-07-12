@@ -171,6 +171,9 @@
     <PackageReference Include="TA.Ascom.ReactiveCommunications">
       <Version>1.2.2</Version>
     </PackageReference>
+    <PackageReference Include="TA.Utils.Core">
+      <Version>0.1.0-alpha.1</Version>
+    </PackageReference>
     <PackageReference Include="TA.WinForms.Controls">
       <Version>1.0.1</Version>
     </PackageReference>

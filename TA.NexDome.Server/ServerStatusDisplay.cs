@@ -1,6 +1,7 @@
 // This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using TA.Utils.Core;
 using TA.WinFormsControls;
 
 namespace TA.NexDome.Server

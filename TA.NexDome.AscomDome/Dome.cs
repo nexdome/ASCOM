@@ -17,6 +17,7 @@ using TA.NexDome.DeviceInterface;
 using TA.NexDome.Server;
 using TA.NexDome.SharedTypes;
 using TA.PostSharp.Aspects;
+using TA.Utils.Core;
 using InvalidOperationException = ASCOM.InvalidOperationException;
 
 namespace TA.NexDome.AscomDome
@@ -106,13 +107,13 @@ namespace TA.NexDome.AscomDome
                 var builder = new StringBuilder();
                 builder.AppendLine(Description);
                 builder.AppendLine("Professionally produced for NexDome by Tigra Astronomy");
-                builder.AppendLine($"Build {GitVersionExtensions.GitInformationalVersion}");
+                builder.AppendLine($"Build {GitVersion.GitInformationalVersion}");
                 return builder.ToString();
                 }
             }
 
         /// <inheritdoc />
-        public string DriverVersion => $"{GitVersionExtensions.GitMajorVersion}.{GitVersionExtensions.GitMinorVersion}";
+        public string DriverVersion => $"{GitVersion.GitMajorVersion}.{GitVersion.GitMinorVersion}";
 
         /// <inheritdoc />
         public short InterfaceVersion => 2;

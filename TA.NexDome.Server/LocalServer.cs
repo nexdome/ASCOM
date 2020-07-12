@@ -1,6 +1,8 @@
 // This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using TA.Utils.Core;
+
 namespace TA.NexDome.Server
     {
     using System;
@@ -159,16 +161,13 @@ namespace TA.NexDome.Server
 
         private static void LogVersionStrings()
             {
-            // var assembly = Assembly.GetExecutingAssembly();
-            // var assemblyName = assembly.GetName().Name;
-            // var git = assembly.GetType(assemblyName + ".GitVersionInformation");
-            Log.Info("Git Commit ID: {fullCommit}", GitVersionExtensions.GitCommitSha);
-            Log.Info("Git Short ID: {shortCommit}", GitVersionExtensions.GitCommitShortSha);
-            Log.Info("Commit Date: {commitDate}", GitVersionExtensions.GitCommitDate);
-            Log.Info("Semantic version: {semVer}", GitVersionExtensions.GitSemVer);
-            Log.Info("Full Semantic version: {fullSemVer}", GitVersionExtensions.GitFullSemVer);
-            Log.Info("Build metadata: {buildMetadata}", GitVersionExtensions.GitBuildMetadata);
-            Log.Info("Informational Version: {informationalVersion}", GitVersionExtensions.GitInformationalVersion);
+            Log.Info("Git Commit ID: {fullCommit}", GitVersion.GitCommitSha);
+            Log.Info("Git Short ID: {shortCommit}", GitVersion.GitCommitShortSha);
+            Log.Info("Commit Date: {commitDate}", GitVersion.GitCommitDate);
+            Log.Info("Semantic version: {semVer}", GitVersion.GitSemVer);
+            Log.Info("Full Semantic version: {fullSemVer}", GitVersion.GitFullSemVer);
+            Log.Info("Build metadata: {buildMetadata}", GitVersion.GitBuildMetadata);
+            Log.Info("Informational Version: {informationalVersion}", GitVersion.GitInformationalVersion);
             }
 
         #endregion
