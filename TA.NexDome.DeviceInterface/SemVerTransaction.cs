@@ -16,7 +16,7 @@ namespace TA.NexDome.DeviceInterface
 
     internal class SemVerTransaction : DeviceTransaction
         {
-        private const string VersionResponsePattern = @"^:FR(?<SemVer>[^#]+)#$";
+        private const string VersionResponsePattern = @"^:FR[RS]?(?<SemVer>[^#]+)#$";
 
         private static readonly Regex versionResponseExpression = new Regex(
             VersionResponsePattern,
