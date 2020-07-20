@@ -53,23 +53,19 @@ namespace TA.NexDome.Server.Properties
 
         private void SettingsLoadedEventHandler(object sender, SettingsLoadedEventArgs e)
             {
-            Log.Debug().Message("Settings loaded").WithSettings(this.Context).Write();
+            Log.Debug().Message("Settings loaded").WithSettings(Default).Write();
             }
 
-        private void SettingChangingEventHandler(object sender, SettingChangingEventArgs e)
-            {
-            var log = CompositionRoot.Kernel.Get<ILog>();
-            log.Debug()
+        private void SettingChangingEventHandler(object sender, SettingChangingEventArgs e) =>
+            Log.Debug()
                 .Message("Setting changing {settingName}[{settingKey}] -> {newValue}", e.SettingKey, e.SettingName,
                     e.NewValue)
                 .Write();
-            }
 
-        private void SettingsSavingEventHandler(object sender, CancelEventArgs e)
-            {
-            var log = CompositionRoot.Kernel.Get<ILog>();
-            log.Debug()
-                .Message("Saving settings");
-            }
+        private void SettingsSavingEventHandler(object sender, CancelEventArgs e) =>
+            Log.Debug()
+                .Message("Saving settings")
+                .WithSettings(Default)
+                .Write();
         }
     }

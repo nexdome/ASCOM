@@ -12,22 +12,18 @@
 
 using System.Collections;
 using System.Configuration;
+using TA.NexDome.Server.Properties;
 using TA.Utils.Core.Diagnostics;
 
 namespace TA.NexDome.Server
     {
     internal static class LoggingExtensions
         {
-        public static IFluentLogBuilder WithSettings(this IFluentLogBuilder logBuilder, SettingsContext settings)
+        public static IFluentLogBuilder WithSettings(this IFluentLogBuilder logBuilder, Settings settings)
             {
-            var settingsKeys = settings.Keys;
-            var settingsValues = settings.Values;
-            // The settings infrastructure is pre-generics so we have to enumerate manually.
-            IEnumerator keys = settingsKeys.GetEnumerator();
-            IEnumerator values = settingsValues.GetEnumerator();
-            while (keys.MoveNext() && values.MoveNext())
+            foreach (SettingsPropertyValue item in settings.PropertyValues)
                 {
-                logBuilder.Property(keys.Current.ToString(), values.Current);
+                logBuilder.Property(item.Name, item.PropertyValue);
                 }
             return logBuilder;
             }
