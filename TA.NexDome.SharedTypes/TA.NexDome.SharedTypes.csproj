@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BatteryChargeState.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="ControllerStatusFactory.cs" />
     <Compile Include="DeviceControllerOptions.cs" />

@@ -47,7 +47,7 @@ namespace TA.NexDome.SharedTypes
         public const string CmdSetMotorSpeedTemplate = "@VW{0},{1:0000}";
 
         public const string CmdSetRampTimeTemplate = "@AW{0},{1:0000}";
-        public const string CmdSetLowBatteryVoltsThreshold = "@BWS,{1:0000}";
+        public const string CmdSetLowBatteryVoltsThreshold = "@BWS,{0:0000}";
 
 
         /// <summary>

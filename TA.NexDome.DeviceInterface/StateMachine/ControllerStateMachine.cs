@@ -1,6 +1,7 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using System.Threading.Tasks;
 using TA.Utils.Core;
 
 namespace TA.NexDome.DeviceInterface.StateMachine
@@ -194,6 +195,17 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             ShutterStepPosition = status.Position;
             }
 
+        /// <summary>
+        /// Sends configuration data to the shutter.
+        /// Normally called upon Offline -> Online state transition.
+        /// </summary>
+        internal async Task ConfigureShutter()
+            {
+            await ControllerActions.ConfigureShutter((uint) Options.ShutterMaximumSpeed,
+                (uint) Options.ShutterRampTime.TotalMilliseconds,
+                Options.EnableAutoCloseOnLowBattery ? Options.ShutterLowBatteryThresholdVolts.VoltsToAdu() : 0);
+            }
+
         internal void RequestHardwareStatus() => ControllerActions.RequestHardwareStatus();
 
         public void ShutterDirectionReceived(ShutterDirection direction)
@@ -228,10 +240,11 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         public void WaitForReady(TimeSpan timeout)
             {
             Log.Info()
-                .Message("Waiting for state machines to be ready, Shutter Installed={shutter}", Options.ShutterIsInstalled)
+                .Message("Waiting for state machines to be ready, Shutter Installed={shutter}, Wait for Shutter={wait}",
+                    Options.ShutterIsInstalled, Options.ShutterWaitForReadyOnConnect)
                 .Write();
             var waitHandles = new List<WaitHandle> { RotatorInReadyState };
-            if (Options.ShutterIsInstalled)
+            if (Options.ShutterIsInstalled && Options.ShutterWaitForReadyOnConnect)
                 waitHandles.Add(ShutterInReadyState);
             bool signalled = WaitHandle.WaitAll(waitHandles.ToArray(), timeout);
 

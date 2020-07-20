@@ -20,6 +20,7 @@ namespace TA.NexDome.Server
         private ClickCommand lowVoltsClickCommand;
         private ClickCommand enableAutoCloseClickCommand;
         private ClickCommand enableShutterClickCommand;
+        private ClickCommand waitForShutterClickCommand;
 
         public SetupDialogForm() => InitializeComponent();
 
@@ -71,6 +72,7 @@ namespace TA.NexDome.Server
             enableAutoCloseClickCommand =
                 EnableShutterAutoClose.AttachCommand(ExecuteEnableShutterAutoClose, CanEnableAutoClose);
             enableShutterClickCommand = ShutterEnabled.AttachCommand(ExecuteShutterEnabled, CanEnableShutter);
+            waitForShutterClickCommand = ShutterWaitUNtilReady.AttachCommand(()=>{}, CanWaitForShutterReady);
             observableClientStatus.ObserveOn(SynchronizationContext.Current)
                 .Subscribe(item => updateClickCommand.CanExecuteChanged());
             int onlineClients = SharedResources.ConnectionManager.OnlineClientCount;
@@ -97,6 +99,7 @@ namespace TA.NexDome.Server
             SetControlAppearance();
             }
 
+
         #region Command pattern implementations
         /*
          * The Command Pattern being used here is a variant of the MVVM command pattern.
@@ -117,6 +120,9 @@ namespace TA.NexDome.Server
             }
         private bool CanEnableAutoClose() => ShutterEnabled.Checked;
         private void ExecuteEnableShutterAutoClose() => lowVoltsClickCommand.CanExecuteChanged();
+
+        private bool CanWaitForShutterReady() => ShutterEnabled.Checked;
+
         private bool CanEditVoltsThreshold() => EnableShutterAutoClose.Checked && ShutterEnabled.Checked;
         private void ConnectionManager_ClientStatusChanged(object sender, EventArgs e) =>
             updateClickCommand.CanExecuteChanged();

@@ -61,7 +61,6 @@ namespace TA.NexDome.Server
                                    RainAnnunciator,
                                    AtHomeAnnunciator,
                                    batteryVoltsAnnunciator,
-                                   BatteryLowAlert
                                    };
             annunciators.ForEach(p => p.Mute = false);
             annunciators.ForEach(p => p.Cadence = CadencePattern.SteadyOn);
@@ -70,7 +69,6 @@ namespace TA.NexDome.Server
             ShutterDispositionAnnunciator.Cadence = CadencePattern.Wink;
             AtHomeAnnunciator.Cadence = CadencePattern.Wink;
             RainAnnunciator.Cadence = CadencePattern.BlinkFast;
-            BatteryLowAlert.Cadence = CadencePattern.BlinkFast;
             annunciators.ForEach(p => p.Mute = true);
             }
 
@@ -179,7 +177,6 @@ namespace TA.NexDome.Server
             if (!SharedResources.ConnectionManager.MaybeControllerInstance.Any())
                 return;
             var controller = SharedResources.ConnectionManager.MaybeControllerInstance.Single();
-
             /*
              * Add subscriptions to PropertyChanged notifications using this pattern:
              *  disposableSubscriptions.Add(
@@ -239,12 +236,34 @@ namespace TA.NexDome.Server
                     .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(SetRainAlarm));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.IsBatteryLow)
+                controller.GetObservableValueFor(p => p.ShutterBatteryChargeState)
                     .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(SetBatteryLow));
             }
 
-        private void SetBatteryLow(bool isLow) => BatteryLowAlert.Mute = !isLow;
+        private void SetBatteryLow(BatteryChargeState chargeState)
+            {
+            switch (chargeState)
+                {
+                    case BatteryChargeState.OK:
+                        batteryVoltsAnnunciator.Cadence = CadencePattern.SteadyOn;
+                        batteryVoltsAnnunciator.ActiveColor = Color.DarkSeaGreen;
+                        batteryVoltsBar.ForeColor = Color.DarkSeaGreen;
+                        break;
+                    case BatteryChargeState.Warning:
+                        batteryVoltsAnnunciator.Cadence = CadencePattern.BlinkSlow;
+                        batteryVoltsAnnunciator.ActiveColor = Color.PaleGoldenrod;
+                        batteryVoltsBar.ForeColor = Color.Orange;
+                        break;
+                    case BatteryChargeState.Alarm:
+                        batteryVoltsAnnunciator.Cadence = CadencePattern.BlinkAlarm;
+                        batteryVoltsAnnunciator.ActiveColor = Color.IndianRed;
+                        batteryVoltsBar.ForeColor = Color.Crimson;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(chargeState), chargeState, null);
+                }
+            }
 
         private void SetRainAlarm(bool isRaining)
             {
@@ -293,41 +312,12 @@ namespace TA.NexDome.Server
 
         private void SetBatteryVolts(float volts)
             {
-            /*
-             * Annunciator:
-             *      Steady/Green above 50% charge
-             *      SlowFlash/Yellow under 50% charge but above flat
-             *      Alarm/Red below flat voltage.
-             * Progress bar:
-             *      Clip to minimum 10V and maximum 15V
-             *      Colours as for annunciator.
-             */
             float annunciatorValue = volts.Clip(0.0f, 15.0f);
             string formatString = batteryVoltsAnnunciator.Tag.ToString();
             batteryVoltsAnnunciator.Text = string.Format(formatString, annunciatorValue);
             batteryVoltsAnnunciator.Mute = false;
             int barValue = (int)(volts * 10f);
             batteryVoltsBar.Value = barValue.Clip(100, 150);
-            if (volts >= Constants.BatteryHalfChargedVolts)
-                {
-                batteryVoltsAnnunciator.ActiveColor = Color.DarkSeaGreen;
-                batteryVoltsAnnunciator.Cadence = CadencePattern.SteadyOn;
-                batteryVoltsBar.ForeColor = Color.DarkSeaGreen;
-                return;
-                }
-
-            if (volts >= Constants.BatteryFullyDischargedVolts)
-                {
-                batteryVoltsAnnunciator.ActiveColor = Color.PaleGoldenrod;
-                batteryVoltsAnnunciator.Cadence = CadencePattern.BlinkFast;
-                batteryVoltsBar.ForeColor = Color.Orange;
-                return;
-                }
-
-            batteryVoltsAnnunciator.ActiveColor = Color.Crimson;
-            batteryVoltsAnnunciator.Cadence = CadencePattern.BlinkAlarm;
-            batteryVoltsBar.ForeColor = Color.Crimson;
-            if (volts <= Constants.BatteryFullyDischargedVolts) batteryVoltsBar.Value = batteryVoltsBar.Maximum;
             }
 
         private void SetShutterDisposition(ShutterDisposition disposition)

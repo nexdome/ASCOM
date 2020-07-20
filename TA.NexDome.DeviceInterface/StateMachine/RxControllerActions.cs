@@ -1,6 +1,11 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using PostSharp.Aspects.Advices;
+
 namespace TA.NexDome.DeviceInterface.StateMachine
     {
     using System;
@@ -13,10 +18,38 @@ namespace TA.NexDome.DeviceInterface.StateMachine
     public class RxControllerActions : IControllerActions
         {
         private readonly ICommunicationChannel channel;
+        private readonly ITransactionProcessor processor;
 
-        public RxControllerActions(ICommunicationChannel channel)
+        public RxControllerActions(ICommunicationChannel channel, ITransactionProcessor processor)
             {
             this.channel = channel;
+            this.processor = processor;
+            }
+
+        public async Task ConfigureShutter(uint maxSpeed, uint rampTime, uint lowVoltsThreshold)
+            {
+            var tasklist = new List<Task>();
+            var autoCancel = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+            var speedTransaction =
+                new EmptyResponseTransaction(string.Format(Constants.CmdSetMotorSpeedTemplate, 'S', maxSpeed));
+            processor.CommitTransaction(speedTransaction);
+            var speedTask = speedTransaction.WaitForCompletionOrTimeoutAsync(autoCancel.Token);
+            tasklist.Add(speedTask);
+            var accelerationTransaction =
+                new EmptyResponseTransaction(string.Format(Constants.CmdSetRampTimeTemplate, 'S', rampTime));
+            processor.CommitTransaction(accelerationTransaction);
+            var accelerationTask = accelerationTransaction.WaitForCompletionOrTimeoutAsync(autoCancel.Token);
+            tasklist.Add(accelerationTask);
+            if (lowVoltsThreshold > 0)
+                {
+                var lowVoltsTransaction =
+                    new EmptyResponseTransaction(
+                        string.Format(Constants.CmdSetLowBatteryVoltsThreshold, lowVoltsThreshold));
+                processor.CommitTransaction(lowVoltsTransaction);
+                var lowVoltsTask = lowVoltsTransaction.WaitForCompletionOrTimeoutAsync(autoCancel.Token);
+                tasklist.Add(lowVoltsTask);
+                }
+            await Task.WhenAll(tasklist);
             }
 
         public void RequestHardwareStatus()

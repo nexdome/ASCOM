@@ -75,7 +75,7 @@
       <Value Profile="(Default)">http://nexdome.com</Value>
     </Setting>
     <Setting Name="OnConnectWaitForShutterOnline" Type="System.TimeSpan" Scope="Application">
-      <Value Profile="(Default)">00:00:30</Value>
+      <Value Profile="(Default)">00:02:00</Value>
     </Setting>
     <Setting Name="FirmwareImageDirectory" Type="System.String" Scope="Application">
       <Value Profile="(Default)">C:\NexDome-Firmware</Value>
@@ -111,6 +111,9 @@
       <Value Profile="(Default)">00:01:00</Value>
     </Setting>
     <Setting Name="ShutterAutoCloseOnLowBattery" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ShutterWaitUntilReady" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>

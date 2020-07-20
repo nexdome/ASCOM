@@ -168,9 +168,6 @@ This can happen if you access your observatory computer
 remotely from a system that has more or larger monitors.
 </value>
   </data>
-  <metadata name="ConnectionErrorProvider.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <data name="ShutterLowVoltsThreshold.ToolTip" xml:space="preserve">
     <value>Sets the threshold (in Volts) for low battery condition
 in the shutter.
@@ -208,6 +205,19 @@ NOTE: it is the shutter firmware (not the driver) that
 decides if and when to auto-close. This setting only
 determines whether the ASCOM driver will configure
 that feature in the shutter.</value>
+  </data>
+  <metadata name="ConnectionErrorProvider.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="ShutterWaitUNtilReady.ToolTip" xml:space="preserve">
+    <value>On connecting, wait until the shutter is online and ready
+before returning.
+
+default: disabled
+
+Some applications may need this enabled if they detect
+a shutter error on startup. If your application or
+workflow doesn't require this, leave it off.</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

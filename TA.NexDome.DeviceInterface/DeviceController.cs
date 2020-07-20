@@ -31,7 +31,6 @@ namespace TA.NexDome.DeviceInterface
         {
         // private SemanticVersion shutterFirmwareVersion;
         private static readonly SemanticVersion MinimumRequiredRotatorVersion = new SemanticVersion(2, 9, 9);
-
         private static readonly SemanticVersion MinimumRequiredShutterVersion = new SemanticVersion(2, 9, 9);
         private static readonly SemanticVersion FirmwareHighPrecisionSlewingSupport = new SemanticVersion("3.2.0-alpha.19");
         private static readonly SemanticVersion FirmwareShutterAutoCloseSupport = new SemanticVersion("3.4.0-alpha.1");
@@ -56,6 +55,7 @@ namespace TA.NexDome.DeviceInterface
 
         private SemanticVersion rotatorFirmwareVersion;
         private SemanticVersion shutterFirmwareVersion;
+        private DateTime connectedTimestamp = DateTime.MinValue;
 
         public DeviceController(
             ICommunicationChannel channel,
@@ -101,9 +101,34 @@ namespace TA.NexDome.DeviceInterface
 
         public SensorState ShutterLimitSwitches => stateMachine.ShutterLimitSwitches;
 
-        public ShutterDisposition ShutterDisposition => stateMachine.ShutterDisposition;
+        /*
+         * ShutterSisposition is marked [SafeForDependencyAnalysis] because PostSharp
+         * otherwise tries to monitor changes in the configuration field.
+         * configuration is immutable type so should not be analyzed.
+         */
+        [SafeForDependencyAnalysis]
+        public ShutterDisposition ShutterDisposition
+            {
+            get
+                {
+                /*
+                 * Prevent the shutter from reporting an error condition for a short time
+                 * after connecting, to give the wireless connection a chance to stabilize
+                 * without freaking the client application out.
+                 */
+                var timeSinceConnected = DateTime.UtcNow - connectedTimestamp;
+                var actualShutterDisposition = stateMachine.ShutterDisposition;
+                if (configuration.ShutterIsInstalled
+                    && timeSinceConnected <= configuration.TimeToWaitForShutterOnConnect
+                    && actualShutterDisposition == ShutterDisposition.Offline)
+                    return ShutterDisposition.Closed;
+                return actualShutterDisposition;
+                }
+            }
 
         public float ShutterBatteryVolts { get; private set; } = Constants.BatteryHalfChargedVolts;
+
+        public BatteryChargeState ShutterBatteryChargeState { get; private set; } = BatteryChargeState.OK;
 
         public int ShutterPercentOpen =>
             (int)(stateMachine.ShutterStepPosition / (float)stateMachine.ShutterLimitOfTravel * 100f);
@@ -132,10 +157,10 @@ namespace TA.NexDome.DeviceInterface
             {
             SubscribeControllerEvents();
             channel.Open();
-            stateMachine.Initialize(new RequestStatusState(stateMachine));
-            stateMachine.Initialize(new OfflineState(stateMachine));
+            stateMachine.Initialize(new RequestStatusState(stateMachine));  // Rotator
+            stateMachine.Initialize(new OfflineState(stateMachine));        // Shutter
             stateMachine.WaitForReady(configuration.TimeToWaitForShutterOnConnect);
-
+            connectedTimestamp = DateTime.UtcNow;
             if (performOnConnectActions)
                 PerformActionsOnConnect();
             }
@@ -156,20 +181,6 @@ namespace TA.NexDome.DeviceInterface
                 string.Format(Constants.CmdSetMotorSpeedTemplate, 'R', configuration.RotatorMaximumSpeed));
             TransactEmptyReponse(
                 string.Format(Constants.CmdSetRampTimeTemplate, 'R', configuration.RotatorRampTime.TotalMilliseconds));
-
-            if (configuration.ShutterIsInstalled && stateMachine.ShutterLinkState == ShutterLinkState.Online)
-                {
-                TransactEmptyReponse(string.Format(Constants.CmdSetMotorSpeedTemplate, 'S',
-                    configuration.ShutterMaximumSpeed));
-                TransactEmptyReponse(string.Format(Constants.CmdSetRampTimeTemplate, 'S',
-                    configuration.ShutterRampTime.TotalMilliseconds));
-                if (configuration.EnableAutoCloseOnLowBattery &&
-                    shutterFirmwareVersion >= FirmwareShutterAutoCloseSupport)
-                    {
-                    var lowBatteryAdu = configuration.ShutterLowBatteryThresholdVolts.VoltsToAdu();
-                    TransactEmptyReponse(string.Format(Constants.CmdSetLowBatteryVoltsThreshold, lowBatteryAdu));
-                    }
-                }
             }
 
         private void TransactEmptyReponse(string command)
@@ -382,8 +393,19 @@ namespace TA.NexDome.DeviceInterface
         private void SubscribeShutterVolts()
             {
             var observableBatteryVolts = channel.ObservableReceivedCharacters.BatteryVoltageUpdates();
-            var subscription = observableBatteryVolts.Subscribe(value => ShutterBatteryVolts = value);
+            var subscription = observableBatteryVolts.Subscribe(volts=>HandleBatteryVoltsUpdate(volts));
             disposableSubscriptions.Add(subscription);
+            }
+
+        private void HandleBatteryVoltsUpdate(float volts)
+            {
+            ShutterBatteryVolts = volts;
+            decimal dVolts = (decimal)volts;
+            if (dVolts <= configuration.ShutterLowBatteryThresholdVolts)
+                    ShutterBatteryChargeState = BatteryChargeState.Alarm;
+            else if (dVolts < (configuration.ShutterLowBatteryThresholdVolts * 1.1M))
+                ShutterBatteryChargeState = BatteryChargeState.Warning;
+            else ShutterBatteryChargeState = BatteryChargeState.OK;
             }
 
         private void SubscribeRainSensorUpdates()
@@ -465,6 +487,7 @@ namespace TA.NexDome.DeviceInterface
             UnsubscribeControllerEvents();
             if (IsConnected)
                 {
+                connectedTimestamp = DateTime.MinValue;
                 stateMachine.SavePersistentSettings();
                 channel.Close();
                 }

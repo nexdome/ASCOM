@@ -68,12 +68,12 @@ namespace TA.NexDome.Specifications.Builders
             // Build the ControllerStatusFactory
             var statusFactory = new ControllerStatusFactory(timeSource);
 
-            var controllerActions = new RxControllerActions(channel);
+            var fakeTransactionProcessor = new FakeTransactionProcessor(Enumerable.Empty<string>());
+            var controllerActions = new RxControllerActions(channel, fakeTransactionProcessor);
             var controllerStateMachine = new ControllerStateMachine(controllerActions, controllerOptions, timeSource);
             controllerStateMachine.ShutterLimitSwitches = initialShutterState;
 
             // Build the device controller
-            var fakeTransactionProcessor = new FakeTransactionProcessor(Enumerable.Empty<string>());
             var controller = new DeviceController(
                 channel,
                 statusFactory,

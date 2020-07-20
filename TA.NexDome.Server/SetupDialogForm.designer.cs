@@ -52,12 +52,14 @@ namespace TA.NexDome.Server
             this.communicationSettingsControl1 = new TA.NexDome.Server.CommunicationSettingsControl();
             this.OnlineHelp = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.ShutterEnabled = new System.Windows.Forms.CheckBox();
+            this.ShutterLowVoltsThreshold = new System.Windows.Forms.NumericUpDown();
+            this.EnableShutterAutoClose = new System.Windows.Forms.CheckBox();
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.AboutBox = new System.Windows.Forms.Button();
             this.ConnectionErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.CommunicationsGroup = new System.Windows.Forms.GroupBox();
-            this.ShutterEnabled = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.RotatorParametersGroup = new System.Windows.Forms.GroupBox();
             this.RotatorRampTimeCurrentValue = new System.Windows.Forms.Label();
@@ -81,9 +83,8 @@ namespace TA.NexDome.Server
             this.FirmwareUpdateCommand = new System.Windows.Forms.Button();
             this.optionsGroup = new System.Windows.Forms.GroupBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.ShutterLowVoltsThreshold = new System.Windows.Forms.NumericUpDown();
-            this.EnableShutterAutoClose = new System.Windows.Forms.CheckBox();
             this.LoadDefaultsCommand = new System.Windows.Forms.Button();
+            this.ShutterWaitUNtilReady = new System.Windows.Forms.CheckBox();
             toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.ShutterOpenCloseTimeSeconds)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FullRotationTimeSeconds)).BeginInit();
@@ -97,12 +98,12 @@ namespace TA.NexDome.Server
             ((System.ComponentModel.ISupportInitialize)(this.RotatorRampTimeTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ShutterAccelerationRampTimeTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ShutterMaximumSpeedTrackBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ShutterLowVoltsThreshold)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ConnectionErrorProvider)).BeginInit();
             this.CommunicationsGroup.SuspendLayout();
             this.RotatorParametersGroup.SuspendLayout();
             this.ShutterParametersGroup.SuspendLayout();
             this.optionsGroup.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ShutterLowVoltsThreshold)).BeginInit();
             this.SuspendLayout();
             // 
             // toolTip1
@@ -423,6 +424,60 @@ namespace TA.NexDome.Server
             toolTip1.SetToolTip(this.checkBox1, resources.GetString("checkBox1.ToolTip"));
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
+            // ShutterEnabled
+            // 
+            this.ShutterEnabled.AutoSize = true;
+            this.ShutterEnabled.Checked = global::TA.NexDome.Server.Properties.Settings.Default.ShutterIsInstalled;
+            this.ShutterEnabled.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::TA.NexDome.Server.Properties.Settings.Default, "ShutterIsInstalled", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ShutterEnabled.Location = new System.Drawing.Point(7, 43);
+            this.ShutterEnabled.Name = "ShutterEnabled";
+            this.ShutterEnabled.Size = new System.Drawing.Size(132, 17);
+            this.ShutterEnabled.TabIndex = 8;
+            this.ShutterEnabled.Text = "Enable Shutter Control";
+            toolTip1.SetToolTip(this.ShutterEnabled, "Enables shutter control.\r\nEnable this option if you have installed the\r\nNexDome s" +
+        "hutter automation kit.\r\n\r\nDefault: disabled");
+            this.ShutterEnabled.UseVisualStyleBackColor = true;
+            // 
+            // ShutterLowVoltsThreshold
+            // 
+            this.ShutterLowVoltsThreshold.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::TA.NexDome.Server.Properties.Settings.Default, "ShutterLowVoltsThreshold", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ShutterLowVoltsThreshold.DecimalPlaces = 1;
+            this.ShutterLowVoltsThreshold.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ShutterLowVoltsThreshold.Location = new System.Drawing.Point(136, 66);
+            this.ShutterLowVoltsThreshold.Maximum = new decimal(new int[] {
+            150,
+            0,
+            0,
+            65536});
+            this.ShutterLowVoltsThreshold.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            65536});
+            this.ShutterLowVoltsThreshold.Name = "ShutterLowVoltsThreshold";
+            this.ShutterLowVoltsThreshold.Size = new System.Drawing.Size(87, 20);
+            this.ShutterLowVoltsThreshold.TabIndex = 10;
+            this.ShutterLowVoltsThreshold.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            toolTip1.SetToolTip(this.ShutterLowVoltsThreshold, resources.GetString("ShutterLowVoltsThreshold.ToolTip"));
+            this.ShutterLowVoltsThreshold.Value = global::TA.NexDome.Server.Properties.Settings.Default.ShutterLowVoltsThreshold;
+            // 
+            // EnableShutterAutoClose
+            // 
+            this.EnableShutterAutoClose.AutoSize = true;
+            this.EnableShutterAutoClose.Checked = global::TA.NexDome.Server.Properties.Settings.Default.ShutterAutoCloseOnLowBattery;
+            this.EnableShutterAutoClose.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::TA.NexDome.Server.Properties.Settings.Default, "ShutterAutoCloseOnLowBattery", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.EnableShutterAutoClose.Location = new System.Drawing.Point(7, 67);
+            this.EnableShutterAutoClose.Name = "EnableShutterAutoClose";
+            this.EnableShutterAutoClose.Size = new System.Drawing.Size(123, 17);
+            this.EnableShutterAutoClose.TabIndex = 9;
+            this.EnableShutterAutoClose.Text = "Enable auto-close at";
+            toolTip1.SetToolTip(this.EnableShutterAutoClose, resources.GetString("EnableShutterAutoClose.ToolTip"));
+            this.EnableShutterAutoClose.UseVisualStyleBackColor = true;
+            // 
             // cmdOK
             // 
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -473,20 +528,6 @@ namespace TA.NexDome.Server
             this.CommunicationsGroup.TabIndex = 9;
             this.CommunicationsGroup.TabStop = false;
             this.CommunicationsGroup.Text = "Communications";
-            // 
-            // ShutterEnabled
-            // 
-            this.ShutterEnabled.AutoSize = true;
-            this.ShutterEnabled.Checked = global::TA.NexDome.Server.Properties.Settings.Default.ShutterIsInstalled;
-            this.ShutterEnabled.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::TA.NexDome.Server.Properties.Settings.Default, "ShutterIsInstalled", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ShutterEnabled.Location = new System.Drawing.Point(7, 43);
-            this.ShutterEnabled.Name = "ShutterEnabled";
-            this.ShutterEnabled.Size = new System.Drawing.Size(132, 17);
-            this.ShutterEnabled.TabIndex = 8;
-            this.ShutterEnabled.Text = "Enable Shutter Control";
-            toolTip1.SetToolTip(this.ShutterEnabled, "Enables shutter control.\r\nEnable this option if you have installed the\r\nNexDome s" +
-        "hutter automation kit.\r\n\r\nDefault: disabled");
-            this.ShutterEnabled.UseVisualStyleBackColor = true;
             // 
             // label4
             // 
@@ -731,6 +772,7 @@ namespace TA.NexDome.Server
             // 
             // optionsGroup
             // 
+            this.optionsGroup.Controls.Add(this.ShutterWaitUNtilReady);
             this.optionsGroup.Controls.Add(this.label9);
             this.optionsGroup.Controls.Add(this.ShutterLowVoltsThreshold);
             this.optionsGroup.Controls.Add(this.EnableShutterAutoClose);
@@ -752,46 +794,6 @@ namespace TA.NexDome.Server
             this.label9.TabIndex = 11;
             this.label9.Text = "Volts";
             // 
-            // ShutterLowVoltsThreshold
-            // 
-            this.ShutterLowVoltsThreshold.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::TA.NexDome.Server.Properties.Settings.Default, "ShutterLowVoltsThreshold", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ShutterLowVoltsThreshold.DecimalPlaces = 1;
-            this.ShutterLowVoltsThreshold.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.ShutterLowVoltsThreshold.Location = new System.Drawing.Point(136, 66);
-            this.ShutterLowVoltsThreshold.Maximum = new decimal(new int[] {
-            150,
-            0,
-            0,
-            65536});
-            this.ShutterLowVoltsThreshold.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            65536});
-            this.ShutterLowVoltsThreshold.Name = "ShutterLowVoltsThreshold";
-            this.ShutterLowVoltsThreshold.Size = new System.Drawing.Size(87, 20);
-            this.ShutterLowVoltsThreshold.TabIndex = 10;
-            this.ShutterLowVoltsThreshold.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            toolTip1.SetToolTip(this.ShutterLowVoltsThreshold, resources.GetString("ShutterLowVoltsThreshold.ToolTip"));
-            this.ShutterLowVoltsThreshold.Value = global::TA.NexDome.Server.Properties.Settings.Default.ShutterLowVoltsThreshold;
-            // 
-            // EnableShutterAutoClose
-            // 
-            this.EnableShutterAutoClose.AutoSize = true;
-            this.EnableShutterAutoClose.Checked = global::TA.NexDome.Server.Properties.Settings.Default.ShutterAutoCloseOnLowBattery;
-            this.EnableShutterAutoClose.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::TA.NexDome.Server.Properties.Settings.Default, "ShutterAutoCloseOnLowBattery", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.EnableShutterAutoClose.Location = new System.Drawing.Point(7, 67);
-            this.EnableShutterAutoClose.Name = "EnableShutterAutoClose";
-            this.EnableShutterAutoClose.Size = new System.Drawing.Size(123, 17);
-            this.EnableShutterAutoClose.TabIndex = 9;
-            this.EnableShutterAutoClose.Text = "Enable auto-close at";
-            toolTip1.SetToolTip(this.EnableShutterAutoClose, resources.GetString("EnableShutterAutoClose.ToolTip"));
-            this.EnableShutterAutoClose.UseVisualStyleBackColor = true;
-            // 
             // LoadDefaultsCommand
             // 
             this.LoadDefaultsCommand.BackColor = System.Drawing.Color.IndianRed;
@@ -804,6 +806,19 @@ namespace TA.NexDome.Server
             this.LoadDefaultsCommand.UseVisualStyleBackColor = false;
             this.LoadDefaultsCommand.Visible = false;
             this.LoadDefaultsCommand.Click += new System.EventHandler(this.LoadDefaultsCommand_Click);
+            // 
+            // ShutterWaitUNtilReady
+            // 
+            this.ShutterWaitUNtilReady.AutoSize = true;
+            this.ShutterWaitUNtilReady.Checked = global::TA.NexDome.Server.Properties.Settings.Default.ShutterWaitUntilReady;
+            this.ShutterWaitUNtilReady.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::TA.NexDome.Server.Properties.Settings.Default, "ShutterWaitUntilReady", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ShutterWaitUNtilReady.Location = new System.Drawing.Point(146, 42);
+            this.ShutterWaitUNtilReady.Name = "ShutterWaitUNtilReady";
+            this.ShutterWaitUNtilReady.Size = new System.Drawing.Size(106, 17);
+            this.ShutterWaitUNtilReady.TabIndex = 12;
+            this.ShutterWaitUNtilReady.Text = "Wait Until Ready";
+            toolTip1.SetToolTip(this.ShutterWaitUNtilReady, resources.GetString("ShutterWaitUNtilReady.ToolTip"));
+            this.ShutterWaitUNtilReady.UseVisualStyleBackColor = true;
             // 
             // SetupDialogForm
             // 
@@ -851,6 +866,7 @@ namespace TA.NexDome.Server
             ((System.ComponentModel.ISupportInitialize)(this.RotatorRampTimeTrackBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ShutterAccelerationRampTimeTrackBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ShutterMaximumSpeedTrackBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ShutterLowVoltsThreshold)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ConnectionErrorProvider)).EndInit();
             this.CommunicationsGroup.ResumeLayout(false);
             this.CommunicationsGroup.PerformLayout();
@@ -860,7 +876,6 @@ namespace TA.NexDome.Server
             this.ShutterParametersGroup.PerformLayout();
             this.optionsGroup.ResumeLayout(false);
             this.optionsGroup.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ShutterLowVoltsThreshold)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -921,5 +936,6 @@ namespace TA.NexDome.Server
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.NumericUpDown ShutterLowVoltsThreshold;
         private System.Windows.Forms.CheckBox EnableShutterAutoClose;
+        private System.Windows.Forms.CheckBox ShutterWaitUNtilReady;
         }
 }

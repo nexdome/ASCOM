@@ -59,7 +59,6 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.StopCommand = new System.Windows.Forms.Button();
-            this.BatteryLowAlert = new TA.WinFormsControls.Annunciator();
             this.statusAnnunciatorPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -126,11 +125,11 @@
             // 
             // RotationTitle
             // 
-            this.RotationTitle.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.RotationTitle.ActiveColor = System.Drawing.SystemColors.ActiveCaption;
             this.RotationTitle.AutoSize = true;
             this.RotationTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.RotationTitle.Font = new System.Drawing.Font("Consolas", 10F);
-            this.RotationTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.RotationTitle.ForeColor = System.Drawing.SystemColors.ActiveCaption;
             this.RotationTitle.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.RotationTitle.Location = new System.Drawing.Point(3, 0);
             this.RotationTitle.Name = "RotationTitle";
@@ -159,7 +158,7 @@
             this.AzimuthMotorAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.AzimuthMotorAnnunciator.Cadence = TA.WinFormsControls.CadencePattern.BlinkAlarm;
             this.AzimuthMotorAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
-            this.AzimuthMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.AzimuthMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.AzimuthMotorAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.AzimuthMotorAnnunciator.Location = new System.Drawing.Point(95, 0);
             this.AzimuthMotorAnnunciator.Name = "AzimuthMotorAnnunciator";
@@ -218,7 +217,7 @@
             this.RainAnnunciator.Cadence = TA.WinFormsControls.CadencePattern.BlinkFast;
             this.statusAnnunciatorPanel.SetFlowBreak(this.RainAnnunciator, true);
             this.RainAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
-            this.RainAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.RainAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.RainAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.RainAnnunciator.Location = new System.Drawing.Point(279, 0);
             this.RainAnnunciator.Name = "RainAnnunciator";
@@ -228,11 +227,11 @@
             // 
             // ShutterTitle
             // 
-            this.ShutterTitle.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.ShutterTitle.ActiveColor = System.Drawing.SystemColors.ActiveCaption;
             this.ShutterTitle.AutoSize = true;
             this.ShutterTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.ShutterTitle.Font = new System.Drawing.Font("Consolas", 10F);
-            this.ShutterTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.ShutterTitle.ForeColor = System.Drawing.SystemColors.ActiveCaption;
             this.ShutterTitle.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.ShutterTitle.Location = new System.Drawing.Point(3, 17);
             this.ShutterTitle.Name = "ShutterTitle";
@@ -261,7 +260,7 @@
             this.ShutterMotorAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.ShutterMotorAnnunciator.Cadence = TA.WinFormsControls.CadencePattern.BlinkAlarm;
             this.ShutterMotorAnnunciator.Font = new System.Drawing.Font("Consolas", 10F);
-            this.ShutterMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.ShutterMotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.ShutterMotorAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.ShutterMotorAnnunciator.Location = new System.Drawing.Point(95, 17);
             this.ShutterMotorAnnunciator.Name = "ShutterMotorAnnunciator";
@@ -443,22 +442,6 @@
             this.StopCommand.Text = "Stop";
             this.StopCommand.UseVisualStyleBackColor = true;
             // 
-            // BatteryLowAlert
-            // 
-            this.BatteryLowAlert.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
-            this.BatteryLowAlert.BackColor = System.Drawing.SystemColors.Control;
-            this.BatteryLowAlert.Cadence = TA.WinFormsControls.CadencePattern.BlinkFast;
-            this.BatteryLowAlert.Font = new System.Drawing.Font("Consolas", 10F);
-            this.BatteryLowAlert.ForeColor = System.Drawing.SystemColors.Control;
-            this.BatteryLowAlert.InactiveColor = System.Drawing.SystemColors.Control;
-            this.BatteryLowAlert.Location = new System.Drawing.Point(209, 86);
-            this.BatteryLowAlert.Mute = true;
-            this.BatteryLowAlert.Name = "BatteryLowAlert";
-            this.BatteryLowAlert.Size = new System.Drawing.Size(281, 17);
-            this.BatteryLowAlert.TabIndex = 20;
-            this.BatteryLowAlert.Text = "Shutter Battery Low";
-            this.BatteryLowAlert.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
             // ServerStatusDisplay
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -466,7 +449,6 @@
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(532, 129);
-            this.Controls.Add(this.BatteryLowAlert);
             this.Controls.Add(this.StopCommand);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
@@ -536,7 +518,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button StopCommand;
         private TA.WinFormsControls.Annunciator RainAnnunciator;
-        private WinFormsControls.Annunciator BatteryLowAlert;
         }
 }
 

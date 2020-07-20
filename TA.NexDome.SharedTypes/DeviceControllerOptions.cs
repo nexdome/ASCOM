@@ -90,5 +90,11 @@ namespace TA.NexDome.SharedTypes
         /// considered nominal again
         /// </summary>
         public TimeSpan ShutterLowVoltsNotificationTimeToLive { get; set; }
+        /// <summary>
+        /// If <c>true</c> the device controller waits for the shutter to report that it is
+        /// online before returning from the Open() method. If <c>false</c> then the shutter is
+        /// assumed to be closed and offline and Open() returns immediately.
+        /// </summary>
+        public bool ShutterWaitForReadyOnConnect { get; set; }
         }
     }

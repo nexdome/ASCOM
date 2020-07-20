@@ -277,7 +277,7 @@ namespace TA.NexDome.Server.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("00:00:30")]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:02:00")]
         public global::System.TimeSpan OnConnectWaitForShutterOnline {
             get {
                 return ((global::System.TimeSpan)(this["OnConnectWaitForShutterOnline"]));
@@ -407,6 +407,18 @@ namespace TA.NexDome.Server.Properties {
             }
             set {
                 this["ShutterAutoCloseOnLowBattery"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShutterWaitUntilReady {
+            get {
+                return ((bool)(this["ShutterWaitUntilReady"]));
+            }
+            set {
+                this["ShutterWaitUntilReady"] = value;
             }
         }
     }
