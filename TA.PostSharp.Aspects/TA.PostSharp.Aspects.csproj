@@ -46,11 +46,20 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="TA.Utils.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\Tim\.nuget\packages\ta.utils.core\1.3.0-alpha.6\lib\netstandard2.0\TA.Utils.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="TA.Utils.Logging.Nlog, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\Tim\.nuget\packages\ta.utils.logging.nlog\1.1.1\lib\netstandard2.0\TA.Utils.Logging.Nlog.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IAscomDriver.cs" />
+    <Compile Include="LogSeverity.cs" />
     <Compile Include="MustBeConnectedAttribute.cs" />
-    <Compile Include="NLogTraceWithArgumentsAttribute.cs" />
+    <Compile Include="TraceWithArgumentsAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -58,7 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ASCOM.Platform">
-      <Version>6.4.2</Version>
+      <Version>6.5.0</Version>
     </PackageReference>
     <PackageReference Include="GitVersionTask">
       <Version>5.0.1</Version>
@@ -69,10 +78,16 @@
       <Version>4.7.2</Version>
     </PackageReference>
     <PackageReference Include="PostSharp">
-      <Version>6.6.10</Version>
+      <Version>6.6.11</Version>
     </PackageReference>
     <PackageReference Include="System.Xml.XmlSerializer">
       <Version>4.3.0</Version>
+    </PackageReference>
+    <PackageReference Include="TA.Utils.Core">
+      <Version>1.3.0-alpha.6</Version>
+    </PackageReference>
+    <PackageReference Include="TA.Utils.Logging.Nlog">
+      <Version>1.1.1</Version>
     </PackageReference>
     <PackageReference Include="UtilPack.NuGet.MSBuild">
       <Version>2.9.1</Version>

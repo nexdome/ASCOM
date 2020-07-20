@@ -1,6 +1,8 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using TA.Utils.Core.Diagnostics;
+
 namespace TA.NexDome.SharedTypes
     {
     using System;
@@ -27,21 +29,18 @@ namespace TA.NexDome.SharedTypes
         ///     Thrown if an instance of <typeparamref name="TException" /> could not be constructed.
         /// </exception>
         [StringFormatMethod("format")]
-        public static void LogAndThrow<TException>(string format, params object[] parameters)
+        public static void LogAndThrow<TException>(ILog log, string format, params object[] parameters)
             where TException : Exception, new()
             {
-            var exceptionToThrow = LogAndBuild<TException>(format, parameters);
+            var exceptionToThrow = LogAndBuild<TException>(log, format, parameters);
             throw exceptionToThrow;
             }
 
         [StringFormatMethod("format")]
-        public static Exception LogAndBuild<TException>(string format, params object[] parameters)
+        public static Exception LogAndBuild<TException>(ILog log, string format, params object[] parameters)
             where TException : Exception, new()
             {
-            var logBuilder = Log.Error().Message(format, parameters);
-            var logEvent = logBuilder.LogEventInfo;
-            LogManager.GetCurrentClassLogger().Log(logEvent);
-            string message = logEvent.FormattedMessage;
+            var message = string.Format(format, parameters);
             Exception exceptionToThrow;
             try
                 {
@@ -52,6 +51,7 @@ namespace TA.NexDome.SharedTypes
                 {
                 exceptionToThrow = new Exception(message, unexpected);
                 }
+            log.Error().Message(message).Exception(exceptionToThrow).Write();
             return exceptionToThrow;
             }
         }

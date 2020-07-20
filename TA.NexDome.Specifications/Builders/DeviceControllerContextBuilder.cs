@@ -1,6 +1,8 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using TA.Utils.Logging.NLog;
+
 namespace TA.NexDome.Specifications.Builders
     {
     using System;
@@ -72,6 +74,7 @@ namespace TA.NexDome.Specifications.Builders
             var controllerActions = new RxControllerActions(channel, fakeTransactionProcessor);
             var controllerStateMachine = new ControllerStateMachine(controllerActions, controllerOptions, timeSource);
             controllerStateMachine.ShutterLimitSwitches = initialShutterState;
+            var logger = new LoggingService();
 
             // Build the device controller
             var controller = new DeviceController(
@@ -79,7 +82,7 @@ namespace TA.NexDome.Specifications.Builders
                 statusFactory,
                 controllerStateMachine,
                 controllerOptions,
-                fakeTransactionProcessor);
+                fakeTransactionProcessor, logger);
 
             // Assemble the device controller test context
             var context = new DeviceControllerContext

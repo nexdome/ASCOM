@@ -6,21 +6,21 @@
 
 using System;
 using System.Collections;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using ASCOM;
 using ASCOM.DeviceInterface;
-using NLog.Fluent;
 using TA.NexDome.DeviceInterface;
-using TA.NexDome.Server;
 using TA.NexDome.SharedTypes;
 using TA.PostSharp.Aspects;
 using TA.Utils.Core;
+using TA.Utils.Core.Diagnostics;
 using InvalidOperationException = ASCOM.InvalidOperationException;
 
-namespace TA.NexDome.AscomDome
+namespace TA.NexDome.Server.AscomDrivers
     {
     using static LogHelper;
 
@@ -30,7 +30,7 @@ namespace TA.NexDome.AscomDome
     [ClassInterface(ClassInterfaceType.None)]
     [DeviceId(SharedResources.DomeDriverId, DeviceName = SharedResources.DomeDriverName)]
     [ServedClassName(SharedResources.DomeDriverName)]
-    [NLogTraceWithArguments]
+    [TraceWithArguments]
     public class Dome : ReferenceCountedObject, IDomeV2, IDisposable, IAscomDriver
         {
         private readonly Guid clientId;
@@ -38,11 +38,16 @@ namespace TA.NexDome.AscomDome
         private DeviceController controller;
 
         private bool disposed;
+        private readonly ILog log;
 
-        public Dome() => clientId = SharedResources.ConnectionManager.RegisterClient(SharedResources.DomeDriverId);
+        public Dome()
+            {
+            clientId = SharedResources.ConnectionManager.RegisterClient(SharedResources.DomeDriverId);
+            log = SharedResources.GetLogger(clientId, SharedResources.DomeDriverId);
+            }
 
         /// <inheritdoc />
-        ~Dome() => ReleaseUnmanagedResources();
+        ~Dome() => ReleaseManagedResources();
 
         /// <inheritdoc />
         public double Altitude => controller?.ShutterPercentOpen * 90.0 ?? 0.0;
@@ -87,7 +92,7 @@ namespace TA.NexDome.AscomDome
             get => controller?.IsConnected ?? false;
             set
                 {
-                if (value) controller = SharedResources.ConnectionManager.GoOnline(clientId);
+                if (value) controller = SharedResources.ConnectionManager.GoOnline(clientId).SingleOrDefault();
                 else
                     {
                     SharedResources.ConnectionManager.GoOffline(clientId);
@@ -174,7 +179,7 @@ namespace TA.NexDome.AscomDome
         public void CloseShutter()
             {
             if (!IsShutterAvailable)
-                LogAndThrow<InvalidOperationException>(
+                LogAndThrow<InvalidOperationException>(log,
                     "Attempt to close the shutter while the shutter is not available");
             controller?.CloseShutter();
             }
@@ -194,7 +199,7 @@ namespace TA.NexDome.AscomDome
             if (disposed) return;
             try
                 {
-                ReleaseUnmanagedResources();
+                ReleaseManagedResources();
                 GC.SuppressFinalize(this);
                 }
             finally
@@ -212,7 +217,8 @@ namespace TA.NexDome.AscomDome
         public void OpenShutter()
             {
             if (!IsShutterAvailable)
-                LogAndThrow<InvalidOperationException>("Attempt to open the shutter while the shutter not available");
+                LogAndThrow<InvalidOperationException>(log,
+                    "Attempt to open the shutter while the shutter not available");
             controller?.OpenShutter();
             }
 
@@ -221,7 +227,8 @@ namespace TA.NexDome.AscomDome
         public void Park()
             {
             if (!Connected)
-                LogAndThrow<NotConnectedException>("The driver must be connected in order to park");
+                LogAndThrow<NotConnectedException>(log,
+                    "The driver must be connected in order to park");
 
             // It is important to catch any and all exceptions because we are using async void
             // and any unhandled exception would crash the process.
@@ -232,7 +239,7 @@ namespace TA.NexDome.AscomDome
             // ReSharper disable once CatchAllClause
             catch (Exception e)
                 {
-                Log.Error().Exception(e)
+                log.Error().Exception(e)
                     .Message("Error during asynchronous park: {message}", e.Message)
                     .Write();
                 }
@@ -246,29 +253,40 @@ namespace TA.NexDome.AscomDome
         public void SetupDialog() => SharedResources.DoSetupDialog(clientId);
 
         /// <inheritdoc />
-        public void SlewToAltitude(double altitude) => throw MethodNotImplemented();
-
-        /// <inheritdoc />
         [MustBeConnected]
         public void SlewToAzimuth(double azimuth)
             {
             if (azimuth < 0.0 || azimuth >= 360.0)
-                throw new InvalidValueException(
+                {
+                var exception = new InvalidValueException(
                     nameof(SlewToAzimuth),
                     azimuth.ToString(),
                     "Expected 0.0 <= azimuth < 360.0");
+                log.Error().Message("Azimuth {azimuth} was outside the allowed range", azimuth)
+                    .Exception(exception)
+                    .Write();
+                throw exception;
+                }
             controller?.SlewToAzimuth(azimuth);
             }
 
         /// <inheritdoc />
+        public void SlewToAltitude(double altitude) => throw MethodNotImplemented();
+
+        /// <inheritdoc />
         public void SyncToAzimuth(double Azimuth) => throw MethodNotImplemented();
 
-        private Exception MethodNotImplemented([CallerMemberName] string method = "") =>
-            LogAndBuild<MethodNotImplementedException>("Method {method} is not implemented", method);
+        private Exception MethodNotImplemented([CallerMemberName] string method = "")
+            {
+            var ex = new MethodNotImplementedException(method);
+            log.Warn().Exception(ex).Message("Method {method} is not implemented", method).Write();
+            return ex;
+            }
 
-        private void ReleaseUnmanagedResources()
+        private void ReleaseManagedResources()
             {
             if (disposed) return;
+            log?.Debug().Message("Releasing managed resources");
             SharedResources.ConnectionManager.GoOffline(clientId);
             SharedResources.ConnectionManager.UnregisterClient(clientId);
             }

@@ -3,6 +3,7 @@
 
 using System.Text;
 using TA.Utils.Core;
+using TA.Utils.Core.Diagnostics;
 
 namespace TA.NexDome.DeviceInterface
     {
@@ -44,6 +45,7 @@ namespace TA.NexDome.DeviceInterface
         private readonly List<IDisposable> disposableSubscriptions = new List<IDisposable>();
 
         private readonly ITransactionProcessor processor;
+        private readonly ILog log;
 
         [NotNull]
         private readonly ControllerStateMachine stateMachine;
@@ -62,13 +64,14 @@ namespace TA.NexDome.DeviceInterface
             ControllerStatusFactory factory,
             ControllerStateMachine machine,
             DeviceControllerOptions configuration,
-            ITransactionProcessor processor)
+            ITransactionProcessor processor, ILog log)
             {
             this.channel = channel;
             statusFactory = factory;
             stateMachine = machine;
             this.configuration = configuration;
             this.processor = processor;
+            this.log = log;
             }
 
         public Octet UserPins => stateMachine.UserPins;
@@ -199,9 +202,8 @@ namespace TA.NexDome.DeviceInterface
             rotatorFirmwareVersion = versionTransaction.SemanticVersion;
             if (rotatorFirmwareVersion < MinimumRequiredRotatorVersion)
                 {
-                Log.Error().Message(
-                    "Unsupported rotator firmware version {version}; will throw.",
-                    rotatorFirmwareVersion).Write();
+                log.Error().Message(
+                    "Unsupported rotator firmware version {firmware}; will throw.", rotatorFirmwareVersion).Write();
                 MessageBox.Show(
                     "Your rotator firmware is too old to work with this driver.\nPlease contact NexDome for an upgrade.\n\n"
                     + $"Your version: {rotatorFirmwareVersion}\n"
@@ -213,7 +215,7 @@ namespace TA.NexDome.DeviceInterface
                 Close();
                 throw new UnsupportedFirmwareVersionException(MinimumRequiredRotatorVersion, rotatorFirmwareVersion);
                 }
-            Log.Info().Message("Rotator firmware version {version}", rotatorFirmwareVersion).Write();
+            log.Info().Message("Rotator firmware version {firmware}", rotatorFirmwareVersion).Write();
             if (!configuration.ShutterIsInstalled || !IsShutterOperational)
                 return; // No shutter
             versionTransaction = new SemVerTransaction(Constants.CmdGetShutterVersion);
@@ -223,8 +225,8 @@ namespace TA.NexDome.DeviceInterface
             shutterFirmwareVersion = versionTransaction.SemanticVersion;
             if (shutterFirmwareVersion < MinimumRequiredShutterVersion)
                 {
-                Log.Error().Message(
-                    "Unsupported rotator firmware version {version}; will throw.",
+                log.Error().Message(
+                    "Unsupported shutter firmware version {firmware}; will throw.",
                     shutterFirmwareVersion).Write();
                 MessageBox.Show(
                     "Your shutter firmware is too old to work with this driver.\nPlease contact NexDome for an upgrade.\n\n"
@@ -237,11 +239,14 @@ namespace TA.NexDome.DeviceInterface
                 Close();
                 throw new UnsupportedFirmwareVersionException(MinimumRequiredShutterVersion, shutterFirmwareVersion);
                 }
-            Log.Info().Message("Shutter firmware version {version}", shutterFirmwareVersion).Write();
+            log.Info().Message("Shutter firmware version {firmware}", shutterFirmwareVersion).Write();
             if (rotatorFirmwareVersion != shutterFirmwareVersion)
                 {
-                Log.Warn()
-                    .Message("Rotator/Shutter firmware version mismatch - this is not a recommended configuration");
+                log.Warn()
+                    .Message("Rotator/Shutter firmware version mismatch - this is not a recommended configuration")
+                    .Property("rotatorVersion", rotatorFirmwareVersion)
+                    .Property("shutterVersion", shutterFirmwareVersion)
+                    .Write();
                 var messageBuilder = new StringBuilder();
                 messageBuilder.AppendLine("Your shutter and rotator firmware versions do not match.");
                 messageBuilder.AppendLine("This is not a recommended configuration.");
@@ -302,7 +307,9 @@ namespace TA.NexDome.DeviceInterface
                 }
             catch (Exception ex)
                 {
-                Log.Error().Exception(ex).Message("Error while processing link state update: {linkState}", state)
+                log.Error()
+                    .Exception(ex)
+                    .Message("Error while processing link state update: {linkState}", state)
                     .Write();
                 }
             }
@@ -347,7 +354,9 @@ namespace TA.NexDome.DeviceInterface
                 }
             catch (Exception ex)
                 {
-                Log.Error().Exception(ex).Message($"Error while processing status notification: {statusNotification}")
+                log.Error()
+                    .Exception(ex)
+                    .Message("Error while processing status notification: {status}", statusNotification)
                     .Write();
                 }
             }
@@ -360,7 +369,9 @@ namespace TA.NexDome.DeviceInterface
                 }
             catch (Exception ex)
                 {
-                Log.Error().Exception(ex).Message($"Error while processing status notification: {statusNotification}")
+                log.Error()
+                    .Exception(ex)
+                    .Message("Error while processing shutter status notification: {status}", statusNotification)
                     .Write();
                 }
             }
@@ -464,7 +475,9 @@ namespace TA.NexDome.DeviceInterface
                 }
             catch (Exception ex)
                 {
-                Log.Error().Exception(ex).Message("Error while processing shutter position: {position}", position)
+                log.Error()
+                    .Exception(ex)
+                    .Message("Error while processing shutter position: {position}", position)
                     .Write();
                 }
             }
@@ -477,13 +490,16 @@ namespace TA.NexDome.DeviceInterface
                 }
             catch (Exception ex)
                 {
-                Log.Error().Exception(ex).Message("Error while processing rotation direction: {direction}", direction)
+                log.Error()
+                    .Exception(ex)
+                    .Message("Error while processing rotation direction: {direction}", direction)
                     .Write();
                 }
             }
 
         public void Close()
             {
+            log.Info().Message("Device Controller closing").Write();
             UnsubscribeControllerEvents();
             if (IsConnected)
                 {
@@ -491,6 +507,7 @@ namespace TA.NexDome.DeviceInterface
                 stateMachine.SavePersistentSettings();
                 channel.Close();
                 }
+            log.Info().Message("Device Controller closed").Write();
             }
 
         private void UnsubscribeControllerEvents()
@@ -543,13 +560,14 @@ namespace TA.NexDome.DeviceInterface
             {
             if (ShutterLimitSwitches == SensorState.Open)
                 {
-                Log.Warn().Message(
-                    "Ignoring OpenShutter request because ShutterPosition is {state}",
-                    ShutterLimitSwitches).Property("state", ShutterLimitSwitches).Write();
+                log.Warn()
+                    .Message(
+                    "Ignoring OpenShutter request because ShutterPosition is {state}", ShutterLimitSwitches)
+                    .Write();
                 return;
                 }
 
-            Log.Info().Message("Opening shutter").Write();
+            log.Info().Message("Opening shutter").Write();
             stateMachine.OpenShutter();
             }
 
@@ -557,14 +575,13 @@ namespace TA.NexDome.DeviceInterface
             {
             if (ShutterLimitSwitches == SensorState.Closed)
                 {
-                Log.Warn().Message(
-                    "Ignoring CloseShutter request because {limits} {disposition}",
-                    ShutterLimitSwitches,
-                    ShutterDisposition).Write();
+                log.Warn().Message(
+                    "Ignoring CloseShutter request because {limits} {disposition}", ShutterLimitSwitches, ShutterDisposition)
+                    .Write();
                 return;
                 }
 
-            Log.Info().Message("Closing shutter").Write();
+            log.Info().Message("Closing shutter").Write();
             stateMachine.CloseShutter();
             }
 
@@ -574,42 +591,48 @@ namespace TA.NexDome.DeviceInterface
         /// </summary>
         public async Task Park()
             {
-            await Task.Run(ParkAsync).ContinueOnCurrentThread();
+            log.Debug().Message("Starting asynchronous park").Write();
+            await Task.Run(ParkAsync).ContinueOnAnyThread();
+            log.Debug().Message("Completed asynchronous park").Write();
             }
 
         private void ParkAsync()
             {
             try
                 {
-                Log.Info().Message("Rotating to park position for park").Write();
+                log.Info().Message("Rotating to park position for park").Write();
                 stateMachine.RotateToAzimuthDegrees((double)configuration.ParkAzimuth);
                 stateMachine.WaitForReady(configuration.MaximumFullRotationTime);
                 if (IsShutterOperational)
                     {
-                    Log.Info().Message("Closing shutter for park").Write();
+                    log.Info().Message("Closing shutter for park").Write();
                     stateMachine.CloseShutter();
                     stateMachine.WaitForReady(configuration.MaximumShutterCloseTime);
                     }
                 else
                     {
-                    Log.Warn().Message("Shutter is not operational, not closing shutter").Write();
+                    log.Warn().Message("Shutter is not operational, not closing shutter").Write();
                     }
                 AtPark = true;
                 }
             // ReSharper disable once CatchAllClause
             catch (Exception e)
                 {
-                Log.Error().Message("Exception while parking").Exception(e).Write();
+                log.Error()
+                    .Message("Exception while parking")
+                    .Exception(e)
+                    .Write();
                 }
             }
 
-        private void ReleaseUnmanagedResources() { }
+        private void ReleaseManagedResources() { }
 
         private void Dispose(bool disposing)
             {
             if (disposed) return;
+            log.Debug().Message("Disposing").Write();
             Close();
-            ReleaseUnmanagedResources();
+            ReleaseManagedResources();
             if (disposing) channel.Dispose();
             disposed = true;
             }

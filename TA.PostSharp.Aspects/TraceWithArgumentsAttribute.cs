@@ -1,16 +1,19 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
-// 
+//
 // Copyright © 2016-2019 Tigra Astronomy, all rights reserved.
-// 
+//
 // File: NLogTraceWithArgumentsAttribute.cs  Last modified: 2019-10-07@17:58 by Tim Long
 
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
 using NLog;
 using PostSharp.Aspects;
 using PostSharp.Aspects.Dependencies;
+using TA.Utils.Core.Diagnostics;
+using TA.Utils.Logging.NLog;
 
 namespace TA.PostSharp.Aspects
     {
@@ -25,47 +28,42 @@ namespace TA.PostSharp.Aspects
     [ProvideAspectRole("Trace")]
     [AspectRoleDependency(AspectDependencyAction.Order, AspectDependencyPosition.Before, "ASCOM")]
     [AspectRoleDependency(AspectDependencyAction.Order, AspectDependencyPosition.After, "Threading")]
-    public sealed class NLogTraceWithArgumentsAttribute : OnMethodBoundaryAspect
+    public sealed class TraceWithArgumentsAttribute : OnMethodBoundaryAspect
         {
-        private static readonly Type MyType = typeof(NLogTraceWithArgumentsAttribute);
         [NonSerialized] private static int indent;
-        private readonly int logAtLevelOrdinal;
+        [NonSerialized] private readonly LogSeverity logSeverity;
         [NonSerialized] private string enteringMessage;
         [NonSerialized] private string exitingMessage;
-        [NonSerialized] private Logger log;
         [NonSerialized] private string loggerName;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="NLogTraceWithArgumentsAttribute" /> class.
+        ///     Initializes a new instance of the <see cref="TraceWithArgumentsAttribute" /> class.
         /// </summary>
-        /// <param name="logAtLevel">The log at level.</param>
-        public NLogTraceWithArgumentsAttribute(int logAtLevel = 0)
-            {
-            logAtLevelOrdinal = logAtLevel;
-            }
+        /// <param name="level">The log severity at which to log. Optional, default: <see cref="LogSeverity.Trace"/></param>
+        public TraceWithArgumentsAttribute(LogSeverity level = LogSeverity.Trace) => logSeverity = level;
 
-        private LogLevel LogAtLevel
+        private IFluentLogBuilder GetLogBuilder(string name)
             {
-            get
+            var logService = new LoggingService();
+            switch (logSeverity)
                 {
-                if (logAtLevelOrdinal == LogLevel.Trace.Ordinal)
-                    return LogLevel.Trace;
-                if (logAtLevelOrdinal == LogLevel.Debug.Ordinal)
-                    return LogLevel.Debug;
-                if (logAtLevelOrdinal == LogLevel.Info.Ordinal)
-                    return LogLevel.Info;
-                if (logAtLevelOrdinal == LogLevel.Warn.Ordinal)
-                    return LogLevel.Warn;
-                if (logAtLevelOrdinal == LogLevel.Error.Ordinal)
-                    return LogLevel.Error;
-                if (logAtLevelOrdinal == LogLevel.Fatal.Ordinal)
-                    return LogLevel.Fatal;
-                if (logAtLevelOrdinal == LogLevel.Off.Ordinal)
-                    return LogLevel.Off;
-                throw new ArgumentException("Invalid trace level specified");
+                    case LogSeverity.None:
+                    case LogSeverity.Trace:
+                        return logService.Trace(name);
+                    case LogSeverity.Debug:
+                        return logService.Debug(name);
+                    case LogSeverity.Info:
+                        return logService.Info(name);
+                    case LogSeverity.Warn:
+                        return logService.Warn(name);
+                    case LogSeverity.Error:
+                        return logService.Error(name);
+                    case LogSeverity.Fatal:
+                        return logService.Fatal(name);
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
-
         /// <summary>
         ///     Method executed <b>before</b> the body of methods to which this aspect is applied.
         /// </summary>
@@ -106,38 +104,43 @@ namespace TA.PostSharp.Aspects
         public override void RuntimeInitialize(MethodBase method)
             {
             if (method.DeclaringType != null) loggerName = method.DeclaringType.FullName;
-            var methodName = method.Name;
-            enteringMessage = "Enter " + methodName + '(';
-            exitingMessage = "Exit " + methodName + "()";
-            log = LogManager.GetLogger(loggerName);
+            loggerName = method.Name;
+            enteringMessage = "Enter " + loggerName + '(';
+            exitingMessage = "Exit " + loggerName + "()";
             }
 
         private void LogMethodEntryWithParameters(MethodExecutionArgs args, int indent = 0)
             {
+            var log = GetLogBuilder(loggerName);
             var builder = new StringBuilder();
             if (indent < 0) indent = 0;
             builder.Append(' ', indent);
             builder.Append(enteringMessage);
-            foreach (var argument in args.Arguments)
+            var parameters = args.Method.GetParameters();
+            var logProperties = args.Arguments.Zip(parameters, (o, p) => new {Value = o, Name = p.Name});
+
+            foreach (var property in logProperties)
                 {
-                if (argument == null)
+                log.Property(property.Name, property.Value);
+                if (property.Value is null)
                     builder.Append("null");
                 else
                     {
-                    builder.Append(argument.GetType().Name);
+                    builder.Append(property.Name);
                     builder.Append('=');
-                    builder.Append(argument);
+                    builder.Append(property.Value);
                     }
                 builder.Append(", ");
                 }
             if (args.Arguments.Count > 0)
                 builder.Length -= 2; // Remove the last comma
             builder.Append(')');
-            LogWithUnwoundStack(builder.ToString());
+            log.Message(builder.ToString()).Write();
             }
 
         private void LogMethodExit(MethodExecutionArgs args, int indent = 0)
             {
+            var log = GetLogBuilder(loggerName);
             var builder = new StringBuilder();
             if (indent < 0) indent = 0;
             builder.Append(' ', indent);
@@ -147,17 +150,7 @@ namespace TA.PostSharp.Aspects
                 builder.Append(" == ");
                 builder.Append(args.ReturnValue);
                 }
-            LogWithUnwoundStack(builder.ToString());
-            }
-
-        /// <summary>
-        ///     Sends output to NLog while correctly preserving the call site of the original logging event.
-        /// </summary>
-        /// <param name="message">The verbatim message to be logged.</param>
-        private void LogWithUnwoundStack(string message)
-            {
-            var logEvent = new LogEventInfo(LogAtLevel, loggerName, message);
-            log.Log(MyType, logEvent);
+            log.Message(builder.ToString()).Property("returnValue", args.ReturnValue).Write();
             }
         }
     }

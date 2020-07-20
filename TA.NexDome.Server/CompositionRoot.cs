@@ -1,6 +1,9 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using TA.Utils.Core;
+using TA.Utils.Core.Diagnostics;
+using TA.Utils.Logging.NLog;
 using static TA.NexDome.Server.Properties.Settings;
 
 namespace TA.NexDome.Server
@@ -27,13 +30,13 @@ namespace TA.NexDome.Server
             Kernel = new StandardKernel(new CoreModule());
             }
 
-        private static ScopeObject CurrentScope { get; set; }
+        private static SessionScopeObject CurrentScope { get; set; }
 
         public static IKernel Kernel { get; }
 
         public static void BeginSessionScope()
             {
-            var scope = new ScopeObject();
+            var scope = new SessionScopeObject();
             Log.Info().Message("Beginning session scope {scope}", scope).Write();
             CurrentScope = scope;
             }
@@ -51,11 +54,11 @@ namespace TA.NexDome.Server
             }
         }
 
-    internal class ScopeObject : INotifyWhenDisposed
+    internal class SessionScopeObject : INotifyWhenDisposed
         {
         private static int scopeId;
 
-        public ScopeObject()
+        public SessionScopeObject()
             {
             ++scopeId;
             }
@@ -82,7 +85,7 @@ namespace TA.NexDome.Server
         public event EventHandler Disposed;
 
         /// <inheritdoc />
-        public override string ToString() => $"{nameof(ScopeId)}: {ScopeId}";
+        public override string ToString() => ScopeId.ToString();
         }
 
     internal class CoreModule : NinjectModule
@@ -98,6 +101,15 @@ namespace TA.NexDome.Server
             Bind<ReactiveTransactionProcessor>().ToSelf().InSessionScope();
             Bind<TransactionObserver>().ToSelf().InSessionScope();
             Bind<ITransactionProcessor>().ToMethod(BuildTransactionProcessor).InSessionScope();
+            Bind<ILog>().ToMethod(CreateSessionLogger).InSessionScope();
+            }
+
+        private ILog CreateSessionLogger(IContext arg)
+            {
+            var scope = Maybe<SessionScopeObject>.From(arg.GetScope() as SessionScopeObject);
+            var log = new LoggingService();
+            return log.WithAmbientProperty("Session", scope)
+                .WithAmbientProperty("Correlator",SharedResources.LogCorrelator);
             }
 
         private ITransactionProcessor BuildTransactionProcessor(IContext arg)
