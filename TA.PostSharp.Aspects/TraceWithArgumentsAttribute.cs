@@ -9,7 +9,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
-using NLog;
 using PostSharp.Aspects;
 using PostSharp.Aspects.Dependencies;
 using TA.Utils.Core.Diagnostics;
@@ -45,6 +44,7 @@ namespace TA.PostSharp.Aspects
         private IFluentLogBuilder GetLogBuilder(string name)
             {
             var logService = new LoggingService();
+            // ReSharper disable ExplicitCallerInfoArgument
             switch (logSeverity)
                 {
                     case LogSeverity.None:

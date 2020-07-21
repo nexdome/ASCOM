@@ -1,20 +1,33 @@
-﻿using System;
+﻿// This file is part of the TA.NexDome.AscomServer project
+// 
+// Copyright © 2015-2020 Tigra Astronomy, all rights reserved.
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
+// You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
+// 
+// File: WindowUtils.cs  Last modified: 2020-07-21@22:26 by Tim Long
+
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using NLog.Fluent;
+using Ninject;
+using TA.Utils.Core.Diagnostics;
 
 namespace TA.NexDome.Server
     {
-    /// <summary>
-    ///     Class WindowUtils.
-    /// </summary>
+    /// <summary>Class WindowUtils.</summary>
     internal static class WindowUtils
         {
+        private static ILog Log => CompositionRoot.Kernel.Get<ILog>();
+
         /// <summary>
-        ///     Determines whether the specified <paramref name="form" /> is fully visible given the current monitor
-        ///     configuration. Method inspired by @Andrija https://stackoverflow.com/a/987090/98516
+        ///     Determines whether the specified <paramref name="form" /> is fully visible given the current
+        ///     monitor configuration. Method inspired by @Andrija https://stackoverflow.com/a/987090/98516
         /// </summary>
         /// <param name="form">The form.</param>
         /// <returns><c>true</c> if the <paramref name="form" /> is fully on-screen; otherwise, <c>false</c> .</returns>
@@ -32,8 +45,8 @@ namespace TA.NexDome.Server
             }
 
         /// <summary>
-        ///     Ensures that the specified <paramref name="form" /> is fully visible. If not, it will be moved to the
-        ///     primary monitor
+        ///     Ensures that the specified <paramref name="form" /> is fully visible. If not, it will be moved
+        ///     to the primary monitor
         /// </summary>
         /// <param name="form">The form.</param>
         public static void EnsureVisible(this Form form)
@@ -46,8 +59,8 @@ namespace TA.NexDome.Server
             }
 
         /// <summary>
-        ///     Navigates to web destination for a control. The target URL is contained in the Tag property of the
-        ///     control.
+        ///     Navigates to web destination for a control. The target URL is contained in the Tag property of
+        ///     the control.
         /// </summary>
         /// <param name="sender">The sender.</param>
         public static void NavigateToWebDestination(object sender)

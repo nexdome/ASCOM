@@ -14,7 +14,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Ninject;
-using NLog;
 using PostSharp.Patterns.Model;
 using PostSharp.Patterns.Threading;
 using TA.NexDome.DeviceInterface;

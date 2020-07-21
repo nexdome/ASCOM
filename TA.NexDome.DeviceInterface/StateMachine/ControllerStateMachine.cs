@@ -1,26 +1,30 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
-// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
+//
+// Copyright © 2015-2020 Tigra Astronomy, all rights reserved.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
+// You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
+//
+// File: ControllerStateMachine.cs  Last modified: 2020-07-21@21:39 by Tim Long
 
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
+using PostSharp.Patterns.Model;
+using TA.NexDome.DeviceInterface.StateMachine.Rotator;
+using TA.NexDome.SharedTypes;
 using TA.Utils.Core;
+using TA.Utils.Core.Diagnostics;
 
 namespace TA.NexDome.DeviceInterface.StateMachine
     {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Runtime.CompilerServices;
-    using System.Threading;
-
-    using JetBrains.Annotations;
-
-    using NLog.Fluent;
-
-    using PostSharp.Patterns.Model;
-
-    using TA.NexDome.DeviceInterface.StateMachine.Rotator;
-    using TA.NexDome.SharedTypes;
-
     [NotifyPropertyChanged]
     public class ControllerStateMachine : INotifyPropertyChanged
         {
@@ -28,14 +32,14 @@ namespace TA.NexDome.DeviceInterface.StateMachine
 
         internal readonly ManualResetEvent ShutterInReadyState = new ManualResetEvent(false);
 
-        [CanBeNull]
-        internal CancellationTokenSource KeepAliveCancellationSource;
+        [CanBeNull] internal CancellationTokenSource KeepAliveCancellationSource;
 
         public ControllerStateMachine(
             IControllerActions controllerActions,
             DeviceControllerOptions options,
-            IClock clock)
+            IClock clock, ILog logger)
             {
+            Logger = logger;
             ControllerActions = controllerActions;
             Options = options;
             Clock = clock;
@@ -59,9 +63,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
 
         public SensorState ShutterLimitSwitches { get; set; }
 
-        /// <summary>
-        ///     The state of the user output pins. Bits 0..3 are significant, other bits are unused.
-        /// </summary>
+        /// <summary>The state of the user output pins. Bits 0..3 are significant, other bits are unused.</summary>
         public Octet UserPins { get; } = Octet.Zero;
 
         [IgnoreAutoChangeNotification]
@@ -95,20 +97,12 @@ namespace TA.NexDome.DeviceInterface.StateMachine
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        /// <summary>
-        ///     Initializes the specified rotator initial state.
-        /// </summary>
-        /// <param name="rotatorInitialState">
-        ///     Sets the Initial state of the rotator state machine.
-        /// </param>
+        /// <summary>Initializes the specified rotator initial state.</summary>
+        /// <param name="rotatorInitialState">Sets the Initial state of the rotator state machine.</param>
         public void Initialize(IRotatorState rotatorInitialState) => TransitionToState(rotatorInitialState);
 
-        /// <summary>
-        ///     Initializes the specified shutter initial state.
-        /// </summary>
-        /// <param name="shutterInitialState">
-        ///     Sets the Initial state of the shutter state machine.
-        /// </param>
+        /// <summary>Initializes the specified shutter initial state.</summary>
+        /// <param name="shutterInitialState">Sets the Initial state of the shutter state machine.</param>
         public void Initialize(IShutterState shutterInitialState) => TransitionToState(shutterInitialState);
 
         private void SetCurrentState<TState>(TState newState)
@@ -152,7 +146,9 @@ namespace TA.NexDome.DeviceInterface.StateMachine
                 }
             catch (Exception ex)
                 {
-                Log.Error().Exception(ex).Message($"Unexpected exception leaving state {state?.Name ?? "Null state"}")
+                Logger.Error()
+                    .Exception(ex)
+                    .Message("Unexpected exception leaving state {fromState}", state)
                     .Write();
                 }
 
@@ -164,7 +160,10 @@ namespace TA.NexDome.DeviceInterface.StateMachine
                 }
             catch (Exception ex)
                 {
-                Log.Error().Exception(ex).Message($"Unexpected exception entering state {targetState.Name}").Write();
+                Logger.Error()
+                    .Exception(ex)
+                    .Message("Unexpected exception entering state {toState}", targetState)
+                    .Write();
                 }
             }
 
@@ -196,13 +195,13 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             }
 
         /// <summary>
-        /// Sends configuration data to the shutter.
-        /// Normally called upon Offline -> Online state transition.
+        ///     Sends configuration data to the shutter. Normally called upon Offline -> Online state
+        ///     transition.
         /// </summary>
         internal async Task ConfigureShutter()
             {
-            await ControllerActions.ConfigureShutter((uint) Options.ShutterMaximumSpeed,
-                (uint) Options.ShutterRampTime.TotalMilliseconds,
+            await ControllerActions.ConfigureShutter((uint)Options.ShutterMaximumSpeed,
+                (uint)Options.ShutterRampTime.TotalMilliseconds,
                 Options.EnableAutoCloseOnLowBattery ? Options.ShutterLowBatteryThresholdVolts.VoltsToAdu() : 0);
             }
 
@@ -217,7 +216,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
 
         public void AllStop()
             {
-            Log.Warn().Message("Emergency Stop requested").Write();
+            Logger.Warn().Message("Emergency Stop requested").Write();
             ControllerActions.PerformEmergencyStop();
             RotatorState.HardStopRequested();
             }
@@ -229,31 +228,32 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             }
 
         /// <summary>
-        ///     Waits for the state machine to enter the Ready state. If the state is not reached within
-        ///     the specified time limit, an exception is thrown.
+        ///     Waits for the state machine to enter the Ready state. If the state is not reached within the
+        ///     specified time limit, an exception is thrown.
         /// </summary>
         /// <param name="timeout">THe maximum amount of time to wait.</param>
         /// <exception cref="TimeoutException">
-        ///     Thrown if the state machine is not ready within the
-        ///     allotted time.
+        ///     Thrown if the state machine is not ready within the allotted
+        ///     time.
         /// </exception>
         public void WaitForReady(TimeSpan timeout)
             {
-            Log.Info()
+            Logger.Info()
                 .Message("Waiting for state machines to be ready, Shutter Installed={shutter}, Wait for Shutter={wait}",
                     Options.ShutterIsInstalled, Options.ShutterWaitForReadyOnConnect)
                 .Write();
-            var waitHandles = new List<WaitHandle> { RotatorInReadyState };
+            var waitHandles = new List<WaitHandle> {RotatorInReadyState};
             if (Options.ShutterIsInstalled && Options.ShutterWaitForReadyOnConnect)
                 waitHandles.Add(ShutterInReadyState);
             bool signalled = WaitHandle.WaitAll(waitHandles.ToArray(), timeout);
 
             if (!signalled)
                 {
-                Log.Error()
-                    .Message("State machine did not enter the ready state within the allotted time of {timeout}", timeout)
+                Logger.Error()
+                    .Message("State machine timeout {timeout} waiting for ready", timeout)
                     .Write();
-                throw new TimeoutException($"State machine did not enter the ready state within the allotted time of {timeout}");
+                throw new TimeoutException(
+                    $"State machine did not enter the ready state within the allotted time of {timeout}");
                 }
             }
 
@@ -263,7 +263,8 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             RotatorState.RotateToAzimuthDegrees(azimuth);
             }
 
-        public void RotateToStepPosition(int targetStepPosition) => RotatorState.RotateToStepPosition(targetStepPosition);
+        public void RotateToStepPosition(int targetStepPosition) =>
+            RotatorState.RotateToStepPosition(targetStepPosition);
 
         public void OpenShutter() => ShutterState.OpenShutter();
 
@@ -273,21 +274,21 @@ namespace TA.NexDome.DeviceInterface.StateMachine
 
         internal void ResetKeepAliveTimer()
             {
-            Log.Debug().Message("Keep-alive timer reset").Write();
+            Logger.Debug().Message("Keep-alive timer reset").Write();
             KeepAliveCancellationSource?.Cancel(); // Cancel any previous timer
             KeepAliveCancellationSource = new CancellationTokenSource();
             }
 
         public void ShutterLinkStateChanged(ShutterLinkState state)
             {
-            Log.Info().Message("Shutter link state {state}", state).Write();
+            Logger.Info().Message("Shutter link state {state}", state).Write();
             ShutterLinkState = state;
             ShutterState.LinkStateReceived(state);
             }
 
         public void SetHomeSensorAzimuth(decimal azimuth)
             {
-            Log.Info().Message("Set home sensor azimuth to {azimuth}", azimuth).Write();
+            Logger.Info().Message("Set home sensor azimuth to {azimuth}", azimuth).Write();
             decimal ticksPerDegree = DomeCircumference / 360.0m;
             decimal homeStepPosition = azimuth * ticksPerDegree;
             ControllerActions.SetHomeSensorPosition((int)homeStepPosition);
@@ -296,31 +297,32 @@ namespace TA.NexDome.DeviceInterface.StateMachine
 
         public void SavePersistentSettings()
             {
-            Log.Info("Saving persistent settings").Write();
+            Logger.Info("Saving persistent settings").Write();
             ControllerActions.SavePersistentSettings();
             }
 
         #region State triggers
         public void AzimuthEncoderTickReceived(int encoderPosition)
             {
+            Logger.Debug().Message("Rotator position received {position}", encoderPosition).Write();
             AzimuthEncoderPosition = encoderPosition;
-
-            // CurrentState.RotationDetected();
             RotatorState.RotationDetected();
             }
 
         public void ShutterEncoderTickReceived(int encoderPosition)
             {
             // The state must process the position update because it needs to make decisions based on the relative position.
-            // ShutterStepPosition = encoderPosition;
+            Logger.Debug().Message("").Message("Shutter position received {position}", encoderPosition).Write();
             ShutterState.EncoderTickReceived(encoderPosition);
             }
 
         public int ShutterStepPosition { get; set; }
 
+        public ILog Logger { get; }
+
         public void HardwareStatusReceived(IRotatorStatus status)
             {
-            Log.Info().Message("Rotator status {status}", status).Write();
+            Logger.Info().Message("Rotator status {status}", status).Write();
             RotatorStatus = status;
             UpdateStatus(status);
             RotatorState.StatusUpdateReceived(status);
@@ -328,13 +330,11 @@ namespace TA.NexDome.DeviceInterface.StateMachine
 
         public void HardwareStatusReceived(IShutterStatus status)
             {
-            Log.Info().Message("Shutter status {status}", status).Write();
+            Logger.Info().Message("Shutter status {status}", status).Write();
             ShutterStatus = status;
             UpdateStatus(status);
             ShutterState.StatusUpdateReceived(status);
             }
-
         #endregion State triggers
-
         }
     }

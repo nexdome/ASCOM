@@ -118,7 +118,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="ServedComClassLocator.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SetupDialogForm.cs">
       <SubType>Form</SubType>
@@ -169,7 +168,7 @@
       <Version>4.7.2</Version>
     </PackageReference>
     <PackageReference Include="NLog.Targets.Seq">
-      <Version>1.2.0</Version>
+      <Version>1.3.0-beta001</Version>
     </PackageReference>
     <PackageReference Include="PostSharp.Patterns.Model">
       <Version>6.6.11</Version>

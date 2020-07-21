@@ -8,7 +8,7 @@
 // permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 //
-// File: LogSeverity.cs  Last modified: 2020-07-20@14:52 by Tim Long
+// File: LogSeverity.cs  Last modified: 2020-07-21@22:44 by Tim Long
 
 namespace TA.PostSharp.Aspects
     {

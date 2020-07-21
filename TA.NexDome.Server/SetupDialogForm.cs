@@ -8,8 +8,9 @@ using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
-using NLog.Fluent;
+using Ninject;
 using TA.NexDome.Server.Properties;
+using TA.Utils.Core.Diagnostics;
 
 namespace TA.NexDome.Server
     {
@@ -21,6 +22,7 @@ namespace TA.NexDome.Server
         private ClickCommand enableAutoCloseClickCommand;
         private ClickCommand enableShutterClickCommand;
         private ClickCommand waitForShutterClickCommand;
+        private readonly ILog log = CompositionRoot.Kernel.Get<ILog>();
 
         public SetupDialogForm() => InitializeComponent();
 
@@ -36,14 +38,14 @@ namespace TA.NexDome.Server
             var control = sender as Control;
             if (control == null)
                 {
-                Log.Error().Message("Can't browse to web page, event sender is not a WinForms control").Write();
+                log.Error().Message("Can't browse to web page, event sender is not a WinForms control").Write();
                 return;
                 }
 
             string url = control.Tag.ToString();
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
                 {
-                Log.Error().Message("Can't browse to web page, URI not absolute well-formed: {uri}", url).Write();
+                log.Error().Message("Can't browse to web page, URI not absolute well-formed: {uri}", url).Write();
                 return;
                 }
 

@@ -13,7 +13,6 @@
 using System;
 using System.Windows.Forms;
 using Ninject;
-using NLog;
 using TA.NexDome.Server.Properties;
 using TA.NexDome.SharedTypes;
 using TA.Utils.Core.Diagnostics;
@@ -27,7 +26,7 @@ namespace TA.NexDome.Server
 
         public const string DomeDriverName = "NexDome";
 
-        private static readonly ILogger Log;
+        public static ILog Log => CompositionRoot.Kernel.Get<ILog>();
 
         /// <summary>
         /// Used by logging to correlate all logs within one process execution
@@ -37,7 +36,6 @@ namespace TA.NexDome.Server
 
         static SharedResources()
             {
-            Log = LogManager.GetCurrentClassLogger();
             ConnectionManager = CreateConnectionManager();
             }
 

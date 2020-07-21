@@ -1,55 +1,37 @@
 // This file is part of the TA.NexDome.AscomServer project
-// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
+//
+// Copyright © 2015-2020 Tigra Astronomy, all rights reserved.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
+// You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
+//
+// File: LocalServer.cs  Last modified: 2020-07-21@22:04 by Tim Long
 
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Security.Principal;
+using System.Threading;
+using System.Windows.Forms;
+using ASCOM;
+using ASCOM.Utilities;
+using Microsoft.Win32;
 using Ninject;
-using NLog.Fluent;
 using TA.Utils.Core;
 using TA.Utils.Core.Diagnostics;
 
 namespace TA.NexDome.Server
     {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Reflection;
-    using System.Runtime.InteropServices;
-    using System.Security.Principal;
-    using System.Threading;
-    using System.Windows.Forms;
-
-    using ASCOM;
-    using ASCOM.Utilities;
-
-    using Microsoft.Win32;
-
-    using NLog;
-    using TA.NexDome.SharedTypes;
-
     public static class Server
         {
-
-        #region Private Data
-        private static int objsInUse; // Keeps a count on the total number of objects alive.
-
-        private static int serverLocks; // Keeps a lock count on this application.
-
-        private static ServerStatusDisplay s_MainForm; // Reference to our main form
-
-        private static readonly string s_appId = "{0efed6b0-bf69-4fd1-8e43-784d0f905426}"; // Our AppId
-
-        private static readonly object lockObject = new object();
-
-        // This property returns the main thread's id.
-        private static uint MainThreadId { get; set; } // Stores the main thread's thread id.
-
-        // Used to tell if started by COM or manually
-        private static bool StartedByCOM { get; set; } // True if server started by COM (-embedding)
-        #endregion
-
         #region Command Line Arguments
-
         //
         // ProcessArguments() will process the command-line arguments
         // If the return value is true, we carry on and start this application.
@@ -66,32 +48,32 @@ namespace TA.NexDome.Server
                 {
                 switch (args[0].ToLower())
                     {
-                    case "-embedding":
-                        StartedByCOM = true; // Indicate COM started us
-                        break;
+                        case "-embedding":
+                            StartedByCOM = true; // Indicate COM started us
+                            break;
 
-                    case "-register":
-                    case @"/register":
-                    case "-regserver": // Emulate VB6
-                    case @"/regserver":
-                        RegisterObjects(drivers); // Register each served object
-                        bRet = false;
-                        break;
+                        case "-register":
+                        case @"/register":
+                        case "-regserver": // Emulate VB6
+                        case @"/regserver":
+                            RegisterObjects(drivers); // Register each served object
+                            bRet = false;
+                            break;
 
-                    case "-unregister":
-                    case @"/unregister":
-                    case "-unregserver": // Emulate VB6
-                    case @"/unregserver":
-                        UnregisterObjects(drivers); //Unregister each served object
-                        bRet = false;
-                        break;
+                        case "-unregister":
+                        case @"/unregister":
+                        case "-unregserver": // Emulate VB6
+                        case @"/unregserver":
+                            UnregisterObjects(drivers); //Unregister each served object
+                            bRet = false;
+                            break;
 
-                    default:
-                        MessageBox.Show(
-                            "Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding",
-                            "ASCOM driver for Arduino Power Controller", MessageBoxButtons.OK,
-                            MessageBoxIcon.Exclamation);
-                        break;
+                        default:
+                            MessageBox.Show(
+                                "Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding",
+                                "ASCOM driver for Arduino Power Controller", MessageBoxButtons.OK,
+                                MessageBoxIcon.Exclamation);
+                            break;
                     }
                 }
             else
@@ -99,7 +81,6 @@ namespace TA.NexDome.Server
 
             return bRet;
             }
-
         #endregion
 
         private static void UnhandledException(object sender, UnhandledExceptionEventArgs ea)
@@ -131,14 +112,21 @@ namespace TA.NexDome.Server
             Application.ThreadException += UnhandledThreadException;
             AppDomain.CurrentDomain.UnhandledException += UnhandledException;
 
-            LogVersionStrings();
+            var log = CompositionRoot.Kernel.Get<ILog>();
+            log.Info()
+                .Message("Server start. Version {gitInformationalVersion}", GitVersion.GitInformationalVersion)
+                .Property("gitCommitDate", GitVersion.GitCommitDate)
+                .Property("gitCommitSha", GitVersion.GitCommitSha)
+                .Property("gitSemVer", GitVersion.GitFullSemVer)
+                .Write();
 
-            var drivers = new DriverDiscovery();
+            var drivers = CompositionRoot.Kernel.Get<DriverDiscovery>();
             drivers.DiscoverServedClasses();
             if (!drivers.DiscoveredTypes.Any())
                 {
-                Log.Fatal()
-                    .Message("No driver classes found. Have you added ServedClassName attributes to your driver classes?")
+                log.Fatal()
+                    .Message("No driver classes found. Have you added [ServedClassName] attributes?")
+                    .Property("discovery", drivers)
                     .Write();
                 return;
                 }
@@ -161,12 +149,12 @@ namespace TA.NexDome.Server
              */
             //if (StartedByCOM) s_MainForm.WindowState = FormWindowState.Minimized;
 
-            var registeredFactories = RegisterClassFactories(drivers);
+            var registeredFactories = RegisterClassFactories(drivers, log);
             // ToDo: [TPL] Why is this even necessary? Shouldn't GC be automatic?
-            var GarbageCollector = new GarbageCollection(10000);
-            var GCThread = new Thread(GarbageCollector.GCWatch);
-            GCThread.Name = "Garbage Collection Thread";
-            GCThread.Start();
+            var garbageCollector = new GarbageCollection(10000);
+            var gcThread = new Thread(garbageCollector.GCWatch);
+            gcThread.Name = "Garbage Collection Thread";
+            gcThread.Start();
 
             // Start the message loop. This serializes incoming calls to our
             // served COM objects, making this act like the VB6 equivalent!
@@ -182,27 +170,36 @@ namespace TA.NexDome.Server
                 RevokeClassFactories(registeredFactories);
 
                 // Now stop the Garbage Collector thread.
-                GarbageCollector.StopThread();
-                GarbageCollector.WaitForThreadToStop();
+                garbageCollector.StopThread();
+                garbageCollector.WaitForThreadToStop();
                 Application.ThreadException -= UnhandledThreadException;
                 AppDomain.CurrentDomain.UnhandledException -= UnhandledException;
                 }
             }
+        #endregion
 
-        private static void LogVersionStrings()
-            {
-            Log.Info()
-                .Message("Server start. Version {gitInformationalVersion}", GitVersion.GitInformationalVersion)
-                .Property("gitCommitDate", GitVersion.GitCommitDate)
-                .Property("gitCommitSha",GitVersion.GitCommitSha)
-                .Property("gitSemVer", GitVersion.GitFullSemVer)
-                .Write();
-            }
+        #region Private Data
+        private static int objsInUse; // Keeps a count on the total number of objects alive.
+
+        private static int serverLocks; // Keeps a lock count on this application.
+
+        private static ServerStatusDisplay s_MainForm; // Reference to our main form
+
+        private static readonly string s_appId = "{0efed6b0-bf69-4fd1-8e43-784d0f905426}"; // Our AppId
+
+        private static readonly object lockObject = new object();
+
+        // This property returns the main thread's id.
+        private static uint MainThreadId { get; set; } // Stores the main thread's thread id.
+
+        // Used to tell if started by COM or manually
+        private static bool StartedByCOM { get; set; } // True if server started by COM (-embedding)
         #endregion
 
         // -----------------
         // PRIVATE FUNCTIONS
         // -----------------
+
         #region Dynamic Driver Assembly Loader
         #endregion
 
@@ -377,11 +374,9 @@ namespace TA.NexDome.Server
             if (StartedByCOM)
                 Application.Exit();
             }
-
         #endregion
 
         #region COM Registration and Unregistration
-
         //
         // Test if running elevated
         //
@@ -423,15 +418,12 @@ namespace TA.NexDome.Server
                 }
             }
 
-        /// <summary>
-        ///     Registers the discovered driver types for COM and with the ASCOM Profile Store.
-        /// </summary>
+        /// <summary>Registers the discovered driver types for COM and with the ASCOM Profile Store.</summary>
         /// <param name="drivers">The discovered drivers.</param>
         /// <remarks>
-        ///     Registers each discovered driver type with COM so that applications
-        ///     can find it and load it by ProgID (i.e. via the ASCOM Chooser).
-        ///     Also adds DCOM info for the LocalServer itself, so it can be activated
-        ///     via an outbound connection from TheSky.
+        ///     Registers each discovered driver type with COM so that applications can find it and load it by
+        ///     ProgID (i.e. via the ASCOM Chooser). Also adds DCOM info for the LocalServer itself, so it can
+        ///     be activated via an outbound connection from TheSky.
         /// </remarks>
         private static void RegisterObjects(DriverDiscovery drivers)
             {
@@ -610,22 +602,18 @@ namespace TA.NexDome.Server
                         P.Unregister(progid);
                         }
                     }
-                catch (Exception)
-                    {
-                    }
+                catch (Exception) { }
                 }
             }
-
         #endregion
 
         #region Class Factory Support
-
         //
         // Register the class factories of the COM objects (drivers)
         // that we serve. This requires the class factory name to be
         // equal to the served class name + "ClassFactory".
         //
-        private static IEnumerable<ClassFactory> RegisterClassFactories(DriverDiscovery drivers)
+        private static IEnumerable<ClassFactory> RegisterClassFactories(DriverDiscovery drivers, ILog log)
             {
             var registeredFactories = new List<ClassFactory>();
             foreach (var type in drivers.DiscoveredTypes)
@@ -637,7 +625,8 @@ namespace TA.NexDome.Server
                     }
                 else
                     {
-                    Log.Fatal()
+                    // This will terminate the application
+                    log.Fatal()
                         .Message("Failed to register class factory for {type}", type.Name)
                         .Write();
                     }
@@ -652,7 +641,6 @@ namespace TA.NexDome.Server
             foreach (var factory in factories)
                 factory.RevokeClassObject();
             }
-
         #endregion
         }
     }

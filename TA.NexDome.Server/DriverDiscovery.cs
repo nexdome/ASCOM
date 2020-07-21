@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using ASCOM;
-using NLog.Fluent;
+using TA.Utils.Core.Diagnostics;
 
 namespace TA.NexDome.Server
     {
@@ -27,6 +27,10 @@ namespace TA.NexDome.Server
     /// <seealso cref="System.MarshalByRefObject" />
     internal class DriverDiscovery
         {
+        private readonly ILog log;
+
+        public DriverDiscovery(ILog logger) => this.log = logger;
+
         /// <summary>Gets the full assembly name of the LocalServer assembly</summary>
         public string DiscoveredAssemblyName { get; private set; } = string.Empty;
 
@@ -44,13 +48,13 @@ namespace TA.NexDome.Server
         /// </summary>
         public void DiscoverServedClasses()
             {
-            Log.Info().Message("Loading served COM classes").Write();
+            log.Trace().Message("Loading served COM classes").Write();
             var thisAssembly = Assembly.GetExecutingAssembly();
             var assemblyName = thisAssembly.GetName();
             var assemblyFullName = assemblyName.FullName;
             var assemblyDisplayName = assemblyName.Name;
             var types = thisAssembly.GetTypes();
-            Log.Trace()
+            log.Debug()
                 .Message("Reflection found {typeCount} types in assembly {assemblyName}",
                     types.Length, assemblyDisplayName)
                 .Write();
@@ -65,9 +69,10 @@ namespace TA.NexDome.Server
                 {
                 DiscoveredTypes.AddRange(discoveredTypes);
                 DiscoveredAssemblyName = assemblyFullName;
-                Log.Info()
-                    .Message("Discovered {servedClassCount} served classes in assembly {assembly}",
+                log.Info()
+                    .Message("Discovered {servedClassCount} ASCOM served classes in assembly {assembly}",
                         discoveredTypes.Count, assemblyName)
+                    .Property("discovery", this)
                     .Write();
                 }
             }
