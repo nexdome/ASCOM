@@ -178,7 +178,7 @@
       <Version>6.6.11</Version>
     </PackageReference>
     <PackageReference Include="TA.Ascom.ReactiveCommunications">
-      <Version>1.3.0-beta.1</Version>
+      <Version>1.3.0-beta.7</Version>
     </PackageReference>
     <PackageReference Include="TA.Utils.Core">
       <Version>1.3.0-alpha.6</Version>

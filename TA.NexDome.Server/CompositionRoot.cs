@@ -1,6 +1,27 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
-// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
+//
+// Copyright © 2015-2020 Tigra Astronomy, all rights reserved.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
+// You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
+//
+// File: CompositionRoot.cs  Last modified: 2020-07-21@02:49 by Tim Long
 
+using System;
+using System.Text;
+using Ninject;
+using Ninject.Activation;
+using Ninject.Infrastructure.Disposal;
+using Ninject.Modules;
+using Ninject.Syntax;
+using NLog.Fluent;
+using TA.Ascom.ReactiveCommunications;
+using TA.NexDome.DeviceInterface;
+using TA.NexDome.DeviceInterface.StateMachine;
+using TA.NexDome.SharedTypes;
 using TA.Utils.Core;
 using TA.Utils.Core.Diagnostics;
 using TA.Utils.Logging.NLog;
@@ -8,21 +29,6 @@ using static TA.NexDome.Server.Properties.Settings;
 
 namespace TA.NexDome.Server
     {
-    using System;
-
-    using Ninject;
-    using Ninject.Activation;
-    using Ninject.Infrastructure.Disposal;
-    using Ninject.Modules;
-    using Ninject.Syntax;
-
-    using NLog.Fluent;
-
-    using TA.Ascom.ReactiveCommunications;
-    using TA.NexDome.DeviceInterface;
-    using TA.NexDome.DeviceInterface.StateMachine;
-    using TA.NexDome.SharedTypes;
-
     public static class CompositionRoot
         {
         static CompositionRoot()
@@ -109,7 +115,7 @@ namespace TA.NexDome.Server
             var scope = Maybe<SessionScopeObject>.From(arg.GetScope() as SessionScopeObject);
             var log = new LoggingService();
             return log.WithAmbientProperty("Session", scope)
-                .WithAmbientProperty("Correlator",SharedResources.LogCorrelator);
+                .WithAmbientProperty("Correlator", SharedResources.LogCorrelator);
             }
 
         private ITransactionProcessor BuildTransactionProcessor(IContext arg)
@@ -124,31 +130,32 @@ namespace TA.NexDome.Server
             {
             var channelFactory = Kernel.Get<ChannelFactory>();
             var channel = channelFactory.FromConnectionString(Default.ConnectionString);
+            ((SerialDeviceEndpoint)channel.Endpoint).Encoding=Encoding.ASCII;
             return channel;
             }
 
         private DeviceControllerOptions BuildDeviceOptions(IContext arg)
             {
             var options = new DeviceControllerOptions
-                              {
-                              HomeAzimuth = Default.HomeSensorAzimuth,
-                              MaximumShutterCloseTime =
-                                  TimeSpan.FromSeconds((double)Default.ShutterOpenCloseTimeSeconds),
-                              MaximumFullRotationTime = TimeSpan.FromSeconds((double)Default.FullRotationTimeSeconds),
-                              ShutterTickTimeout = Default.ShutterTickTimeout,
-                              RotatorTickTimeout = Default.RotatorTickTimeout,
-                              RotatorMaximumSpeed = Default.RotatorMaximumSpeed,
-                              RotatorRampTime = TimeSpan.FromMilliseconds(Default.RotatorRampTimeMilliseconds),
-                              ShutterMaximumSpeed = Default.ShutterMaximumSpeed,
-                              ShutterRampTime =
-                                  TimeSpan.FromMilliseconds(Default.ShutterAccelerationRampTimeMilliseconds),
-                              ParkAzimuth = Default.ParkAzimuth,
-                              TimeToWaitForShutterOnConnect = Default.OnConnectWaitForShutterOnline,
-                              ShutterIsInstalled = Default.ShutterIsInstalled,
-                              ShutterLowBatteryThresholdVolts = Default.ShutterLowVoltsThreshold,
-                              ShutterLowVoltsNotificationTimeToLive = Default.ShutterLowVoltsNotificationTimeToLive,
-                              EnableAutoCloseOnLowBattery = Default.ShutterAutoCloseOnLowBattery
-                              };
+                {
+                HomeAzimuth = Default.HomeSensorAzimuth,
+                MaximumShutterCloseTime =
+                    TimeSpan.FromSeconds((double)Default.ShutterOpenCloseTimeSeconds),
+                MaximumFullRotationTime = TimeSpan.FromSeconds((double)Default.FullRotationTimeSeconds),
+                ShutterTickTimeout = Default.ShutterTickTimeout,
+                RotatorTickTimeout = Default.RotatorTickTimeout,
+                RotatorMaximumSpeed = Default.RotatorMaximumSpeed,
+                RotatorRampTime = TimeSpan.FromMilliseconds(Default.RotatorRampTimeMilliseconds),
+                ShutterMaximumSpeed = Default.ShutterMaximumSpeed,
+                ShutterRampTime =
+                    TimeSpan.FromMilliseconds(Default.ShutterAccelerationRampTimeMilliseconds),
+                ParkAzimuth = Default.ParkAzimuth,
+                TimeToWaitForShutterOnConnect = Default.OnConnectWaitForShutterOnline,
+                ShutterIsInstalled = Default.ShutterIsInstalled,
+                ShutterLowBatteryThresholdVolts = Default.ShutterLowVoltsThreshold,
+                ShutterLowVoltsNotificationTimeToLive = Default.ShutterLowVoltsNotificationTimeToLive,
+                EnableAutoCloseOnLowBattery = Default.ShutterAutoCloseOnLowBattery
+                };
             return options;
             }
         }
