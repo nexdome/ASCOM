@@ -31,14 +31,18 @@ namespace TA.NexDome.DeviceInterface
         /// <inheritdoc />
         public override void ObserveResponse(IObservable<char> source)
             {
-            var validResponses = from response in source.DelimitedMessageStrings('F','\n')
+            var strings = source.DelimitedMessageStrings('F', '\n').Trace("DelimitedMessageStrings");
+            var semverResponses = from response in strings
                                  let match = versionResponseExpression.Match(response)
                                  where match.Success
-                                 let versionString = match.Groups["SemVer"].Value
+                                 let versionString = match.Groups["SemVer"].Value.Trim()
                                  where SemanticVersion.IsValid(versionString)
                                  select versionString;
 
-            var semanticVersions = validResponses.Trace("SemVer").Take(1).Subscribe(OnNext, OnError, OnCompleted);
+            var semanticVersions = semverResponses
+                .Trace("SemVer")
+                .Take(1)
+                .Subscribe(OnNext, OnError, OnCompleted);
             }
 
         /// <inheritdoc />
