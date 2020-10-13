@@ -198,9 +198,9 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         ///     Sends configuration data to the shutter. Normally called upon Offline -> Online state
         ///     transition.
         /// </summary>
-        internal async Task ConfigureShutter()
+        internal void ConfigureShutter()
             {
-            await ControllerActions.ConfigureShutter((uint)Options.ShutterMaximumSpeed,
+            ControllerActions.ConfigureShutter((uint)Options.ShutterMaximumSpeed,
                 (uint)Options.ShutterRampTime.TotalMilliseconds,
                 Options.EnableAutoCloseOnLowBattery ? Options.ShutterLowBatteryThresholdVolts.VoltsToAdu() : 0);
             }

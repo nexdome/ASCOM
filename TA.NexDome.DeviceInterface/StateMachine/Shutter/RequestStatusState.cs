@@ -9,7 +9,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
 
     internal class RequestStatusState : ShutterStateBase
         {
-        private static readonly TimeSpan StatusReceiveTimeout = TimeSpan.FromSeconds(4);
+        private static readonly TimeSpan StatusReceiveTimeout = TimeSpan.FromSeconds(10);
 
         /// <inheritdoc />
         public RequestStatusState(ControllerStateMachine machine)
@@ -39,8 +39,9 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
             {
             base.HandleTimeout();
             ResetTimeout(StatusReceiveTimeout);
-            Machine.ControllerActions.PerformEmergencyStop();
-            Machine.ControllerActions.RequestShutterStatus();
+            //Machine.ControllerActions.PerformEmergencyStop();
+            //Machine.ControllerActions.RequestShutterStatus();
+            Machine.TransitionToState(new OfflineState(Machine));
             }
         }
     }

@@ -1,0 +1,16 @@
+@startuml Open-Connect
+participant ASCOM
+participant ConnectionManager
+participant DeviceController
+participant RotatorStateMachine
+participant ShutterStateMachine
+participant ControllerActions
+participant Channel
+
+ASCOM --> ConnectionManager : GoOnline()
+ConnectionManager --> DeviceController : <<create>>
+activate DeviceController
+ConnectionManager --> DeviceController : Open()
+ASCOM <-- ConnectionManager : DeviceController
+
+@enduml

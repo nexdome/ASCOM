@@ -16,7 +16,7 @@ namespace TA.NexDome.DeviceInterface
 
     internal class SemVerTransaction : DeviceTransaction
         {
-        private const string VersionResponsePattern = @"^FR[RS]?(?<SemVer>[^#]+)$";
+        private const string VersionResponsePattern = @"^:FR[RS]?(?<SemVer>[^#]+)#$";
 
         private static readonly Regex versionResponseExpression = new Regex(
             VersionResponsePattern,
@@ -31,15 +31,14 @@ namespace TA.NexDome.DeviceInterface
         /// <inheritdoc />
         public override void ObserveResponse(IObservable<char> source)
             {
-            var strings = source.DelimitedMessageStrings('F', '\n').Trace("DelimitedMessageStrings");
+            var strings = source.DelimitedMessageStrings(':','#').Trace("DelimitedMessageStrings");
             var semverResponses = from response in strings
                                  let match = versionResponseExpression.Match(response)
                                  where match.Success
-                                 let versionString = match.Groups["SemVer"].Value.Trim()
+                                 let versionString = match.Groups["SemVer"].Value
                                  where SemanticVersion.IsValid(versionString)
                                  select versionString;
-
-            var semanticVersions = semverResponses
+            semverResponses
                 .Trace("SemVer")
                 .Take(1)
                 .Subscribe(OnNext, OnError, OnCompleted);

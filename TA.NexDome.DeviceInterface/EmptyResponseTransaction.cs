@@ -28,7 +28,9 @@ namespace TA.NexDome.DeviceInterface
         /// <inheritdoc />
         public override void ObserveResponse(IObservable<char> source)
             {
-            var validResponses = source.DelimitedMessageStrings().Where(r => r == expectedResponse);
+            var messages = source.DelimitedMessageStrings()
+                .Trace("Strings");
+            var validResponses = messages.Where(r => r == expectedResponse);
             validResponses.Trace("Ack").Take(1).Subscribe(OnNext, OnError, OnCompleted);
             }
         }

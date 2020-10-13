@@ -26,30 +26,24 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             this.processor = processor;
             }
 
-        public async Task ConfigureShutter(uint maxSpeed, uint rampTime, uint lowVoltsThreshold)
+        public void ConfigureShutter(uint maxSpeed, uint rampTime, uint lowVoltsThreshold)
             {
-            var tasklist = new List<Task>();
-            var autoCancel = new CancellationTokenSource(TimeSpan.FromSeconds(10));
             var speedTransaction =
                 new EmptyResponseTransaction(string.Format(Constants.CmdSetMotorSpeedTemplate, 'S', maxSpeed));
             processor.CommitTransaction(speedTransaction);
-            var speedTask = speedTransaction.WaitForCompletionOrTimeoutAsync(autoCancel.Token);
-            tasklist.Add(speedTask);
+            var speedTask = speedTransaction.WaitForCompletionOrTimeout();
             var accelerationTransaction =
                 new EmptyResponseTransaction(string.Format(Constants.CmdSetRampTimeTemplate, 'S', rampTime));
             processor.CommitTransaction(accelerationTransaction);
-            var accelerationTask = accelerationTransaction.WaitForCompletionOrTimeoutAsync(autoCancel.Token);
-            tasklist.Add(accelerationTask);
+            accelerationTransaction.WaitForCompletionOrTimeout();
             if (lowVoltsThreshold > 0)
                 {
                 var lowVoltsTransaction =
                     new EmptyResponseTransaction(
                         string.Format(Constants.CmdSetLowBatteryVoltsThreshold, lowVoltsThreshold));
                 processor.CommitTransaction(lowVoltsTransaction);
-                var lowVoltsTask = lowVoltsTransaction.WaitForCompletionOrTimeoutAsync(autoCancel.Token);
-                tasklist.Add(lowVoltsTask);
+                lowVoltsTransaction.WaitForCompletionOrTimeout();
                 }
-            await Task.WhenAll(tasklist);
             }
 
         public void RequestHardwareStatus()

@@ -70,6 +70,6 @@ namespace TA.NexDome.DeviceInterface.StateMachine
 
         void SavePersistentSettings();
 
-        Task ConfigureShutter(uint maxSpeed, uint rampTime, uint lowVoltsThreshold);
+        void ConfigureShutter(uint maxSpeed, uint rampTime, uint lowVoltsThreshold);
         }
     }
