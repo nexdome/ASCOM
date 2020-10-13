@@ -165,7 +165,7 @@
       <Version>3.3.4</Version>
     </PackageReference>
     <PackageReference Include="NLog">
-      <Version>4.7.2</Version>
+      <Version>4.7.5</Version>
     </PackageReference>
     <PackageReference Include="NLog.Targets.Seq">
       <Version>1.3.0-beta001</Version>
@@ -174,7 +174,7 @@
       <Version>6.6.15</Version>
     </PackageReference>
     <PackageReference Include="PostSharp.Patterns.Threading">
-      <Version>6.6.11</Version>
+      <Version>6.6.15</Version>
     </PackageReference>
     <PackageReference Include="TA.Ascom.ReactiveCommunications">
       <Version>1.3.0-beta.7</Version>

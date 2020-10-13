@@ -193,6 +193,5 @@ namespace TA.NexDome.Server
             {
             Settings.Default.Reset();
             }
-
         }
     }
