@@ -33,7 +33,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Firmware", "Firmware", "{CDBD7121-F00F-44B7-9F91-21E5DAC97DEE}"
 	ProjectSection(SolutionItems) = preProject
 		Firmware\Rotator-3.3.0.hex = Firmware\Rotator-3.3.0.hex
+		Firmware\Rotator-3.4.0-alpha.9.hex = Firmware\Rotator-3.4.0-alpha.9.hex
 		Firmware\Shutter-3.3.0.hex = Firmware\Shutter-3.3.0.hex
+		Firmware\Shutter-3.4.0-alpha.9.hex = Firmware\Shutter-3.4.0-alpha.9.hex
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TA.NexDome.FirmwareUpdater", "TA.NexDome.FirmwareUpdater\TA.NexDome.FirmwareUpdater.csproj", "{741967C5-9A92-4062-A777-F3118442974C}"

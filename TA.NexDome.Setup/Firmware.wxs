@@ -9,6 +9,12 @@
             <Component Id="cmpShutterFirmware" Guid="{730106BE-1652-4C03-A2C1-F0B57415105F}">
                 <File Id="filShutterFirmware" KeyPath="yes" Source="$(var.SolutionDir)Firmware\Shutter-3.3.0.hex" />
             </Component>
+            <Component Id="cmpRotatorAlphaFirmware" Guid="{DD25FD6C-E081-41FB-BDF3-AB0C17FF2F6A}">
+                <File Id="filRotatorAlphaFirmware" KeyPath="yes" Source="$(var.SolutionDir)Firmware\Rotator-3.4.0-alpha.9.hex" />
+            </Component>
+            <Component Id="cmpShutterAlphaFirmware" Guid="{5DF68483-BF71-427E-8659-A9ED8FA25B6C}">
+                <File Id="filShutterAlphaFirmware" KeyPath="yes" Source="$(var.SolutionDir)Firmware\Shutter-3.4.0-alpha.9.hex" />
+            </Component>
         </ComponentGroup>
   </Fragment>
 </Wix>
