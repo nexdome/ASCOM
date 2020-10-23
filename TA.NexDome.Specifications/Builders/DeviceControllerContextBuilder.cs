@@ -1,36 +1,42 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
-// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
+//
+// Copyright © 2015-2020 Tigra Astronomy, all rights reserved.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
+// You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
+//
+// File: DeviceControllerContextBuilder.cs  Last modified: 2020-07-21@22:40 by Tim Long
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using TA.Ascom.ReactiveCommunications;
+using TA.NexDome.Common;
+using TA.NexDome.DeviceInterface;
+using TA.NexDome.DeviceInterface.StateMachine;
+using TA.NexDome.Specifications.Contexts;
+using TA.NexDome.Specifications.Fakes;
+using TA.Utils.Core.Diagnostics;
+using TA.Utils.Logging.NLog;
 
 namespace TA.NexDome.Specifications.Builders
     {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Linq;
-    using System.Text;
-
-    using TA.Ascom.ReactiveCommunications;
-    using TA.NexDome.DeviceInterface;
-    using TA.NexDome.DeviceInterface.StateMachine;
-    using TA.NexDome.SharedTypes;
-    using TA.NexDome.Specifications.Contexts;
-    using TA.NexDome.Specifications.Fakes;
-
     class DeviceControllerContextBuilder
         {
+        readonly ILog logger = new LoggingService();
+
         public DeviceControllerContextBuilder()
             {
             channelFactory = new ChannelFactory();
             channelFactory.RegisterChannelType(
                 p => p.StartsWith("Fake", StringComparison.InvariantCultureIgnoreCase),
                 connection => new FakeEndpoint(),
-                endpoint => new FakeCommunicationChannel(fakeResponseBuilder.ToString()));
-
-            // channelFactory.RegisterChannelType(
-            // SimulatorEndpoint.IsConnectionStringValid,
-            // SimulatorEndpoint.FromConnectionString,
-            // endpoint => new SimulatorCommunicationsChannel(endpoint as SimulatorEndpoint)
-            // );
+                endpoint => new FakeCommunicationChannel(fakeResponseBuilder.ToString(), logger));
             }
 
         bool channelShouldBeOpen;
@@ -44,13 +50,13 @@ namespace TA.NexDome.Specifications.Builders
         string connectionString = "Fake";
 
         readonly DeviceControllerOptions controllerOptions = new DeviceControllerOptions
-                                                                 {
-                                                                 MaximumFullRotationTime = TimeSpan.FromMinutes(1),
-                                                                 MaximumShutterCloseTime = TimeSpan.FromMinutes(1),
-                                                                 ShutterTickTimeout = TimeSpan.FromSeconds(5),
-                                                                 RotatorTickTimeout = TimeSpan.FromSeconds(5),
-                                                                 HomeAzimuth = 10.0m
-                                                                 };
+            {
+            MaximumFullRotationTime = TimeSpan.FromMinutes(1),
+            MaximumShutterCloseTime = TimeSpan.FromMinutes(1),
+            ShutterTickTimeout = TimeSpan.FromSeconds(5),
+            RotatorTickTimeout = TimeSpan.FromSeconds(5),
+            HomeAzimuth = 10.0m
+            };
 
         PropertyChangedEventHandler propertyChangedAction;
 
@@ -68,27 +74,28 @@ namespace TA.NexDome.Specifications.Builders
             // Build the ControllerStatusFactory
             var statusFactory = new ControllerStatusFactory(timeSource);
 
-            var controllerActions = new RxControllerActions(channel);
-            var controllerStateMachine = new ControllerStateMachine(controllerActions, controllerOptions, timeSource);
+            var fakeTransactionProcessor = new FakeTransactionProcessor(Enumerable.Empty<string>());
+            var controllerActions = new RxControllerActions(channel, fakeTransactionProcessor);
+            var controllerStateMachine =
+                new ControllerStateMachine(controllerActions, controllerOptions, timeSource, this.logger);
             controllerStateMachine.ShutterLimitSwitches = initialShutterState;
 
             // Build the device controller
-            var fakeTransactionProcessor = new FakeTransactionProcessor(Enumerable.Empty<string>());
             var controller = new DeviceController(
                 channel,
                 statusFactory,
                 controllerStateMachine,
                 controllerOptions,
-                fakeTransactionProcessor);
+                fakeTransactionProcessor, logger);
 
             // Assemble the device controller test context
             var context = new DeviceControllerContext
-                              {
-                              Channel = channel,
-                              Controller = controller,
-                              StateMachine = controllerStateMachine,
-                              Actions = controllerActions
-                              };
+                {
+                Channel = channel,
+                Controller = controller,
+                StateMachine = controllerStateMachine,
+                Actions = controllerActions
+                };
 
             // Wire up any Property Changed notifications
             if (propertyChangedAction != null) controller.PropertyChanged += propertyChangedAction;
@@ -103,13 +110,8 @@ namespace TA.NexDome.Specifications.Builders
             return this;
             }
 
-        /// <summary>
-        ///     Start with the state machine initialized and in the Ready state. Implies an open
-        ///     channel.
-        /// </summary>
-        /// <param name="connectionString">
-        ///     The connection string to use when creating and opening the channel.
-        /// </param>
+        /// <summary>Start with the state machine initialized and in the Ready state. Implies an open channel.</summary>
+        /// <param name="connectionString">The connection string to use when creating and opening the channel.</param>
         public DeviceControllerContextBuilder WithStateMachineInitializedAndReady(string connectionString)
             {
             return WithOpenConnection(connectionString);

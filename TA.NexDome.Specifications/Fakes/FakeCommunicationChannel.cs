@@ -1,6 +1,8 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using TA.Utils.Core.Diagnostics;
+
 namespace TA.NexDome.Specifications.Fakes
     {
     using System;
@@ -8,8 +10,6 @@ namespace TA.NexDome.Specifications.Fakes
     using System.Reactive.Linq;
     using System.Reactive.Subjects;
     using System.Text;
-
-    using NLog.Fluent;
 
     using TA.Ascom.ReactiveCommunications;
 
@@ -21,6 +21,7 @@ namespace TA.NexDome.Specifications.Fakes
     /// </summary>
     public class FakeCommunicationChannel : ICommunicationChannel
         {
+        readonly ILog log;
         readonly IObservable<char> receivedCharacters;
 
         readonly Subject<char> receiveChannelSubject = new Subject<char>();
@@ -32,9 +33,11 @@ namespace TA.NexDome.Specifications.Fakes
         ///     Initializes a new instance of the <see cref="SafetyMonitorDriver" /> class.
         /// </summary>
         /// <param name="fakeResponse">Implementation of the injected dependency.</param>
-        public FakeCommunicationChannel(string fakeResponse)
+        /// <param name="logger">The logging service (output will be captured by the test runner)</param>
+        public FakeCommunicationChannel(string fakeResponse, ILog logger)
             {
             Contract.Requires(fakeResponse != null);
+            this.log = logger;
             Endpoint = new InvalidEndpoint();
             Response = fakeResponse;
             receivedCharacters = fakeResponse.ToCharArray().ToObservable();
@@ -79,7 +82,7 @@ namespace TA.NexDome.Specifications.Fakes
 
         public void Send(string txData)
             {
-            Log.Info().Message($"Send: {txData}").Property(nameof(txData), txData).Write();
+            log.Info().Message($"Send: {txData}").Property(nameof(txData), txData).Write();
             sendLog.Append(txData);
             foreach (char c in Response) receiveChannelSubject.OnNext(c);
             }

@@ -1,6 +1,8 @@
 // This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using TA.NexDome.Common;
+using TA.Utils.Core;
 using TA.WinFormsControls;
 
 namespace TA.NexDome.Server
@@ -15,7 +17,6 @@ namespace TA.NexDome.Server
     using System.Windows.Forms;
     using JetBrains.Annotations;
     using TA.NexDome.Server.Properties;
-    using TA.NexDome.SharedTypes;
 
     public partial class ServerStatusDisplay : Form
         {
@@ -59,7 +60,7 @@ namespace TA.NexDome.Server
                                    ShutterLinkStateAnnunciator,
                                    RainAnnunciator,
                                    AtHomeAnnunciator,
-                                   batteryVoltsAnnunciator
+                                   batteryVoltsAnnunciator,
                                    };
             annunciators.ForEach(p => p.Mute = false);
             annunciators.ForEach(p => p.Cadence = CadencePattern.SteadyOn);
@@ -165,6 +166,7 @@ namespace TA.NexDome.Server
             {
             disposableSubscriptions.ForEach(p => p.Dispose());
             disposableSubscriptions.Clear();
+            ConfigureAnnunciators();
             }
 
         /// <summary>
@@ -175,53 +177,92 @@ namespace TA.NexDome.Server
             if (!SharedResources.ConnectionManager.MaybeControllerInstance.Any())
                 return;
             var controller = SharedResources.ConnectionManager.MaybeControllerInstance.Single();
-
-            /* ToDo:
-                         * Add subscriptions to PropertyChanged notifications using this pattern:
-                         *  movingSubscription = controller
-                         *      .GetObservableValueFor(m => m.IsMoving)
-                         *      .ObserveOn(SynchronizationContext.Current)
-                         *      .Subscribe(SetMotorMovingState);
-                         */
+            /*
+             * Add subscriptions to PropertyChanged notifications using this pattern:
+             *  disposableSubscriptions.Add(
+             *      controller.GetObservableValueFor(p => p.PropertyName)
+             *      .ObserveOn(SynchronizationContext.Current)
+             *      .Subscribe(OnNextHandler);
+             */
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.AzimuthMotorActive).ObserveOn(SynchronizationContext.Current)
+                controller.GetObservableValueFor(p => p.AzimuthMotorActive)
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(motorActive => AzimuthMotorAnnunciator.Mute = !motorActive));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.AzimuthDirection).ObserveOn(SynchronizationContext.Current)
+                controller.GetObservableValueFor(p => p.AzimuthDirection)
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(SetRotationDirection));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.AzimuthDegrees).ObserveOn(SynchronizationContext.Current)
+                controller.GetObservableValueFor(p => p.AzimuthDegrees)
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(SetAzimuthPosition));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.ShutterMotorActive).ObserveOn(SynchronizationContext.Current)
+                controller.GetObservableValueFor(p => p.ShutterMotorActive)
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(motorActive => ShutterMotorAnnunciator.Mute = !motorActive));
             disposableSubscriptions.Add(
                 controller.GetObservableValueFor(p => p.ShutterMovementDirection)
                     .ObserveOn(SynchronizationContext.Current).Subscribe(SetShutterDirection));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.ShutterDisposition).ObserveOn(SynchronizationContext.Current)
+                controller.GetObservableValueFor(p => p.ShutterDisposition)
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(SetShutterDisposition));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.ShutterPercentOpen).ObserveOn(SynchronizationContext.Current)
+                controller.GetObservableValueFor(p => p.ShutterPercentOpen)
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(SetShutterPercentOpen));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.ShutterLimitSwitches).ObserveOn(SynchronizationContext.Current)
+                controller.GetObservableValueFor(p => p.ShutterLimitSwitches)
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(SetShutterLimitSwitches));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.ShutterLinkState).ObserveOn(SynchronizationContext.Current)
+                controller.GetObservableValueFor(p => p.ShutterLinkState)
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(SetShutterLinkState));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.AtHome).ObserveOn(SynchronizationContext.Current)
+                controller.GetObservableValueFor(p => p.AtHome)
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(home => AtHomeAnnunciator.Mute = !home));
             disposableSubscriptions.Add(
-                controller.GetPropertyChangedEvents().ObserveOn(SynchronizationContext.Current)
+                controller.GetPropertyChangedEvents()
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(p => clickCommands.ForEach(q => q.CanExecuteChanged())));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.ShutterBatteryVolts).ObserveOn(SynchronizationContext.Current)
+                controller.GetObservableValueFor(p => p.ShutterBatteryVolts)
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(SetBatteryVolts));
             disposableSubscriptions.Add(
-                controller.GetObservableValueFor(p => p.IsRaining).ObserveOn(SynchronizationContext.Current)
+                controller.GetObservableValueFor(p => p.IsRaining)
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(SetRainAlarm));
+            disposableSubscriptions.Add(
+                controller.GetObservableValueFor(p => p.ShutterBatteryChargeState)
+                    .ObserveOn(SynchronizationContext.Current)
+                    .Subscribe(SetBatteryLow));
+            }
+
+        private void SetBatteryLow(BatteryChargeState chargeState)
+            {
+            switch (chargeState)
+                {
+                    case BatteryChargeState.OK:
+                        batteryVoltsAnnunciator.Cadence = CadencePattern.SteadyOn;
+                        batteryVoltsAnnunciator.ActiveColor = Color.DarkSeaGreen;
+                        batteryVoltsBar.ForeColor = Color.DarkSeaGreen;
+                        break;
+                    case BatteryChargeState.Warning:
+                        batteryVoltsAnnunciator.Cadence = CadencePattern.BlinkSlow;
+                        batteryVoltsAnnunciator.ActiveColor = Color.PaleGoldenrod;
+                        batteryVoltsBar.ForeColor = Color.Orange;
+                        break;
+                    case BatteryChargeState.Alarm:
+                        batteryVoltsAnnunciator.Cadence = CadencePattern.BlinkAlarm;
+                        batteryVoltsAnnunciator.ActiveColor = Color.IndianRed;
+                        batteryVoltsBar.ForeColor = Color.Crimson;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(chargeState), chargeState, null);
+                }
             }
 
         private void SetRainAlarm(bool isRaining)
@@ -271,41 +312,12 @@ namespace TA.NexDome.Server
 
         private void SetBatteryVolts(float volts)
             {
-            /*
-             * Annunciator:
-             *      Steady/Green above 50% charge
-             *      SlowFlash/Yellow under 50% charge but above flat
-             *      Alarm/Red below flat voltage.
-             * Progress bar:
-             *      Clip to minimum 10V and maximum 15V
-             *      Colours as for annunciator.
-             */
             float annunciatorValue = volts.Clip(0.0f, 15.0f);
             string formatString = batteryVoltsAnnunciator.Tag.ToString();
             batteryVoltsAnnunciator.Text = string.Format(formatString, annunciatorValue);
             batteryVoltsAnnunciator.Mute = false;
             int barValue = (int)(volts * 10f);
             batteryVoltsBar.Value = barValue.Clip(100, 150);
-            if (volts >= Constants.BatteryHalfChargedVolts)
-                {
-                batteryVoltsAnnunciator.ActiveColor = Color.DarkSeaGreen;
-                batteryVoltsAnnunciator.Cadence = CadencePattern.SteadyOn;
-                batteryVoltsBar.ForeColor = Color.DarkSeaGreen;
-                return;
-                }
-
-            if (volts >= Constants.BatteryFullyDischargedVolts)
-                {
-                batteryVoltsAnnunciator.ActiveColor = Color.PaleGoldenrod;
-                batteryVoltsAnnunciator.Cadence = CadencePattern.BlinkFast;
-                batteryVoltsBar.ForeColor = Color.Orange;
-                return;
-                }
-
-            batteryVoltsAnnunciator.ActiveColor = Color.Crimson;
-            batteryVoltsAnnunciator.Cadence = CadencePattern.BlinkAlarm;
-            batteryVoltsBar.ForeColor = Color.Crimson;
-            if (volts <= Constants.BatteryFullyDischargedVolts) batteryVoltsBar.Value = batteryVoltsBar.Maximum;
             }
 
         private void SetShutterDisposition(ShutterDisposition disposition)

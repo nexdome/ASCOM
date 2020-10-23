@@ -1,10 +1,10 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using TA.NexDome.Common;
+
 namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
     {
-    using TA.NexDome.SharedTypes;
-
     internal class OfflineState : ShutterStateBase
         {
         /// <inheritdoc />
@@ -27,13 +27,10 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
             {
             base.LinkStateReceived(state);
             if (state == ShutterLinkState.Online)
+                {
+                Machine.ConfigureShutter();
                 Machine.TransitionToState(new RequestStatusState(Machine));
-            }
-
-        /// <inheritdoc />
-        public override void OnExit()
-            {
-            base.OnExit();
+                }
             }
         }
     }

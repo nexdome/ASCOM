@@ -1,6 +1,8 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using System.Threading.Tasks;
+
 namespace TA.NexDome.DeviceInterface.StateMachine
     {
     public interface IControllerActions
@@ -67,5 +69,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         void SetHomeSensorPosition(int stepsFromTrueNorth);
 
         void SavePersistentSettings();
+
+        void ConfigureShutter(uint maxSpeed, uint rampTime, uint lowVoltsThreshold);
         }
     }

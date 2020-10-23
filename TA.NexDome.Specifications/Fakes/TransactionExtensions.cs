@@ -1,6 +1,8 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using TA.Utils.Core;
+
 namespace TA.NexDome.Specifications.Fakes
     {
     using System;
@@ -23,7 +25,7 @@ namespace TA.NexDome.Specifications.Fakes
         /// <seealso cref="SimulateCompletionWithResponse" />
         public static void SetResponse(this DeviceTransaction transaction, [CanBeNull] string response)
             {
-            var maybeResponse = response == null ? Maybe<string>.Empty : new Maybe<string>(response);
+            var maybeResponse = Maybe<string>.From(response);
             var transactionType = typeof(DeviceTransaction);
             var responseProperty = transactionType.GetProperty("Response");
             responseProperty.SetValue(

@@ -24,7 +24,15 @@ namespace TA.NexDome.Server
             this.control = control;
             this.execute = execute;
             this.canExecute = canExecute;
-            control.Click += Execute;
+            switch (control)
+                {
+                case CheckBox checkbox:
+                    checkbox.CheckedChanged += Execute;
+                    break;
+                default:
+                    control.Click += Execute;
+                    break;
+                }
             }
 
         public void Execute(object sender, EventArgs eventArgs) => execute.Invoke();

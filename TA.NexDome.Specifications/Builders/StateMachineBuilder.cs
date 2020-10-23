@@ -1,6 +1,9 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using TA.NexDome.Common;
+using TA.Utils.Logging.NLog;
+
 namespace TA.NexDome.Specifications.Builders
     {
     using System;
@@ -12,7 +15,6 @@ namespace TA.NexDome.Specifications.Builders
     using TA.NexDome.DeviceInterface.StateMachine;
     using TA.NexDome.DeviceInterface.StateMachine.Rotator;
     using TA.NexDome.DeviceInterface.StateMachine.Shutter;
-    using TA.NexDome.SharedTypes;
     using TA.NexDome.Specifications.Contexts;
 
     using RequestStatusState = TA.NexDome.DeviceInterface.StateMachine.Rotator.RequestStatusState;
@@ -48,10 +50,11 @@ namespace TA.NexDome.Specifications.Builders
         SensorState shutterSensorState = SensorState.Indeterminate;
 
         int shutterStepPosition;
+        LoggingService logger = new LoggingService();
 
         internal StateMachineContext Build()
             {
-            var machine = new ControllerStateMachine(actions, deviceControllerOptions, new SystemDateTimeUtcClock());
+            var machine = new ControllerStateMachine(actions, deviceControllerOptions, new SystemDateTimeUtcClock(), logger);
             machine.ShutterStepPosition = shutterStepPosition;
             machine.ShutterLimitSwitches = shutterSensorState;
             var context = new StateMachineContext { Actions = actions, Machine = machine };

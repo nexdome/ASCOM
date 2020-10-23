@@ -1,12 +1,13 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using TA.NexDome.Common;
+
 namespace TA.NexDome.Specifications.DeviceInterface.Behaviours
     {
     using Machine.Specifications;
 
     using TA.NexDome.DeviceInterface.StateMachine.Shutter;
-    using TA.NexDome.SharedTypes;
 
     [Behaviors]
     class a_stopped_shutter : state_machine_behaviour

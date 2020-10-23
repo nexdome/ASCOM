@@ -1,18 +1,25 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
-// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
+//
+// Copyright © 2015-2020 Tigra Astronomy, all rights reserved.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
+// You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
+//
+// File: ShutterStateSpecs.cs  Last modified: 2020-07-24@13:17 by Tim Long
+
+using FakeItEasy;
+using Machine.Specifications;
+using TA.NexDome.Common;
+using TA.NexDome.DeviceInterface.StateMachine;
+using TA.NexDome.DeviceInterface.StateMachine.Shutter;
+using TA.NexDome.Specifications.Contexts;
+using TA.NexDome.Specifications.DeviceInterface.Behaviours;
 
 namespace TA.NexDome.Specifications.DeviceInterface
     {
-    using FakeItEasy;
-
-    using Machine.Specifications;
-
-    using TA.NexDome.DeviceInterface.StateMachine;
-    using TA.NexDome.DeviceInterface.StateMachine.Shutter;
-    using TA.NexDome.SharedTypes;
-    using TA.NexDome.Specifications.Contexts;
-    using TA.NexDome.Specifications.DeviceInterface.Behaviours;
-
     [Subject(typeof(OfflineState), "startup")]
     class when_shutter_is_offline : with_state_machine_context
         {
@@ -264,11 +271,7 @@ namespace TA.NexDome.Specifications.DeviceInterface
 
         Because of = () => testableState.TriggerWatchdogTimeout();
 
-        It should_perform_emergency_stop = () =>
-            A.CallTo(() => Machine.ControllerActions.PerformEmergencyStop()).MustHaveHappenedOnceExactly();
-
-        It should_request_status = () =>
-            A.CallTo(() => Machine.ControllerActions.RequestShutterStatus()).MustHaveHappenedTwiceExactly();
+        It should_transition_to_offline_state = () => Machine.ShutterState.ShouldBeOfExactType<OfflineState>();
 
         static TestableRequestStatusState testableState;
 

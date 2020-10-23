@@ -1,15 +1,15 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using TA.NexDome.Common;
+
 namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
     {
     using System;
 
-    using TA.NexDome.SharedTypes;
-
     internal class RequestStatusState : ShutterStateBase
         {
-        private static readonly TimeSpan StatusReceiveTimeout = TimeSpan.FromSeconds(4);
+        private static readonly TimeSpan StatusReceiveTimeout = TimeSpan.FromSeconds(10);
 
         /// <inheritdoc />
         public RequestStatusState(ControllerStateMachine machine)
@@ -39,8 +39,9 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
             {
             base.HandleTimeout();
             ResetTimeout(StatusReceiveTimeout);
-            Machine.ControllerActions.PerformEmergencyStop();
-            Machine.ControllerActions.RequestShutterStatus();
+            //Machine.ControllerActions.PerformEmergencyStop();
+            //Machine.ControllerActions.RequestShutterStatus();
+            Machine.TransitionToState(new OfflineState(Machine));
             }
         }
     }

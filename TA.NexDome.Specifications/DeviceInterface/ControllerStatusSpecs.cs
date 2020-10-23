@@ -1,6 +1,8 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using TA.NexDome.Common;
+
 #pragma warning disable 0169    // Field not used, triggers on Behaves_like<>
 
 namespace TA.NexDome.Specifications.DeviceInterface
@@ -8,8 +10,6 @@ namespace TA.NexDome.Specifications.DeviceInterface
     using System;
 
     using Machine.Specifications;
-
-    using TA.NexDome.SharedTypes;
     using TA.NexDome.Specifications.Fakes;
 
     [Ignore("Deprecated code")]

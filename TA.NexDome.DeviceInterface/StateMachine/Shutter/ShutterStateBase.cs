@@ -1,23 +1,34 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
-// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
+//
+// Copyright © 2015-2020 Tigra Astronomy, all rights reserved.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
+// You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
+//
+// File: ShutterStateBase.cs  Last modified: 2020-07-21@21:26 by Tim Long
+
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using TA.NexDome.Common;
+using TA.Utils.Core;
+using TA.Utils.Core.Diagnostics;
 
 namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
     {
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    using NLog.Fluent;
-
-    using TA.NexDome.SharedTypes;
-
     internal class ShutterStateBase : IShutterState
         {
         private CancellationTokenSource timeoutCancellation;
+        protected readonly ILog Log;
+
 
         protected ShutterStateBase(ControllerStateMachine machine)
             {
             Machine = machine;
+            Log = machine.Logger;
             }
 
         protected ControllerStateMachine Machine { get; }
@@ -66,9 +77,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
         public virtual void EncoderTickReceived(int encoderPosition) =>
             Log.Debug().Message("Shutter position {position}", encoderPosition).Write();
 
-        /// <summary>
-        ///     Cancels any existing timeout and starts a new one with the specified time interval.
-        /// </summary>
+        /// <summary>Cancels any existing timeout and starts a new one with the specified time interval.</summary>
         /// <param name="timeout">The timeout interval.</param>
         protected void ResetTimeout(TimeSpan timeout)
             {
@@ -83,10 +92,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
         ///     <see cref="CancelTimeout" /> is called.
         /// </summary>
         /// <param name="timeout">The time span before the timeout handler should be called.</param>
-        /// <param name="cancel">
-        ///     A <see cref="CancellationToken" /> that can be used to cancel the
-        ///     timeout.
-        /// </param>
+        /// <param name="cancel">A <see cref="CancellationToken" /> that can be used to cancel the timeout.</param>
         private async void ResetTimeoutAsync(TimeSpan timeout, CancellationToken cancel)
             {
             /*
@@ -112,8 +118,8 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
             }
 
         /// <summary>
-        ///     Called when the state's timeout expires. Derived classes that wish to handle a
-        ///     timeout should override this method.
+        ///     Called when the state's timeout expires. Derived classes that wish to handle a timeout should
+        ///     override this method.
         /// </summary>
         protected virtual void HandleTimeout()
             {
@@ -121,12 +127,9 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Shutter
             }
 
         /// <summary>
-        ///     Cancels the state's timeout. Note that because cancellation is cooperative, it is
-        ///     not guaranteed that cancellation will be successful.
+        ///     Cancels the state's timeout. Note that because cancellation is cooperative, it is not
+        ///     guaranteed that cancellation will be successful.
         /// </summary>
-        protected void CancelTimeout()
-            {
-            timeoutCancellation?.Cancel();
-            }
+        protected void CancelTimeout() => timeoutCancellation?.Cancel();
         }
     }
