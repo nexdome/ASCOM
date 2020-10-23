@@ -15,7 +15,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace TA.NexDome.SharedTypes
+namespace TA.NexDome.Common
     {
     /// <summary>A factory class that creates immutable instances of various types of status object.</summary>
     public sealed class ControllerStatusFactory
@@ -79,7 +79,7 @@ namespace TA.NexDome.SharedTypes
 
         /// <summary>
         ///     An immutable snapshot of the rotator status at a moment in time. Implements the
-        ///     <see cref="T:TA.NexDome.SharedTypes.IRotatorStatus" />
+        ///     <see cref="T:TA.NexDome.Common.IRotatorStatus" />
         /// </summary>
         private class RotatorStatus : IRotatorStatus
             {

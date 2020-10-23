@@ -1,6 +1,8 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using TA.NexDome.Common;
+
 namespace TA.NexDome.DeviceInterface
     {
     using System;
@@ -11,7 +13,6 @@ namespace TA.NexDome.DeviceInterface
 
     using TA.Ascom.ReactiveCommunications;
     using TA.Ascom.ReactiveCommunications.Diagnostics;
-    using TA.NexDome.SharedTypes;
 
     internal static class ObservableExtensions
         {

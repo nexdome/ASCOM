@@ -14,7 +14,7 @@ using System;
 using JetBrains.Annotations;
 using TA.Utils.Core.Diagnostics;
 
-namespace TA.NexDome.SharedTypes
+namespace TA.NexDome.Common
     {
     public static class LogHelper
         {

@@ -1,6 +1,7 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using TA.NexDome.Common;
 using TA.Utils.Logging.NLog;
 
 namespace TA.NexDome.Specifications.Builders
@@ -14,7 +15,6 @@ namespace TA.NexDome.Specifications.Builders
     using TA.NexDome.DeviceInterface.StateMachine;
     using TA.NexDome.DeviceInterface.StateMachine.Rotator;
     using TA.NexDome.DeviceInterface.StateMachine.Shutter;
-    using TA.NexDome.SharedTypes;
     using TA.NexDome.Specifications.Contexts;
 
     using RequestStatusState = TA.NexDome.DeviceInterface.StateMachine.Rotator.RequestStatusState;

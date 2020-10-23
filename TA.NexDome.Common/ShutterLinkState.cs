@@ -3,7 +3,7 @@
 
 using TA.Utils.Core;
 
-namespace TA.NexDome.SharedTypes
+namespace TA.NexDome.Common
     {
     public enum ShutterLinkState
         {

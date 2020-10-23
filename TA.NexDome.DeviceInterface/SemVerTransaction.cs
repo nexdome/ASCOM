@@ -12,7 +12,6 @@ namespace TA.NexDome.DeviceInterface
 
     using TA.Ascom.ReactiveCommunications;
     using TA.Ascom.ReactiveCommunications.Diagnostics;
-    using TA.NexDome.SharedTypes;
 
     internal class SemVerTransaction : DeviceTransaction
         {

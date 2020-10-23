@@ -1,12 +1,11 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using System;
 using TA.Utils.Core;
 
-namespace TA.NexDome.SharedTypes
+namespace TA.NexDome.Common
     {
-    using System;
-
     public interface IHardwareStatus
         {
         /// <summary>

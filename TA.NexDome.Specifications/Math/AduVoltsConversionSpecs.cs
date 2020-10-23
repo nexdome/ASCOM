@@ -1,6 +1,5 @@
 ﻿using Machine.Specifications;
 using TA.NexDome.DeviceInterface;
-using TA.NexDome.SharedTypes;
 
 namespace TA.NexDome.Specifications.Math
     {

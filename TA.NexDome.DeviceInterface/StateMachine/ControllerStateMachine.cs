@@ -18,8 +18,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using PostSharp.Patterns.Model;
+using TA.NexDome.Common;
 using TA.NexDome.DeviceInterface.StateMachine.Rotator;
-using TA.NexDome.SharedTypes;
 using TA.Utils.Core;
 using TA.Utils.Core.Diagnostics;
 

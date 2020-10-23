@@ -105,13 +105,13 @@
     <None Include="TA.NexDome.Specifications.csproj.DotSettings" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TA.NexDome.Common\TA.NexDome.Common.csproj">
+      <Project>{7044532A-C68E-4773-AB7E-F709ACF85E44}</Project>
+      <Name>TA.NexDome.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TA.NexDome.DeviceInterface\TA.NexDome.DeviceInterface.csproj">
       <Project>{c0e526b9-e19d-42b4-8aee-08a775d9e0b6}</Project>
       <Name>TA.NexDome.DeviceInterface</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TA.NexDome.SharedTypes\TA.NexDome.SharedTypes.csproj">
-      <Project>{1224a06b-5a84-452f-af63-cf8ef7d6713e}</Project>
-      <Name>TA.NexDome.SharedTypes</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

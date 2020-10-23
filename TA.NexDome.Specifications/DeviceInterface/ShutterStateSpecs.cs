@@ -12,9 +12,9 @@
 
 using FakeItEasy;
 using Machine.Specifications;
+using TA.NexDome.Common;
 using TA.NexDome.DeviceInterface.StateMachine;
 using TA.NexDome.DeviceInterface.StateMachine.Shutter;
-using TA.NexDome.SharedTypes;
 using TA.NexDome.Specifications.Contexts;
 using TA.NexDome.Specifications.DeviceInterface.Behaviours;
 

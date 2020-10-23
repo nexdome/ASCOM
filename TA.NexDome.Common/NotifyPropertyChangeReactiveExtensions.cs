@@ -1,15 +1,15 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
-namespace TA.NexDome.SharedTypes
-    {
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics.Contracts;
-    using System.Linq.Expressions;
-    using System.Reactive;
-    using System.Reactive.Linq;
+using System;
+using System.ComponentModel;
+using System.Diagnostics.Contracts;
+using System.Linq.Expressions;
+using System.Reactive;
+using System.Reactive.Linq;
 
+namespace TA.NexDome.Common
+    {
     public static class NotifyPropertyChangeReactiveExtensions
         {
         // Returns the values of property (an Expression) as they
@@ -41,7 +41,7 @@ namespace TA.NexDome.SharedTypes
 
             var accessor = property.Compile();
 
-            return source.GetPropertyChangedEvents().Where(x => x.EventArgs.PropertyName == propertyName)
+            return GetPropertyChangedEvents(source).Where(x => x.EventArgs.PropertyName == propertyName)
                 .Select(x => accessor(source)).StartWith(accessor(source));
             }
 
@@ -62,7 +62,7 @@ namespace TA.NexDome.SharedTypes
             where TSource : INotifyPropertyChanged
             {
             Contract.Requires(property != null);
-            return source.GetObservableValueFor(property).Subscribe(observer);
+            return GetObservableValueFor<TSource, TValue>(source, property).Subscribe(observer);
             }
 
         public static IDisposable Subscribe<TSource, TValue>(
@@ -72,7 +72,7 @@ namespace TA.NexDome.SharedTypes
             Action onCompleted)
             where TSource : INotifyPropertyChanged
             {
-            return source.GetObservableValueFor(property).Subscribe(observer, onCompleted);
+            return GetObservableValueFor<TSource, TValue>(source, property).Subscribe(observer, onCompleted);
             }
 
         public static IDisposable Subscribe<TSource, TValue>(
@@ -82,7 +82,7 @@ namespace TA.NexDome.SharedTypes
             Action<Exception> onException)
             where TSource : INotifyPropertyChanged
             {
-            return source.GetObservableValueFor(property).Subscribe(observer, onException);
+            return GetObservableValueFor<TSource, TValue>(source, property).Subscribe(observer, onException);
             }
 
         public static IDisposable Subscribe<TSource, TValue>(
@@ -93,7 +93,7 @@ namespace TA.NexDome.SharedTypes
             Action onCompleted)
             where TSource : INotifyPropertyChanged
             {
-            return source.GetObservableValueFor(property).Subscribe(observer, onException, onCompleted);
+            return GetObservableValueFor<TSource, TValue>(source, property).Subscribe(observer, onException, onCompleted);
             }
         }
     }

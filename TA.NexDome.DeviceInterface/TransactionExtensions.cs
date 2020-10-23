@@ -16,7 +16,7 @@ using System.Text;
 using JetBrains.Annotations;
 using TA.Ascom.ReactiveCommunications;
 using TA.Ascom.ReactiveCommunications.Diagnostics;
-using TA.NexDome.SharedTypes;
+using TA.NexDome.Common;
 using TA.Utils.Core.Diagnostics;
 
 namespace TA.NexDome.DeviceInterface

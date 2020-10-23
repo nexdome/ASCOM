@@ -13,7 +13,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using TA.NexDome.SharedTypes;
+using TA.NexDome.Common;
 using TA.Utils.Core;
 using TA.Utils.Core.Diagnostics;
 

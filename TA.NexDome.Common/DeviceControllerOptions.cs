@@ -1,10 +1,10 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
-namespace TA.NexDome.SharedTypes
-    {
-    using System;
+using System;
 
+namespace TA.NexDome.Common
+    {
     /// <summary>
     ///     Data transfer object for passing configuration to the device controller
     /// </summary>

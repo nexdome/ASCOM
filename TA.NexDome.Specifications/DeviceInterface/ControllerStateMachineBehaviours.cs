@@ -1,6 +1,8 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using TA.NexDome.Common;
+
 #pragma warning disable CS0649
 
 namespace TA.NexDome.Specifications.DeviceInterface
@@ -10,7 +12,6 @@ namespace TA.NexDome.Specifications.DeviceInterface
     using Machine.Specifications;
 
     using TA.NexDome.DeviceInterface.StateMachine;
-    using TA.NexDome.SharedTypes;
 
     [Behaviors]
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]

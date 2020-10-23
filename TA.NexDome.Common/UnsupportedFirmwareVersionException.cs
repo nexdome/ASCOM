@@ -1,13 +1,12 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using System;
+using System.Runtime.Serialization;
 using TA.Utils.Core;
 
-namespace TA.NexDome.SharedTypes
+namespace TA.NexDome.Common
     {
-    using System;
-    using System.Runtime.Serialization;
-
     /// <summary>
     ///     An exception that is thrown when the driver detects a firmware version in the
     ///     Intelligent Handset that it cannot properly support.

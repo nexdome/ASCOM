@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using PostSharp.Aspects.Advices;
+using TA.NexDome.Common;
 
 namespace TA.NexDome.DeviceInterface.StateMachine
     {
@@ -13,7 +14,6 @@ namespace TA.NexDome.DeviceInterface.StateMachine
     using System.Text;
 
     using TA.Ascom.ReactiveCommunications;
-    using TA.NexDome.SharedTypes;
 
     public class RxControllerActions : IControllerActions
         {

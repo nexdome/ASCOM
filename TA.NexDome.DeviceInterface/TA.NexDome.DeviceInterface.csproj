@@ -87,12 +87,11 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TA.NexDome.SharedTypes\TA.NexDome.SharedTypes.csproj">
-      <Project>{1224a06b-5a84-452f-af63-cf8ef7d6713e}</Project>
-      <Name>TA.NexDome.SharedTypes</Name>
+    <ProjectReference Include="..\TA.NexDome.Common\TA.NexDome.Common.csproj">
+      <Project>{7044532A-C68E-4773-AB7E-F709ACF85E44}</Project>
+      <Name>TA.NexDome.Common</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="..\TA.NexDome.SharedCode\TA.NexDome.SharedCode.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

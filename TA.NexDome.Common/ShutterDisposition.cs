@@ -1,7 +1,7 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
-namespace TA.NexDome.SharedTypes
+namespace TA.NexDome.Common
     {
     public enum ShutterDisposition
         {

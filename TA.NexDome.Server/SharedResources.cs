@@ -13,8 +13,8 @@
 using System;
 using System.Windows.Forms;
 using Ninject;
+using TA.NexDome.Common;
 using TA.NexDome.Server.Properties;
-using TA.NexDome.SharedTypes;
 using TA.Utils.Core.Diagnostics;
 
 namespace TA.NexDome.Server
