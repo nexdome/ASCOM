@@ -4,13 +4,13 @@ branches:
   feature:
     tag: alpha
   develop:
-    tag: beta
+    tag: alpha
   hotfix:
     tag: hotfix
   master: {}
   support: {}
   release:
-    tag: rc
+    tag: beta
   pull-request:
     tag: integration
 ignore:
