@@ -9,6 +9,10 @@
               KeyPath="yes" />
         <File Id="filNLogConfig" Source="$(var.AscomServer.TargetDir)NLog.config" Vital="no" />
       </Component>
+      <Component Id="cmpNLogTargetsSeq" Directory="INSTALLDIRECTORY" Guid="*" Win64="no">
+        <File Id="filNLogTargetsSeq" Source="$(var.AscomServer.TargetDir)NLog.Targets.Seq.dll" Vital="yes"
+              KeyPath="yes" />
+      </Component>
     </ComponentGroup>
   </Fragment>
 </Wix>

@@ -13,6 +13,12 @@
       <Component Id="cmpSysValueTuple" Directory="INSTALLDIRECTORY" Guid="*" Win64="no">
         <File Id="filSysValueTupleDll" Source="$(var.AscomServer.TargetDir)System.ValueTuple.dll" Vital="yes" KeyPath="yes" />
       </Component>
+      <Component Id="cmpSysIoPorts" Directory="INSTALLDIRECTORY" Guid="*" Win64="no">
+        <File Id="filSysIoPortsDll" Source="$(var.AscomServer.TargetDir)System.IO.Ports.dll" Vital="yes" KeyPath="yes" />
+      </Component>
+      <Component Id="cmpSysTextCodePages" Directory="INSTALLDIRECTORY" Guid="*" Win64="no">
+        <File Id="filSysTextCodePagesDll" Source="$(var.AscomServer.TargetDir)System.Text.Encoding.CodePages.dll" Vital="yes" KeyPath="yes" />
+      </Component>
     </ComponentGroup>
   </Fragment>
 </Wix>
