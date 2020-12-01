@@ -27,6 +27,12 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         void RotateToAzimuthDegrees(double azimuth);
 
         /// <summary>
+        ///     Requests that the dome sync its current position to the specified target position,
+        ///     measured from North clockwise.
+        /// </summary>
+        void SyncRotatorToStepPosition(int stepPosition);
+
+        /// <summary>
         ///     Action: requests that the dome is rotated to the home position.
         /// </summary>
         void RotateToHomePosition();
