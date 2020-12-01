@@ -295,6 +295,15 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             TransitionToState(new RequestStatusState(this));
             }
 
+        public void SyncAzimuth(double azimuth)
+            {
+            Log.Info().Message("Sync rotator azimuth to {azimuth}", azimuth).Write();
+            decimal ticksPerDegree = DomeCircumference / 360.0m;
+            decimal syncPosition = (decimal)azimuth * ticksPerDegree;
+            ControllerActions.SyncRotatorAzimuth((int)syncPosition);
+            TransitionToState(new RequestStatusState(this));
+            }
+
         public void SavePersistentSettings()
             {
             Logger.Info("Saving persistent settings").Write();
