@@ -30,40 +30,49 @@ namespace TA.PostSharp.Aspects
     public sealed class TraceWithArgumentsAttribute : OnMethodBoundaryAspect
         {
         [NonSerialized] private static int indent;
-        [NonSerialized] private readonly LogSeverity logSeverity;
+        [NonSerialized] private readonly LogSeverity logActionSeverity;
+        [NonSerialized] private readonly LogSeverity logPropertyReadSeverity;
         [NonSerialized] private string enteringMessage;
         [NonSerialized] private string exitingMessage;
         [NonSerialized] private string loggerName;
+        [NonSerialized] private bool isPropertyRead;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="TraceWithArgumentsAttribute" /> class.
         /// </summary>
-        /// <param name="level">The log severity at which to log. Optional, default: <see cref="LogSeverity.Trace"/></param>
-        public TraceWithArgumentsAttribute(LogSeverity level = LogSeverity.Trace) => logSeverity = level;
-
-        private IFluentLogBuilder GetLogBuilder(string name)
+        /// <param name="actionSeverity">The log severity of action methods and property writes.</param>
+        /// <param name="readonlySeverity">The log severity of property reads.</param>
+        public TraceWithArgumentsAttribute(LogSeverity actionSeverity = LogSeverity.Info, LogSeverity readonlySeverity= LogSeverity.Trace)
             {
+            logActionSeverity = actionSeverity;
+            logPropertyReadSeverity = readonlySeverity;
+            }
+
+        private IFluentLogBuilder GetLogBuilder()
+            {
+            var logSeverity = isPropertyRead ? logPropertyReadSeverity : logActionSeverity;
             var logService = new LoggingService();
             // ReSharper disable ExplicitCallerInfoArgument
             switch (logSeverity)
                 {
                     case LogSeverity.None:
                     case LogSeverity.Trace:
-                        return logService.Trace(name);
+                        return logService.Trace(loggerName);
                     case LogSeverity.Debug:
-                        return logService.Debug(name);
+                        return logService.Debug(loggerName);
                     case LogSeverity.Info:
-                        return logService.Info(name);
+                        return logService.Info(loggerName);
                     case LogSeverity.Warn:
-                        return logService.Warn(name);
+                        return logService.Warn(loggerName);
                     case LogSeverity.Error:
-                        return logService.Error(name);
+                        return logService.Error(loggerName);
                     case LogSeverity.Fatal:
-                        return logService.Fatal(name);
+                        return logService.Fatal(loggerName);
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
             }
+
         /// <summary>
         ///     Method executed <b>before</b> the body of methods to which this aspect is applied.
         /// </summary>
@@ -77,8 +86,10 @@ namespace TA.PostSharp.Aspects
             {
             base.OnEntry(args);
             var useIndent = Interlocked.Increment(ref indent);
-            LogMethodEntryWithParameters(args, useIndent);
+            var log = GetLogBuilder();
+            LogMethodEntryWithParameters(log, args, useIndent);
             }
+
 
         /// <summary>
         ///     Method executed <b>after</b> the body of methods to which this aspect is applied,
@@ -92,7 +103,8 @@ namespace TA.PostSharp.Aspects
         public override void OnExit(MethodExecutionArgs args)
             {
             base.OnExit(args);
-            LogMethodExit(args, indent);
+            var log = GetLogBuilder();
+            LogMethodExit(log, args, indent);
             Interlocked.Decrement(ref indent);
             }
 
@@ -107,11 +119,11 @@ namespace TA.PostSharp.Aspects
             loggerName = method.Name;
             enteringMessage = "Enter " + loggerName + '(';
             exitingMessage = "Exit " + loggerName + "()";
+            isPropertyRead = method.IsSpecialName && loggerName.StartsWith("get_");
             }
 
-        private void LogMethodEntryWithParameters(MethodExecutionArgs args, int indent = 0)
+        private void LogMethodEntryWithParameters(IFluentLogBuilder log, MethodExecutionArgs args, int indent = 0)
             {
-            var log = GetLogBuilder(loggerName);
             var builder = new StringBuilder();
             if (indent < 0) indent = 0;
             builder.Append(' ', indent);
@@ -138,9 +150,8 @@ namespace TA.PostSharp.Aspects
             log.Message(builder.ToString()).Write();
             }
 
-        private void LogMethodExit(MethodExecutionArgs args, int indent = 0)
+        private void LogMethodExit(IFluentLogBuilder log, MethodExecutionArgs args, int indent = 0)
             {
-            var log = GetLogBuilder(loggerName);
             var builder = new StringBuilder();
             if (indent < 0) indent = 0;
             builder.Append(' ', indent);
