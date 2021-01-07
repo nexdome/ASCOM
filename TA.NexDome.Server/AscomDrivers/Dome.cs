@@ -84,7 +84,7 @@ namespace TA.NexDome.Server.AscomDrivers
         public bool CanSlave => false;
 
         /// <inheritdoc />
-        public bool CanSyncAzimuth => false;
+        public bool CanSyncAzimuth => true;
 
         /// <inheritdoc />
         public bool Connected
@@ -274,7 +274,16 @@ namespace TA.NexDome.Server.AscomDrivers
         public void SlewToAltitude(double altitude) => throw MethodNotImplemented();
 
         /// <inheritdoc />
-        public void SyncToAzimuth(double Azimuth) => throw MethodNotImplemented();
+        [MustBeConnected]
+        public void SyncToAzimuth(double azimuth)
+            {
+            if (azimuth < 0.0 || azimuth >= 360.0)
+                throw new InvalidValueException(
+                    nameof(SyncToAzimuth),
+                    azimuth.ToString(),
+                    "Expected 0.0 <= azimuth < 360.0");
+            controller?.SyncAzimuth(azimuth);
+            }
 
         private Exception MethodNotImplemented([CallerMemberName] string method = "")
             {

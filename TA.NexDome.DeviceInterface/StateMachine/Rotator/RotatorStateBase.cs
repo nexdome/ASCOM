@@ -56,6 +56,10 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Rotator
             Log.Debug().Message("Rotate to azimuth {azimuth}", azimuth).Write();
 
         /// <inheritdoc />
+        public virtual void SyncRotatorToStepPosition(int targetPosition) =>
+            Log.Debug().Message("Sync rotator to step position {targetPosition}", targetPosition).Write();
+
+        /// <inheritdoc />
         public virtual void RotateToStepPosition(int targetPosition) =>
             Log.Debug().Message("Rotate to position {position}", targetPosition).Write();
 
