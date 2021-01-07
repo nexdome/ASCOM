@@ -33,18 +33,16 @@
     </bal:Condition>
 
     <Chain>
-      <!-- Install .Net Framework 4.7.2 if necessary -->
-      <PackageGroupRef Id="NetFx472Web"/>
+      <!-- Install .Net Framework 4.8 if necessary -->
+      <PackageGroupRef Id="NetFx48Web"/>
       <RollbackBoundary Vital="yes" />
 
       <!-- Install Arduino serial port drivers -->
       <PackageGroupRef Id="pgArduinoSerialDrivers"/>
       <RollbackBoundary />
 
-
       <!-- Install the NexDome Constrol System ASCOM server -->
       <PackageGroupRef Id="pgNexDomeAscomServer"/>
-
     </Chain>
 	</Bundle>
 </Wix>

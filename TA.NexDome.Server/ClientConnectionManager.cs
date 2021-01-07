@@ -56,6 +56,7 @@ namespace TA.NexDome.Server
             MaybeControllerInstance = Maybe<DeviceController>.Empty;
             }
 
+        [Reference]
         internal List<ClientStatus> Clients { get; }
 
         /// <summary>Gets the number of connected clients.</summary>
@@ -66,6 +67,7 @@ namespace TA.NexDome.Server
 
         /// <summary>Gets the controller instance if it has been created.</summary>
         /// <value>The controller instance.</value>
+        [Reference]
         internal Maybe<DeviceController> MaybeControllerInstance
             {
             get;

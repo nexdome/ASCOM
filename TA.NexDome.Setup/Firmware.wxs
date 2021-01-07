@@ -3,17 +3,11 @@
 	<Fragment>
     <DirectoryRef Id="FIRMWAREUTILS" />
     <ComponentGroup Id="cgFirmware" Directory="FIRMWAREUTILS">
-            <Component Id="cmpRotatorFirmware" Guid="{F5C76E87-7957-4E62-B2A8-EC7C5949BECD}">
-                <File Id="filRotatorFirmware" KeyPath="yes" Source="$(var.SolutionDir)Firmware\Rotator-3.3.0.hex" />
+            <Component Id="cmpRotatorFirmware" Guid="{6B942DEB-FB65-4F2B-B515-4064F7AB32BD}">
+                <File Id="filRotatorFirmware" KeyPath="yes" Source="$(var.SolutionDir)Firmware\Rotator-4.0.0-beta.44.hex" />
             </Component>
-            <Component Id="cmpShutterFirmware" Guid="{730106BE-1652-4C03-A2C1-F0B57415105F}">
-                <File Id="filShutterFirmware" KeyPath="yes" Source="$(var.SolutionDir)Firmware\Shutter-3.3.0.hex" />
-            </Component>
-            <Component Id="cmpRotatorAlphaFirmware" Guid="{DD25FD6C-E081-41FB-BDF3-AB0C17FF2F6A}">
-                <File Id="filRotatorAlphaFirmware" KeyPath="yes" Source="$(var.SolutionDir)Firmware\Rotator-3.4.0-alpha.9.hex" />
-            </Component>
-            <Component Id="cmpShutterAlphaFirmware" Guid="{5DF68483-BF71-427E-8659-A9ED8FA25B6C}">
-                <File Id="filShutterAlphaFirmware" KeyPath="yes" Source="$(var.SolutionDir)Firmware\Shutter-3.4.0-alpha.9.hex" />
+            <Component Id="cmpShutterFirmware" Guid="{80FA6B13-059D-4AEE-B556-A667046AE2B5}">
+                <File Id="filShutterFirmware" KeyPath="yes" Source="$(var.SolutionDir)Firmware\Shutter-4.0.0-beta.44.hex" />
             </Component>
         </ComponentGroup>
   </Fragment>

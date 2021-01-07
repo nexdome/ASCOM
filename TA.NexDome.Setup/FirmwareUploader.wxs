@@ -6,7 +6,7 @@
       <Component Id="cmpFirwareUploaderExecutable" Guid="{050d212f-b02e-4f8d-ad89-2887ec41c436}">
         <File Id="filFirwareUploaderExecutable"
               KeyPath="yes"
-              Source="$(var.FirmwareUpdater.ProjectDir)bin\Release\netcoreapp30\win-x86\publish\TA.NexDome.FirmwareUpdater.exe"
+              Source="$(var.FirmwareUpdater.ProjectDir)bin\Release\netcoreapp31\win-x86\publish\TA.NexDome.FirmwareUpdater.exe"
                Vital="yes" />
       </Component>
     </ComponentGroup>

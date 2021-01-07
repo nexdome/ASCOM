@@ -33,11 +33,12 @@ namespace TA.NexDome.DeviceInterface
     public class DeviceController : INotifyPropertyChanged, IDisposable
         {
         // private SemanticVersion shutterFirmwareVersion;
-        private static readonly SemanticVersion MinimumRequiredRotatorVersion = new SemanticVersion(2, 9, 9);
-        private static readonly SemanticVersion MinimumRequiredShutterVersion = new SemanticVersion(2, 9, 9);
+        private static readonly SemanticVersion MinimumRequiredRotatorVersion = new SemanticVersion("4.0.0-beta.44");
+        private static readonly SemanticVersion MinimumRequiredShutterVersion = new SemanticVersion("4.0.0-beta.44");
         private static readonly SemanticVersion FirmwareHighPrecisionSlewingSupport =
             new SemanticVersion("3.2.0-alpha.19");
         private static readonly SemanticVersion FirmwareShutterAutoCloseSupport = new SemanticVersion("3.4.0-alpha.1");
+        private static readonly SemanticVersion FirmwareHoldingTorqueSupport = new SemanticVersion("4.0.0-beta.44");
 
         [NotNull] private readonly ICommunicationChannel channel;
 
