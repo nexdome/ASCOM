@@ -70,6 +70,12 @@ namespace TA.NexDome.DeviceInterface.StateMachine
             SendCommand(cmd);
             }
 
+        public void SyncRotatorToStepPosition(int targetPosition)
+            {
+            string cmd = string.Format(Constants.CmdSyncAzimuthTemplate, targetPosition);
+            SendCommand(cmd);
+            }
+
         public void OpenShutter()
             {
             SendCommand(Constants.CmdOpenShutter);

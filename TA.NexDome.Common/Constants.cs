@@ -71,6 +71,13 @@ namespace TA.NexDome.Common
         ///     Response is a series of Pxxx position update packets, followed by a SER status packet.
         /// </summary>
         public const string CmdGotoHome = "GHR";
+
+        /// <summary>
+        ///     Format string used with <see cref="string.Format(string,object)" /> for building a "Sync Azimuth" command.
+        ///     Format Gxxx, 3 digits packed with leading zeroes as necessary.
+        ///     <seealso cref="string.Format(string,object)" />
+        /// </summary>
+        public const string CmdSyncAzimuthTemplate = "PWR,{0:000}";
         #endregion
 
         #region Magic Numbers

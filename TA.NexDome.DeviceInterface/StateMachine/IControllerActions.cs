@@ -31,6 +31,11 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         void RotateToStepPosition(int targetPosition);
 
         /// <summary>
+        ///     Requests that the controller set the rotator position to the given step position without rotating
+        /// </summary>
+        void SyncRotatorToStepPosition(int targetPosition);
+
+        /// <summary>
         ///     Requests that the controller open the shutter.
         /// </summary>
         void OpenShutter();
