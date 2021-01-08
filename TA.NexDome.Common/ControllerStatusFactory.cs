@@ -113,7 +113,7 @@ namespace TA.NexDome.Common
                     AtHome = values[1] == "1",
                     DomeCircumference = int.Parse(values[2]),
                     HomePosition = int.Parse(values[3]),
-                    DeadZone = 0 // int.Parse(values[4].Value),
+                    DeadZone = int.Parse(values[4]),    // Fixes #20
                     };
                 return status;
                 }

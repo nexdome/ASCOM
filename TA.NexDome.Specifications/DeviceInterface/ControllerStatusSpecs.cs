@@ -12,31 +12,6 @@ namespace TA.NexDome.Specifications.DeviceInterface
     using Machine.Specifications;
     using TA.NexDome.Specifications.Fakes;
 
-    [Ignore("Deprecated code")]
-    [Subject(typeof(ControllerStatusFactory), "creation")]
-    class when_creating_a_rotator_status
-        {
-        Establish context = () =>
-            factory = new ControllerStatusFactory(new FakeClock(DateTime.MinValue.ToUniversalTime()));
-
-        Because of = () => actual = factory.FromRotatorStatusPacket(RealWorldStatusPacket);
-
-        It should_have_circumference = () => actual.DomeCircumference.ShouldEqual(704);
-
-        It should_have_home_position = () => actual.HomePosition.ShouldEqual(293);
-
-        It should_have_azimuth = () => actual.Azimuth.ShouldEqual(289);
-
-        It should_not_be_at_home = () => actual.AtHome.ShouldBeFalse();
-
-        It should_have_dead_zone = () => actual.DeadZone.ShouldEqual(5);
-
-        static IRotatorStatus actual;
-
-        static ControllerStatusFactory factory;
-
-        const string RealWorldStatusPacket = "SER,1530,0,55080,0,0#"; // Captured from real hardware
-        }
 
     [Subject(typeof(IRotatorStatus), "Instance creation")]
     class when_creating_a_rotator_status_from_received_event_data
@@ -54,13 +29,13 @@ namespace TA.NexDome.Specifications.DeviceInterface
 
         It should_set_home_offset = () => status.HomePosition.ShouldEqual(34567);
 
-        It should_set_deadzone = () => status.DeadZone.ShouldEqual(0);
+        It should_set_deadzone = () => status.DeadZone.ShouldEqual(75);
 
         static ControllerStatusFactory factory;
 
         static IRotatorStatus status;
 
-        const string RealWorldStatusPacket = ":SER,450,1,55080,34567,0#";
+        const string RealWorldStatusPacket = ":SER,450,1,55080,34567,75#";
         }
 
     [Subject(typeof(IShutterStatus), "Instance creation")]
