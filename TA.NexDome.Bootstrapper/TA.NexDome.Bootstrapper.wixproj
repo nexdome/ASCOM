@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" InitialTargets="EnsureWixToolsetInstalled" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\GitVersionTask.5.5.1\build\GitVersionTask.props" Condition="Exists('..\packages\GitVersionTask.5.5.1\build\GitVersionTask.props')" />
   <Import Project="..\packages\WiX.3.11.2\build\wix.props" Condition="Exists('..\packages\WiX.3.11.2\build\wix.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -25,6 +24,11 @@
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <SuppressPdbOutput>True</SuppressPdbOutput>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup>
+    <UpdateAssemblyInfo>false</UpdateAssemblyInfo>
+    <Language>
+    </Language>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ArduinoDriverInstallerPayload.wxs" />
@@ -156,12 +160,8 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\WiX.3.11.2\build\wix.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\WiX.3.11.2\build\wix.props'))" />
-    <Error Condition="!Exists('..\packages\GitVersion.MsBuild.5.6.1\build\GitVersion.MsBuild.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersion.MsBuild.5.6.1\build\GitVersion.MsBuild.targets'))" />
-    <Error Condition="!Exists('..\packages\GitVersion.MsBuild.5.6.1\build\GitVersion.MsBuild.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersion.MsBuild.5.6.1\build\GitVersion.MsBuild.props'))" />
-    <Error Condition="!Exists('..\packages\GitVersionTask.5.5.1\build\GitVersionTask.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.5.5.1\build\GitVersionTask.props'))" />
-    <Error Condition="!Exists('..\packages\GitVersionTask.5.5.1\build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.5.5.1\build\GitVersionTask.targets'))" />
   </Target>
-  <Target Name="BeforeBuild" AfterTargets="GetVersion">
+  <!--<Target Name="BeforeBuild" AfterTargets="GetVersion">
     <CreateProperty Value="$(OutputName).$(GitVersion_SemVer)">
       <Output TaskParameter="Value" PropertyName="TargetName" />
     </CreateProperty>
@@ -171,8 +171,9 @@
     <CreateProperty Value="$(TargetDir)$(TargetFileName)">
       <Output TaskParameter="Value" PropertyName="TargetPath" />
     </CreateProperty>
-  </Target>
+    <Message Text="Full SemVer is $(GitVersion_FullSemVer)" />
+    <Message Text="Output $(TargetPath)" />
+  </Target>-->
   <Target Name="AfterBuild">
   </Target>
-  <Import Project="..\packages\GitVersionTask.5.5.1\build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.5.5.1\build\GitVersionTask.targets')" />
 </Project>

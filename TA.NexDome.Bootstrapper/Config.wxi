@@ -6,6 +6,7 @@
   <?define Manufacturer = "NexDome" ?>
   <?define InstallDirectory = "$(var.InstallName)" ?>
   <?define CopyrightNotice="Copyright © 2019 NexDome and Tigra Astronomy, all rights reserved" ?>
+  <?define BundleVersion = "4.0.0" ?>
   <!-- End of User Configuration - do not edit anything beyond this point -->
 
   <!-- Define platform-specific names and locations -->

@@ -4,8 +4,9 @@
      xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
      xmlns:bal="http://schemas.microsoft.com/wix/BalExtension" >
   <?include Config.wxi?>
+  <!-- Ideally use $(var.GitVersion_AssemblySemVer) but GitVersion is broken -->
   <Bundle Name="NexDome Control System"
-          Version="$(var.GitVersion_AssemblySemVer)" 
+          Version="$(var.BundleVersion)" 
           IconSourceFile="NexDome.ico"
           SplashScreenSourceFile="NexDome.bmp"
           Manufacturer="$(var.Manufacturer)"

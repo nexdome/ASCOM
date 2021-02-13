@@ -59,10 +59,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ASCOM.Platform">
-      <Version>6.5.1</Version>
+      <Version>6.5.2</Version>
     </PackageReference>
     <PackageReference Include="GitVersion.MsBuild">
-      <Version>5.6.1</Version>
+      <Version>5.6.6</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

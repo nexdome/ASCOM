@@ -134,10 +134,10 @@
       <Output TaskParameter="Value" PropertyName="TargetPath" />
     </CreateProperty>-->
     <!-- [TPL] Publish the .Net Core firmware update utility -->
-    <Exec Command="dotnet publish ..\TA.NexDome.FirmwareUpdater\TA.NexDome.FirmwareUpdater.csproj -c $(Configuration) -r win-x86 --self-contained --framework netcoreapp31 -property:PublishSingleFile=true,PublishTrimmed=true,PublishReadyToRunShowWarnings=true " />
+    <Exec Command="dotnet publish ..\TA.NexDome.FirmwareUpdater\TA.NexDome.FirmwareUpdater.csproj -c $(Configuration) -r win-x86 --self-contained --framework netcoreapp3.1 -property:PublishSingleFile=true,PublishTrimmed=true,PublishReadyToRunShowWarnings=true " />
     <PropertyGroup>
-      <LinkerBaseInputPaths>..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp30\win-x86\publish</LinkerBaseInputPaths>
-      <DefineConstants>BasePath=..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp30\win-x86\publish</DefineConstants>
+      <LinkerBaseInputPaths>..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp3.1\win-x86\publish</LinkerBaseInputPaths>
+      <DefineConstants>BasePath=..\TA.NexDome.FirmwareUpdater\bin\$(Configuration)\netcoreapp3.1\win-x86\publish</DefineConstants>
     </PropertyGroup>
   </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
