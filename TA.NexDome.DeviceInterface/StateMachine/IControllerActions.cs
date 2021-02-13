@@ -1,6 +1,8 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using System.Threading.Tasks;
+
 namespace TA.NexDome.DeviceInterface.StateMachine
     {
     public interface IControllerActions
@@ -27,6 +29,11 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         /// </summary>
         /// <param name="targetPosition">The target whole step position.</param>
         void RotateToStepPosition(int targetPosition);
+
+        /// <summary>
+        ///     Requests that the controller set the rotator position to the given step position without rotating
+        /// </summary>
+        void SyncRotatorToStepPosition(int targetPosition);
 
         /// <summary>
         ///     Requests that the controller open the shutter.
@@ -67,5 +74,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         void SetHomeSensorPosition(int stepsFromTrueNorth);
 
         void SavePersistentSettings();
+
+        void ConfigureShutter(uint maxSpeed, uint rampTime, uint lowVoltsThreshold);
         }
     }

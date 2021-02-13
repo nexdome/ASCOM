@@ -3,11 +3,11 @@
 	<Fragment>
     <DirectoryRef Id="FIRMWAREUTILS" />
     <ComponentGroup Id="cgFirmware" Directory="FIRMWAREUTILS">
-            <Component Id="cmpRotatorFirmware" Guid="{F5C76E87-7957-4E62-B2A8-EC7C5949BECD}">
-                <File Id="filRotatorFirmware" KeyPath="yes" Source="$(var.SolutionDir)Firmware\Rotator-3.3.0.hex" />
+            <Component Id="cmpRotatorFirmware" Guid="{7b377721-fc43-49b6-9de1-c9afe944d1e8}" Permanent="yes">
+                <File Id="filRotatorFirmware" KeyPath="yes" Source="$(var.SolutionDir)Firmware\Rotator-4.0.0.hex" />
             </Component>
-            <Component Id="cmpShutterFirmware" Guid="{730106BE-1652-4C03-A2C1-F0B57415105F}">
-                <File Id="filShutterFirmware" KeyPath="yes" Source="$(var.SolutionDir)Firmware\Shutter-3.3.0.hex" />
+            <Component Id="cmpShutterFirmware" Guid="{2c9715c2-79ea-4e19-8301-9330d705bbed}" Permanent="yes">
+                <File Id="filShutterFirmware" KeyPath="yes" Source="$(var.SolutionDir)Firmware\Shutter-4.0.0.hex" />
             </Component>
         </ComponentGroup>
   </Fragment>

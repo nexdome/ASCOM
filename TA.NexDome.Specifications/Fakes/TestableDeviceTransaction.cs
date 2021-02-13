@@ -1,6 +1,8 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using TA.Utils.Core;
+
 namespace TA.NexDome.Specifications.Fakes
     {
     using System;
@@ -24,7 +26,7 @@ namespace TA.NexDome.Specifications.Fakes
 
         void SetResponse(string response)
             {
-            Response = new Maybe<string>(response);
+            Response = Maybe<string>.From(response);
             }
 
         internal void SignalCompletion(string fakeResponse)

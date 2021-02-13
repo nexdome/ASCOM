@@ -1,10 +1,10 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using TA.NexDome.Common;
+
 namespace TA.NexDome.DeviceInterface.StateMachine.Rotator
     {
-    using TA.NexDome.SharedTypes;
-
     internal class ReadyState : RotatorStateBase
         {
         public ReadyState(ControllerStateMachine machine)
@@ -37,6 +37,13 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Rotator
             {
             base.RotateToAzimuthDegrees(azimuth);
             Machine.ControllerActions.RotateToAzimuth((int)azimuth);
+            Machine.TransitionToState(new RotatingState(Machine));
+            }
+
+        public override void SyncRotatorToStepPosition(int targetPosition)
+            {
+            base.SyncRotatorToStepPosition(targetPosition);
+            Machine.ControllerActions.SyncRotatorToStepPosition(targetPosition);
             Machine.TransitionToState(new RotatingState(Machine));
             }
 

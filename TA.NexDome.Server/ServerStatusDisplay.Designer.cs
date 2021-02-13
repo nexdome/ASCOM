@@ -125,11 +125,11 @@
             // 
             // RotationTitle
             // 
-            this.RotationTitle.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.RotationTitle.ActiveColor = System.Drawing.SystemColors.ActiveCaption;
             this.RotationTitle.AutoSize = true;
             this.RotationTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.RotationTitle.Font = new System.Drawing.Font("Consolas", 10F);
-            this.RotationTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.RotationTitle.ForeColor = System.Drawing.SystemColors.ActiveCaption;
             this.RotationTitle.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.RotationTitle.Location = new System.Drawing.Point(3, 0);
             this.RotationTitle.Name = "RotationTitle";
@@ -227,11 +227,11 @@
             // 
             // ShutterTitle
             // 
-            this.ShutterTitle.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.ShutterTitle.ActiveColor = System.Drawing.SystemColors.ActiveCaption;
             this.ShutterTitle.AutoSize = true;
             this.ShutterTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.ShutterTitle.Font = new System.Drawing.Font("Consolas", 10F);
-            this.ShutterTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.ShutterTitle.ForeColor = System.Drawing.SystemColors.ActiveCaption;
             this.ShutterTitle.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.ShutterTitle.Location = new System.Drawing.Point(3, 17);
             this.ShutterTitle.Name = "ShutterTitle";

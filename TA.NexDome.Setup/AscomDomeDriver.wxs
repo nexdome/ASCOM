@@ -22,12 +22,12 @@
                  Directory="INSTALLDIRECTORY"
                  Guid="*"
                  Win64="no">
-        <File Id="filDomeDriverAssembly"
+        <!--<File Id="filDomeDriverAssembly"
               Source="$(var.AscomDome.TargetPath)"
               KeyPath="yes"
               Vital="yes"
               Assembly=".net"
-              AssemblyApplication="filDomeDriverAssembly" />
+              AssemblyApplication="filDomeDriverAssembly" />-->
         <!-- Registry entries suitable for a LocalServer served class -->
         <!-- HKCR\CLSID\{driver-guid} -->
         <RegistryKey Root="HKCR" Key="CLSID">

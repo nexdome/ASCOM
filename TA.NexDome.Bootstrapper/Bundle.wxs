@@ -4,8 +4,9 @@
      xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
      xmlns:bal="http://schemas.microsoft.com/wix/BalExtension" >
   <?include Config.wxi?>
+  <!-- Ideally use $(var.GitVersion_AssemblySemVer) but GitVersion is broken -->
   <Bundle Name="NexDome Control System"
-          Version="$(var.GitVersion_AssemblySemVer)" 
+          Version="$(var.BundleVersion)" 
           IconSourceFile="NexDome.ico"
           SplashScreenSourceFile="NexDome.bmp"
           Manufacturer="$(var.Manufacturer)"
@@ -33,18 +34,16 @@
     </bal:Condition>
 
     <Chain>
-      <!-- Install .Net Framework 4.7.2 if necessary -->
-      <PackageGroupRef Id="NetFx472Web"/>
+      <!-- Install .Net Framework 4.8 if necessary -->
+      <PackageGroupRef Id="NetFx48Web"/>
       <RollbackBoundary Vital="yes" />
 
       <!-- Install Arduino serial port drivers -->
       <PackageGroupRef Id="pgArduinoSerialDrivers"/>
       <RollbackBoundary />
 
-
       <!-- Install the NexDome Constrol System ASCOM server -->
       <PackageGroupRef Id="pgNexDomeAscomServer"/>
-
     </Chain>
 	</Bundle>
 </Wix>

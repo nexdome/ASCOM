@@ -6,5 +6,6 @@
 	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=FileC8C678F68C7CFA4ABFE075216580072C/IsOn/@EntryValue">False</s:Boolean>
 	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=FileC8C678F68C7CFA4ABFE075216580072C/RelativePriority/@EntryValue">1</s:Double>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Ascom/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Correlator/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=NETFRAMEWORK/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=rotator/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

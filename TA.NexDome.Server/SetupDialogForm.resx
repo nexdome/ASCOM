@@ -168,9 +168,57 @@ This can happen if you access your observatory computer
 remotely from a system that has more or larger monitors.
 </value>
   </data>
+  <data name="ShutterLowVoltsThreshold.ToolTip" xml:space="preserve">
+    <value>Sets the threshold (in Volts) for low battery condition
+in the shutter.
+
+This value will need to be determined by experiment.
+Different types of battery chemistry can have significantly
+different discharge curves, and it is impossible to provide
+any single "coorect" value for this setting. It is up to you,
+the user, to determine the correct value for your installation.
+Do not simply use a value that someone has given you as the
+best value will most likely be different for every installation.
+
+Keep in mind that inherent variation in electrical
+components might mean that the actual battery voltage
+may differ by as much as 5% from the measured voltage.
+
+According to batteryuniversity.com, a lead-acid battery
+is fully charged at 13.2 Volts and should not be discharged
+below 10.5 Volts. You will need to set the threshold somewhat
+above 10.5 Volts to allow enough reserve current to close the
+shutter fully.
+
+Discharging batteries below their minimum voltage can result
+in permanent damage to the battery.</value>
+  </data>
+  <data name="EnableShutterAutoClose.ToolTip" xml:space="preserve">
+    <value>Configures the shutter to auto-close on low battery volts.
+
+Enable this option if you want the shutter to auto-close.
+You must also configure the low volts threshold.
+
+Default: disabled
+
+NOTE: it is the shutter firmware (not the driver) that
+decides if and when to auto-close. This setting only
+determines whether the ASCOM driver will configure
+that feature in the shutter.</value>
+  </data>
   <metadata name="ConnectionErrorProvider.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="ShutterWaitUNtilReady.ToolTip" xml:space="preserve">
+    <value>On connecting, wait until the shutter is online and ready
+before returning.
+
+default: disabled
+
+Some applications may need this enabled if they detect
+a shutter error on startup. If your application or
+workflow doesn't require this, leave it off.</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

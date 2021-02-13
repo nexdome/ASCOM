@@ -1,10 +1,10 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using TA.NexDome.Common;
+
 namespace TA.NexDome.DeviceInterface.StateMachine
     {
-    using TA.NexDome.SharedTypes;
-
     public interface IRotatorState : IState
         {
         /// <summary>
@@ -25,6 +25,12 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         ///     measured from North clockwise.
         /// </summary>
         void RotateToAzimuthDegrees(double azimuth);
+
+        /// <summary>
+        ///     Requests that the dome sync its current position to the specified target position,
+        ///     measured from North clockwise.
+        /// </summary>
+        void SyncRotatorToStepPosition(int stepPosition);
 
         /// <summary>
         ///     Action: requests that the dome is rotated to the home position.

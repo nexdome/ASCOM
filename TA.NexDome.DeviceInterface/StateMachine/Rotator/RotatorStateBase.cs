@@ -1,23 +1,32 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
-// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
+//
+// Copyright © 2015-2020 Tigra Astronomy, all rights reserved.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
+// You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
+//
+// File: RotatorStateBase.cs  Last modified: 2020-07-21@21:41 by Tim Long
+
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using TA.NexDome.Common;
+using TA.Utils.Core.Diagnostics;
 
 namespace TA.NexDome.DeviceInterface.StateMachine.Rotator
     {
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    using NLog.Fluent;
-
-    using TA.NexDome.SharedTypes;
-
     internal abstract class RotatorStateBase : IRotatorState
         {
+        protected readonly ILog Log;
         private CancellationTokenSource timeoutCancellation;
 
         protected RotatorStateBase(ControllerStateMachine machine)
             {
             Machine = machine;
+            Log = machine.Logger;
             }
 
         public ControllerStateMachine Machine { get; }
@@ -47,7 +56,12 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Rotator
             Log.Debug().Message("Rotate to azimuth {azimuth}", azimuth).Write();
 
         /// <inheritdoc />
-        public virtual void RotateToStepPosition(int targetPosition) => Log.Debug().Message("Rotate to position {position}", targetPosition).Write();
+        public virtual void SyncRotatorToStepPosition(int targetPosition) =>
+            Log.Debug().Message("Sync rotator to step position {targetPosition}", targetPosition).Write();
+
+        /// <inheritdoc />
+        public virtual void RotateToStepPosition(int targetPosition) =>
+            Log.Debug().Message("Rotate to position {position}", targetPosition).Write();
 
         /// <inheritdoc />
         public virtual void RotateToHomePosition() => Log.Debug().Message("Rotate to Home").Write();
@@ -58,9 +72,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Rotator
         /// <inheritdoc />
         public virtual void HardStopRequested() => Log.Debug().Message("Hard stop").Write();
 
-        /// <summary>
-        ///     Cancels any existing timeout and starts a new one with the specified time interval.
-        /// </summary>
+        /// <summary>Cancels any existing timeout and starts a new one with the specified time interval.</summary>
         /// <param name="timeout">The timeout interval.</param>
         protected void ResetTimeout(TimeSpan timeout)
             {
@@ -75,10 +87,7 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Rotator
         ///     <see cref="CancelTimeout" /> is called.
         /// </summary>
         /// <param name="timeout">The time span before the timeout handler should be called.</param>
-        /// <param name="cancel">
-        ///     A <see cref="CancellationToken" /> that can be used to cancel the
-        ///     timeout.
-        /// </param>
+        /// <param name="cancel">A <see cref="CancellationToken" /> that can be used to cancel the timeout.</param>
         private async void ResetTimeoutAsync(TimeSpan timeout, CancellationToken cancel)
             {
             /*
@@ -104,8 +113,8 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Rotator
             }
 
         /// <summary>
-        ///     Called when the state's timeout expires. Derived classes that wish to handle a
-        ///     timeout should override this method.
+        ///     Called when the state's timeout expires. Derived classes that wish to handle a timeout should
+        ///     override this method.
         /// </summary>
         protected internal virtual void HandleTimeout()
             {
@@ -113,8 +122,8 @@ namespace TA.NexDome.DeviceInterface.StateMachine.Rotator
             }
 
         /// <summary>
-        ///     Cancels the state's timeout. Note that because cancellation is cooperative, it is
-        ///     not guaranteed that cancellation will be successful.
+        ///     Cancels the state's timeout. Note that because cancellation is cooperative, it is not
+        ///     guaranteed that cancellation will be successful.
         /// </summary>
         protected void CancelTimeout()
             {

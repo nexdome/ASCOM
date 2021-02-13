@@ -6,6 +6,8 @@
 BuildOutput/
 Markdown/*.pdf
 
+# Temporary files and build artifacts
+gitversion.json
 
 # User-specific files
 *.suo
@@ -265,3 +267,4 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/TA.NexDome.Bootstrapper/gitversion.json

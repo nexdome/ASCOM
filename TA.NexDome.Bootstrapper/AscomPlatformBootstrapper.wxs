@@ -11,9 +11,9 @@
   <?define NetFx472MinRelease = 461808 ?>
 
   <Fragment>
-    <Variable Name="AscomPlatformMinimumRequiredVersion" Type="version" Value="6.4.0.0"/>
+    <Variable Name="AscomPlatformMinimumRequiredVersion" Type="version" Value="6.5.1.3199"/>
     <WixVariable Id="AscomPlatformWebDownloadLink" Overridable="yes" 
-                 Value="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/download/Build_2695/ASCOMPlatform64.exe" />
+                 Value="https://github.com/ASCOMInitiative/ASCOMPlatform/releases/download/v6.5SP1Release/ASCOMPlatform65SP1.exe" />
               
     <util:RegistrySearch
       Id='rsAscomPlatform'
@@ -42,10 +42,10 @@
           LogPathVariable="AscomPlatformFullLog"
           Compressed="no"
           Name="!(wix.AscomPlatformPackageDirectory)ASCOMPlatform64.exe">
-        <RemotePayload Description="ASCOM Platform 6.4 SP1 Installation"
-                       Hash="9B27F55138A7F6B1D107A9763FB993DFE93A384F"
-                       ProductName="ASCOM Platform 6.4 SP1"
-                       Size="59032298" Version="6.4.1.2695" />
+        <RemotePayload Description="ASCOM Platform 6.5 SP1 Installation"
+                       Hash="7B0D5F8F8CDDA70C9FC3DA93283451F34EC3B94D"
+                       ProductName="ASCOM Platform 6.5 SP1"
+                       Size="61762208" Version="6.5.1.3199" />
       </ExePackage>
     </PackageGroup>
   </Fragment>

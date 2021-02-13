@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <DirectoryRef Id="INSTALLDIRECTORY"/>
+    <ComponentGroup Id="cgTaUtils" Directory="INSTALLDIRECTORY" >
+      <Component Id="cmpTaUtilsCore" Guid="*" Win64="no" >
+        <File Id="filTaUtilsCore"  Source="$(var.AscomServer.TargetDir)TA.Utils.Core.dll"              Vital="yes" KeyPath="yes" />
+      </Component>
+      <Component Id="cmpTaUtilsLogging" Guid="*" Win64="no" >
+        <File Id="filTaUtilsLogging"  Source="$(var.AscomServer.TargetDir)TA.Utils.Logging.Nlog.dll"              Vital="yes" KeyPath="yes" />
+      </Component>
+      <ComponentGroupRef Id="cgNLog"/>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

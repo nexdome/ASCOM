@@ -1,6 +1,12 @@
 ﻿// This file is part of the TA.NexDome.AscomServer project
 // Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
 
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using PostSharp.Aspects.Advices;
+using TA.NexDome.Common;
+
 namespace TA.NexDome.DeviceInterface.StateMachine
     {
     using System;
@@ -8,15 +14,36 @@ namespace TA.NexDome.DeviceInterface.StateMachine
     using System.Text;
 
     using TA.Ascom.ReactiveCommunications;
-    using TA.NexDome.SharedTypes;
 
     public class RxControllerActions : IControllerActions
         {
         private readonly ICommunicationChannel channel;
+        private readonly ITransactionProcessor processor;
 
-        public RxControllerActions(ICommunicationChannel channel)
+        public RxControllerActions(ICommunicationChannel channel, ITransactionProcessor processor)
             {
             this.channel = channel;
+            this.processor = processor;
+            }
+
+        public void ConfigureShutter(uint maxSpeed, uint rampTime, uint lowVoltsThreshold)
+            {
+            var speedTransaction =
+                new EmptyResponseTransaction(string.Format(Constants.CmdSetMotorSpeedTemplate, 'S', maxSpeed));
+            processor.CommitTransaction(speedTransaction);
+            var speedTask = speedTransaction.WaitForCompletionOrTimeout();
+            var accelerationTransaction =
+                new EmptyResponseTransaction(string.Format(Constants.CmdSetRampTimeTemplate, 'S', rampTime));
+            processor.CommitTransaction(accelerationTransaction);
+            accelerationTransaction.WaitForCompletionOrTimeout();
+            if (lowVoltsThreshold > 0)
+                {
+                var lowVoltsTransaction =
+                    new EmptyResponseTransaction(
+                        string.Format(Constants.CmdSetLowBatteryVoltsThreshold, lowVoltsThreshold));
+                processor.CommitTransaction(lowVoltsTransaction);
+                lowVoltsTransaction.WaitForCompletionOrTimeout();
+                }
             }
 
         public void RequestHardwareStatus()
@@ -40,6 +67,12 @@ namespace TA.NexDome.DeviceInterface.StateMachine
         public void RotateToStepPosition(int targetPosition)
             {
             string cmd = string.Format(Constants.CmdGotoStepPositionTemplate, targetPosition);
+            SendCommand(cmd);
+            }
+
+        public void SyncRotatorToStepPosition(int targetPosition)
+            {
+            string cmd = string.Format(Constants.CmdSyncAzimuthTemplate, targetPosition);
             SendCommand(cmd);
             }
 
